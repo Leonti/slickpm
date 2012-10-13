@@ -1,0 +1,25 @@
+html,
+body {
+	height: 100%;
+}
+
+.wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -40px;
+}
+
+.wrapper > .container {
+	padding-top: 60px;
+}
+
+.footer {
+	text-align: center;
+	height: 40px;
+	line-height: 40px;
+}
+
+.footerPush {
+	height: 40px;
+}
