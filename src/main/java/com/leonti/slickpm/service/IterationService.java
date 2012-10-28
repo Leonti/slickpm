@@ -1,0 +1,49 @@
+package com.leonti.slickpm.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.leonti.slickpm.domain.Iteration;
+
+@Service("IterationService")
+@Transactional
+public class IterationService {
+
+    @Autowired
+    private SessionFactory sessionFactory;	
+
+	@Resource(name="ProjectService")
+	ProjectService projectService;    
+    
+	public void save(Iteration iteration) {
+		sessionFactory.getCurrentSession().saveOrUpdate(iteration);
+	}	
+    
+    public void delete(Iteration iteration) {
+    	sessionFactory.getCurrentSession().delete(iteration);
+    }
+    
+    @SuppressWarnings("unchecked")
+	public List<Iteration> getList(Integer projectId) {
+    	
+    	return (ArrayList<Iteration>) sessionFactory.getCurrentSession()
+    			.createQuery("FROM Iteration WHERE project = ?")
+    			.setEntity(0, projectService.getById(projectId)).list();
+	}   
+    
+	public Iteration getById(Integer id) {
+
+    	return (Iteration) sessionFactory.getCurrentSession()
+    			.createQuery("FROM Iteration i WHERE i.id = ?")
+    			.setLong(0, id)
+    			.setMaxResults(1)
+    			.uniqueResult();
+	}  
+}
