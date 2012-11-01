@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.leonti.slickpm.domain.Project;
 import com.leonti.slickpm.form.ProjectForm;
+import com.leonti.slickpm.form.IterationTaskForm;
 import com.leonti.slickpm.service.IterationService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
@@ -97,8 +98,9 @@ public class ProjectController {
     public String scrumView(@RequestParam(value="id", required=true) Integer id,
     							Model model) {
     	
-    	model.addAttribute("backlogList", taskService.getList(id));
+    	model.addAttribute("backlogList", taskService.getBacklogList(id));
     	model.addAttribute("iterationList", iterationService.getList(id));
+    	model.addAttribute("iterationTaskForm", new IterationTaskForm());
     	model.addAttribute("projectId", id);
     	
 		return "project/scrum";

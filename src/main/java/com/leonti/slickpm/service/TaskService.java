@@ -37,6 +37,14 @@ public class TaskService {
     			.createQuery("FROM Task WHERE project = ?")
     			.setEntity(0, projectService.getById(projectId)).list();
 	}   
+
+    @SuppressWarnings("unchecked")
+	public List<Task> getBacklogList(Integer projectId) {
+    	
+    	return (ArrayList<Task>) sessionFactory.getCurrentSession()
+    			.createQuery("FROM Task WHERE project = ? AND iteration IS NULL")
+    			.setEntity(0, projectService.getById(projectId)).list();
+	}     
     
 	public Task getById(Integer id) {
 

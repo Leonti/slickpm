@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.leonti.slickpm.domain.Iteration;
+import com.leonti.slickpm.domain.Task;
 
 @Service("IterationService")
 @Transactional
@@ -45,5 +46,16 @@ public class IterationService {
     			.setLong(0, id)
     			.setMaxResults(1)
     			.uniqueResult();
-	}  
+	}
+	
+	public void addTask(Iteration iteration, Task task) {
+
+		task.setIteration(iteration);
+		sessionFactory.getCurrentSession().saveOrUpdate(task);	
+	}
+	
+	public void removeTask(Iteration iteration, Task task) {
+		iteration.getTasks().remove(task);
+		save(iteration);		
+	}
 }

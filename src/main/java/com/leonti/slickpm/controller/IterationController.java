@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.leonti.slickpm.domain.Iteration;
+import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.form.IterationForm;
+import com.leonti.slickpm.form.IterationTaskForm;
 import com.leonti.slickpm.service.IterationService;
 import com.leonti.slickpm.service.ProjectService;
+import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.validator.IterationFormValidator;
 
 @Controller
@@ -26,6 +29,9 @@ public class IterationController {
 	
 	@Resource(name="ProjectService")
 	ProjectService projectService;	
+
+	@Resource(name="TaskService")
+	TaskService taskService;	
 	
 	@Autowired
 	IterationFormValidator iterationFormValidator;	
@@ -109,5 +115,17 @@ public class IterationController {
         iterationService.delete(iteration);   	
 		       
     	return "redirect:list?projectId=" + projectId;
-	}    	
+	} 
+    
+    @RequestMapping(value = "/addTask", method = RequestMethod.POST)
+    public String addTask(@RequestParam(value="taskId", required=true) Integer taskId,
+			@ModelAttribute("iterationTaskForm") IterationTaskForm iterationTaskForm, 
+			Model model) {
+    	
+    	Iteration iteration = iterationService.getById(iterationTaskForm.getIterationId());
+    	Task task = taskService.getById(taskId);
+    	iterationService.addTask(iteration, task);
+    	
+    	return "redirect:/project/scrum?id=" + iteration.getProject().getId();
+    }
 }

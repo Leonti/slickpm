@@ -20,7 +20,12 @@
 	    		<c:forEach var="task" items="${backlogList}">
 	    			<div class="span6">
 	    				<a href="/task/details?id=${task.id}">${task.title}</a>
-	    			</div>	
+	    			</div>
+					<form:form modelAttribute="iterationTaskForm" action="/iteration/addTask?taskId=${task.id}" method="POST" class="form-inline">
+						<form:select path="iterationId" items="${iterationList}" itemValue="id" itemLabel="title" />							
+						<spring:message code="task.addToIteration" var="submit" /> 
+						<input type="submit" value="${submit}" class="btn" />		
+					</form:form>						
 	    		</c:forEach>
 		    </div>
 		    <div class="span6">
@@ -30,7 +35,12 @@
 	    		<c:forEach var="iteration" items="${iterationList}">
 	    			<div class="span6">
 	    				<a href="/iteration/details?id=${iteration.id}">${iteration.title}</a>
-	    			</div>	
+	    			</div>
+	    			<c:forEach var="task" items="${iteration.tasks}">
+	    				<div class="span6">
+	    					<a href="/task/details?id=${task.id}">${task.title}</a>
+	    				</div>
+	    			</c:forEach>	
 	    		</c:forEach>		    			    
 		    </div>
 	    </div>

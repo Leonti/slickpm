@@ -26,6 +26,9 @@ public class Task {
     private TaskType taskType;
     
     @ManyToOne
+    private Iteration iteration;
+    
+    @ManyToOne
     private Project project;
 
     public Task() {}
@@ -79,5 +82,13 @@ public class Task {
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+
+	public Iteration getIteration() {
+		return iteration;
+	}
+
+	public void setIteration(Iteration iteration) {
+		this.iteration = iteration;
 	}
 }
