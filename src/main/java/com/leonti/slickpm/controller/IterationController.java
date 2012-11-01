@@ -1,5 +1,9 @@
 package com.leonti.slickpm.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.Task;
+import com.leonti.slickpm.domain.TaskStage;
 import com.leonti.slickpm.form.IterationForm;
 import com.leonti.slickpm.form.IterationTaskForm;
+import com.leonti.slickpm.form.TaskTaskStageForm;
 import com.leonti.slickpm.service.IterationService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
+import com.leonti.slickpm.service.TaskStageService;
 import com.leonti.slickpm.validator.IterationFormValidator;
 
 @Controller
@@ -32,6 +39,9 @@ public class IterationController {
 
 	@Resource(name="TaskService")
 	TaskService taskService;	
+
+	@Resource(name="TaskStageService")
+	TaskStageService taskStageService;	
 	
 	@Autowired
 	IterationFormValidator iterationFormValidator;	
@@ -124,6 +134,13 @@ public class IterationController {
     	
     	Iteration iteration = iterationService.getById(iterationTaskForm.getIterationId());
     	Task task = taskService.getById(taskId);
+    	
+    	List<TaskStage> taskStages = taskStageService.getList();
+    	if (taskStages.size() > 0) {
+    		task.setTaskStage(taskStages.get(0));
+    		taskService.save(task);
+    	}
+    	 	
     	iterationService.addTask(iteration, task);
     	
     	return "redirect:/project/scrum?id=" + iteration.getProject().getId();
@@ -138,5 +155,40 @@ public class IterationController {
     	iterationService.removeTask(task.getIteration(), task);
     	
     	return "redirect:/project/scrum?id=" + projectId;
+    }
+    
+    @RequestMapping(value = "/taskboard", method = RequestMethod.GET)
+    public String taskboard(@RequestParam(value="id", required=true) Integer id,
+    							Model model) {
+    	
+    	Iteration iteration = iterationService.getById(id);
+    	List<TaskStage> taskStages = taskStageService.getList();
+    	  	
+    	Map<TaskStage, List<Task>> tasks = new HashMap<TaskStage, List<Task>>();
+    	
+    	for (TaskStage taskStage : taskStages) {    		
+    		tasks.put(taskStage, taskStageService.getTasksForStage(iteration, taskStage));
+    	}
+    	
+    	model.addAttribute("iteration", iteration);
+		model.addAttribute("taskStageList", taskStages);
+		model.addAttribute("tasks", tasks);
+		model.addAttribute("taskTaskStageForm", new TaskTaskStageForm());
+		
+		return "iteration/taskboard";
+    }
+
+    @RequestMapping(value = "/changeTaskStage", method = RequestMethod.POST)
+    public String changeTaskStage(@RequestParam(value="taskId", required=true) Integer taskId,
+			@ModelAttribute("taskTaskStageForm") TaskTaskStageForm taskTaskStageForm, 
+			Model model) {
+    	
+    	Task task = taskService.getById(taskId);
+    	task.setTaskStage(taskStageService.getById(taskTaskStageForm.getTaskStageId()));
+    	
+    	taskService.save(task);
+    	
+    	return "redirect:taskboard?id=" + task.getIteration().getId();
     }    
+    
 }

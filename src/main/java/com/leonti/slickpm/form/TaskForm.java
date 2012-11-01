@@ -8,6 +8,7 @@ public class TaskForm {
 
 	private String title;
 	private String description;
+	private Integer pointsId;	
 	
 	private Integer taskTypeId;
 	
@@ -17,6 +18,9 @@ public class TaskForm {
 		this.title = task.getTitle();
 		this.description = task.getDescription();
 		this.taskTypeId = task.getTaskType().getId();
+		
+		if (task.getPoints() != null)
+			this.pointsId = task.getPoints().getId();
 	}
 	
 	public String getTitle() {
@@ -36,6 +40,12 @@ public class TaskForm {
 	}
 	public void setTaskTypeId(Integer taskTypeId) {
 		this.taskTypeId = taskTypeId;
+	}
+	public Integer getPointsId() {
+		return pointsId;
+	}
+	public void setPointsId(Integer pointsId) {
+		this.pointsId = pointsId;
 	}
 
 	public Task getTask(Project project, TaskType taskType) {

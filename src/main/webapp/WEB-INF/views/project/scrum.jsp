@@ -34,7 +34,7 @@
 		    	
 	    		<c:forEach var="iteration" items="${iterationList}">
 	    			<div class="span6">
-	    				<a href="/iteration/details?id=${iteration.id}">${iteration.title}</a>
+	    				<a href="/iteration/taskboard?id=${iteration.id}">${iteration.title}</a>
 	    			</div>
 	    			<c:forEach var="task" items="${iteration.tasks}">
 	    				<div class="span6">

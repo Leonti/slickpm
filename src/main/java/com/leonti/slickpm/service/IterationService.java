@@ -38,7 +38,7 @@ public class IterationService {
     	return (ArrayList<Iteration>) sessionFactory.getCurrentSession()
     			.createQuery("FROM Iteration WHERE project = ?")
     			.setEntity(0, projectService.getById(projectId)).list();
-	}   
+	}      
     
 	public Iteration getById(Integer id) {
 
@@ -56,8 +56,6 @@ public class IterationService {
 	}
 	
 	public void removeTask(Iteration iteration, Task task) {
-//		iteration.getTasks().remove(task);
-//		save(iteration);
 		
 		task.setIteration(null);
 		sessionFactory.getCurrentSession().saveOrUpdate(task);			

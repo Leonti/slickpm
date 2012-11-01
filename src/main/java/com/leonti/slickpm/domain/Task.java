@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -28,6 +27,9 @@ public class Task {
     private String description;
     
     @ManyToOne
+    private Points points;    
+    
+    @ManyToOne
     private Task parent;
     
     @ManyToOne
@@ -35,6 +37,9 @@ public class Task {
     
     @ManyToOne
     private Iteration iteration;
+    
+    @ManyToOne
+    private TaskStage taskStage;
     
     @ManyToOne
     private Project project;
@@ -70,6 +75,14 @@ public class Task {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public Points getPoints() {
+		return points;
+	}
+
+	public void setPoints(Points points) {
+		this.points = points;
 	}
 
 	public Task getParent() {
@@ -110,5 +123,13 @@ public class Task {
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+
+	public TaskStage getTaskStage() {
+		return taskStage;
+	}
+
+	public void setTaskStage(TaskStage taskStage) {
+		this.taskStage = taskStage;
 	}
 }

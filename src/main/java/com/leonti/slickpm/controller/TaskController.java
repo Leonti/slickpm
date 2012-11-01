@@ -15,6 +15,7 @@ import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.form.CommentForm;
 import com.leonti.slickpm.form.TaskForm;
 import com.leonti.slickpm.service.CommentService;
+import com.leonti.slickpm.service.PointsService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskTypeService;
@@ -29,6 +30,9 @@ public class TaskController {
 
 	@Resource(name="TaskTypeService")
 	TaskTypeService taskTypeService;	
+
+	@Resource(name="PointsService")
+	PointsService pointsService;	
 	
 	@Resource(name="ProjectService")
 	ProjectService projectService;	
@@ -62,7 +66,7 @@ public class TaskController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addPost(@RequestParam(value="projectId", required=true) Integer projectId,
-		@ModelAttribute("projectForm") TaskForm taskForm, 
+		@ModelAttribute("taskForm") TaskForm taskForm, 
 		Model model,
 		BindingResult result) {
     	   	
@@ -84,6 +88,7 @@ public class TaskController {
     	
     	Task task = taskService.getById(id);
     	model.addAttribute("taskTypeList", taskTypeService.getList());
+    	model.addAttribute("pointList", pointsService.getList());
 		model.addAttribute("taskForm", new TaskForm(task));
 		
 		return "task/edit";
@@ -103,6 +108,13 @@ public class TaskController {
         Task task = taskService.getById(id);
         task.setTitle(taskForm.getTitle());
         task.setDescription(taskForm.getDescription());
+        task.setTaskType(taskTypeService.getById(taskForm.getTaskTypeId()));
+        
+        if (taskForm.getPointsId() > 1) {
+        	task.setPoints(pointsService.getById(taskForm.getPointsId()));
+        } else {
+        	task.setPoints(null);
+        }
         
         taskService.save(task);   	
 		
