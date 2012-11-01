@@ -39,6 +39,10 @@
 	    			<c:forEach var="task" items="${iteration.tasks}">
 	    				<div class="span6">
 	    					<a href="/task/details?id=${task.id}">${task.title}</a>
+	    					<form action="/iteration/removeTask?taskId=${task.id}" method="POST" class="form-inline">
+								<spring:message code="task.removeFromIteration" var="submit" /> 
+								<input type="submit" value="${submit}" class="btn" />	    					
+	    					</form>
 	    				</div>
 	    			</c:forEach>	
 	    		</c:forEach>		    			    

@@ -1,10 +1,18 @@
 package com.leonti.slickpm.domain;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class Task {
@@ -31,6 +39,10 @@ public class Task {
     @ManyToOne
     private Project project;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+	private List<Comment> comments;    
+    
     public Task() {}
     
     public Task(String title, String description, TaskType taskType, Project project) {
@@ -90,5 +102,13 @@ public class Task {
 
 	public void setIteration(Iteration iteration) {
 		this.iteration = iteration;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 }

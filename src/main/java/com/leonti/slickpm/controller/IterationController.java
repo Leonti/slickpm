@@ -128,4 +128,15 @@ public class IterationController {
     	
     	return "redirect:/project/scrum?id=" + iteration.getProject().getId();
     }
+    
+    @RequestMapping(value = "/removeTask", method = RequestMethod.POST)
+    public String removeTask(@RequestParam(value="taskId", required=true) Integer taskId,
+			Model model) {
+    	
+    	Task task = taskService.getById(taskId);
+    	Integer projectId = task.getProject().getId();
+    	iterationService.removeTask(task.getIteration(), task);
+    	
+    	return "redirect:/project/scrum?id=" + projectId;
+    }    
 }

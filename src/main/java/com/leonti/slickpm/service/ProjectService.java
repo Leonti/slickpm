@@ -18,8 +18,9 @@ public class ProjectService {
     @Autowired
     private SessionFactory sessionFactory;	
     
-	public void save(Project project) {
+	public Project save(Project project) {
 		sessionFactory.getCurrentSession().saveOrUpdate(project);
+		return project;
 	}	
     
     public void delete(Project project) {

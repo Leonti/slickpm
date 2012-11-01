@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.leonti.slickpm.domain.Comment;
 import com.leonti.slickpm.domain.Task;
 
 @Service("TaskService")
@@ -22,8 +23,9 @@ public class TaskService {
 	@Resource(name="ProjectService")
 	ProjectService projectService;    
     
-	public void save(Task task) {
+	public Task save(Task task) {
 		sessionFactory.getCurrentSession().saveOrUpdate(task);
+		return task;
 	}	
     
     public void delete(Task task) {
@@ -53,5 +55,11 @@ public class TaskService {
     			.setLong(0, id)
     			.setMaxResults(1)
     			.uniqueResult();
-	}     
+	}
+	
+	public void addComment(Task task, Comment comment) {
+
+		comment.setTask(task);
+		sessionFactory.getCurrentSession().saveOrUpdate(comment);	
+	}	
 }

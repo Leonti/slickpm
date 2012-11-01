@@ -17,8 +17,9 @@ public class TaskTypeService {
     @Autowired
     private SessionFactory sessionFactory;	
     
-	public void save(TaskType taskType) {
+	public TaskType save(TaskType taskType) {
 		sessionFactory.getCurrentSession().saveOrUpdate(taskType);
+		return taskType;
 	}	
     
     public void delete(TaskType taskType) {

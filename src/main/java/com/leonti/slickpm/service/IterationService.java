@@ -23,8 +23,9 @@ public class IterationService {
 	@Resource(name="ProjectService")
 	ProjectService projectService;    
     
-	public void save(Iteration iteration) {
+	public Iteration save(Iteration iteration) {
 		sessionFactory.getCurrentSession().saveOrUpdate(iteration);
+		return iteration;
 	}	
     
     public void delete(Iteration iteration) {
@@ -55,7 +56,10 @@ public class IterationService {
 	}
 	
 	public void removeTask(Iteration iteration, Task task) {
-		iteration.getTasks().remove(task);
-		save(iteration);		
+//		iteration.getTasks().remove(task);
+//		save(iteration);
+		
+		task.setIteration(null);
+		sessionFactory.getCurrentSession().saveOrUpdate(task);			
 	}
 }
