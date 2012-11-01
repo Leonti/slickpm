@@ -7,7 +7,7 @@ By Leonti Bielski
 
 ##License
 
-ETMWeb
+SlickPM
 Copyright 2012 Leonti Bielski, prishelec@gmail.com.
 
 Licensed under the Apache License, Version 2.0
