@@ -43,6 +43,9 @@ public class Task {
     
     @ManyToOne
     private Project project;
+    
+    @ManyToOne
+    private User user;
 
     @LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
@@ -131,5 +134,13 @@ public class Task {
 
 	public void setTaskStage(TaskStage taskStage) {
 		this.taskStage = taskStage;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

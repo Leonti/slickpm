@@ -27,7 +27,13 @@
 						<spring:message code="task.editSubmit" var="submit" /> 
 						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
 					</div>		
-				</form:form>	        
+				</form:form>
+				
+				<form:form modelAttribute="taskUserForm" action="/task/assignToUser?id=${task.id}" method="POST" class="form-inline">
+					<form:select path="userId" items="${userList}" itemValue="id" itemLabel="name" />							
+					<spring:message code="task.assignToUser" var="submit" /> 
+					<input type="submit" value="${submit}" class="btn" />		
+				</form:form>									        
 		    </div>
 	    </div>
 

@@ -11,6 +11,13 @@
 </jsp:include>
 
     <div class="container">
+		<h2>${iteration.title}</h2>
+		<div class="row">
+			<div class="span2">
+				<spring:message code="iteration.pointsPlanned" />: ${plannedPoints}<br> 
+				<spring:message code="iteration.pointsDone" />: ${donePoints}
+			</div>
+		</div>
 
 	    <div class="row">
 			<c:forEach var="taskStage" items="${taskStageList}">
@@ -22,7 +29,7 @@
 						<form:select path="taskStageId" items="${taskStageList}" itemValue="id" itemLabel="title" />							
 						<spring:message code="iteration.changeTaskStage" var="submit" /> 
 						<input type="submit" value="${submit}" class="btn" />		
-					</form:form>	        		
+					</form:form>						        		
 	        	</c:forEach>
 		    </div>
 			</c:forEach>

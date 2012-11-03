@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.form.CommentForm;
 import com.leonti.slickpm.form.TaskForm;
+import com.leonti.slickpm.form.TaskUserForm;
 import com.leonti.slickpm.service.CommentService;
 import com.leonti.slickpm.service.PointsService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskTypeService;
+import com.leonti.slickpm.service.UserService;
 import com.leonti.slickpm.validator.TaskFormValidator;
 
 @Controller
@@ -37,6 +39,9 @@ public class TaskController {
 	@Resource(name="ProjectService")
 	ProjectService projectService;	
 
+	@Resource(name="UserService")
+	UserService userService;		
+	
 	@Resource(name="CommentService")
 	CommentService commentService;		
 	
@@ -89,7 +94,10 @@ public class TaskController {
     	Task task = taskService.getById(id);
     	model.addAttribute("taskTypeList", taskTypeService.getList());
     	model.addAttribute("pointList", pointsService.getList());
+    	model.addAttribute("userList", userService.getList());
+    	model.addAttribute("task", task);
 		model.addAttribute("taskForm", new TaskForm(task));
+		model.addAttribute("taskUserForm", new TaskUserForm());
 		
 		return "task/edit";
     }    
@@ -168,4 +176,16 @@ public class TaskController {
     	return "redirect:details?id=" + id;
     }
 
+    @RequestMapping(value = "/assignToUser", method = RequestMethod.POST)
+    public String assignToUser(@RequestParam(value="id", required=true) Integer id,
+    		@ModelAttribute("taskUserForm") TaskUserForm taskUserForm,
+			Model model) {
+
+    	Task task = taskService.getById(id); 	
+    	task.setUser(userService.getById(taskUserForm.getUserId()));
+		taskService.save(task);  	
+    	
+    	return "redirect:details?id=" + id;
+    }    
+    
 }

@@ -21,6 +21,7 @@ import com.leonti.slickpm.domain.TaskStage;
 import com.leonti.slickpm.form.IterationForm;
 import com.leonti.slickpm.form.IterationTaskForm;
 import com.leonti.slickpm.form.TaskTaskStageForm;
+import com.leonti.slickpm.hook.EmailNotificationHook;
 import com.leonti.slickpm.service.IterationService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
@@ -134,11 +135,10 @@ public class IterationController {
     	
     	Iteration iteration = iterationService.getById(iterationTaskForm.getIterationId());
     	Task task = taskService.getById(taskId);
-    	
-    	List<TaskStage> taskStages = taskStageService.getList();
-    	if (taskStages.size() > 0) {
-    		task.setTaskStage(taskStages.get(0));
-    		taskService.save(task);
+
+    	if (taskStageService.getFirstStage() != null) {
+    		task.setTaskStage(taskStageService.getFirstStage());
+    		taskService.save(task);   		
     	}
     	 	
     	iterationService.addTask(iteration, task);
@@ -171,6 +171,8 @@ public class IterationController {
     	}
     	
     	model.addAttribute("iteration", iteration);
+    	model.addAttribute("plannedPoints", iterationService.getPlannedPoints(iteration));
+    	model.addAttribute("donePoints", iterationService.getDonePoints(iteration));    	
 		model.addAttribute("taskStageList", taskStages);
 		model.addAttribute("tasks", tasks);
 		model.addAttribute("taskTaskStageForm", new TaskTaskStageForm());
@@ -184,9 +186,14 @@ public class IterationController {
 			Model model) {
     	
     	Task task = taskService.getById(taskId);
+    	TaskStage previousStage = task.getTaskStage();
     	task.setTaskStage(taskStageService.getById(taskTaskStageForm.getTaskStageId()));
     	
     	taskService.save(task);
+    	
+    	EmailNotificationHook emailNotificationHook = new EmailNotificationHook();
+    	
+    	emailNotificationHook.execute(task, previousStage);
     	
     	return "redirect:taskboard?id=" + task.getIteration().getId();
     }    

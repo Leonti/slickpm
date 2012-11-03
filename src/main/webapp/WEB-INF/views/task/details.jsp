@@ -15,7 +15,8 @@
 	    <div class="row">
 	    	<h2>${task.title}</h2>
 	    	<div class="span12 well">
-	    		${task.description}
+	    		${task.description}<br>
+	    		${task.user.name}
 	    	</div>
 		    
 		    <c:forEach var="comment" items="${task.comments}">

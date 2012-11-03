@@ -52,5 +52,25 @@ public class TaskStageService {
     			.setEntity(0, iteration)
     			.setEntity(1, taskStage)
     			.list();
-	}  	
+	}
+ 
+    public TaskStage getFirstStage() {
+    	
+    	List<TaskStage> stages = getList();
+    	if (stages.size() > 0) {
+    		return stages.get(0);
+    	} 
+    	
+    	return null;
+    }    
+    
+    public TaskStage getLastStage() {
+    	
+    	List<TaskStage> stages = getList();
+    	if (stages.size() > 0) {
+    		return stages.get(stages.size() - 1);
+    	} 
+    	
+    	return null;
+    }
 }

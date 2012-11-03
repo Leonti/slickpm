@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.Task;
+import com.leonti.slickpm.domain.TaskStage;
 
 @Service("IterationService")
 @Transactional
@@ -22,7 +23,10 @@ public class IterationService {
 
 	@Resource(name="ProjectService")
 	ProjectService projectService;    
-    
+
+	@Resource(name="TaskStageService")
+	TaskStageService taskStageService; 	
+	
 	public Iteration save(Iteration iteration) {
 		sessionFactory.getCurrentSession().saveOrUpdate(iteration);
 		return iteration;
@@ -60,4 +64,31 @@ public class IterationService {
 		task.setIteration(null);
 		sessionFactory.getCurrentSession().saveOrUpdate(task);			
 	}
+	
+	public Double getPlannedPoints(Iteration iteration) {
+		
+		Double total = 0d;
+		List<Task> tasks = iteration.getTasks();
+		for (Task task : tasks) {
+			if (task.getPoints() != null) {
+				total += task.getPoints().getValue();
+			}
+		}
+		
+		return total;
+	}
+	
+	public Double getDonePoints(Iteration iteration) {
+	
+		Double total = 0d;
+		
+		List<Task> tasks = taskStageService.getTasksForStage(iteration, taskStageService.getLastStage());
+		for (Task task : tasks) {
+			if (task.getPoints() != null) {
+				total += task.getPoints().getValue();
+			}
+		}
+		
+		return total;
+	}	
 }
