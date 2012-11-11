@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.form.CommentForm;
+import com.leonti.slickpm.form.TaskDependencyForm;
 import com.leonti.slickpm.form.TaskForm;
 import com.leonti.slickpm.form.TaskUserForm;
 import com.leonti.slickpm.service.CommentService;
@@ -98,6 +99,8 @@ public class TaskController {
     	model.addAttribute("task", task);
 		model.addAttribute("taskForm", new TaskForm(task));
 		model.addAttribute("taskUserForm", new TaskUserForm());
+		model.addAttribute("taskDependencyForm", new TaskDependencyForm());
+		model.addAttribute("taskList", taskService.getDependencyCandidates(task));
 		
 		return "task/edit";
     }    
@@ -184,6 +187,18 @@ public class TaskController {
     	Task task = taskService.getById(id); 	
     	task.setUser(userService.getById(taskUserForm.getUserId()));
 		taskService.save(task);  	
+    	
+    	return "redirect:details?id=" + id;
+    } 
+    
+    @RequestMapping(value = "/addDependency", method = RequestMethod.POST)
+    public String addDependency(@RequestParam(value="id", required=true) Integer id,
+    		@ModelAttribute("taskDependencyForm") TaskDependencyForm taskDependencyForm,
+			Model model) {
+    	
+    	System.out.println("DEPENDENCY ID: " + taskDependencyForm.getDependencyId());
+    	
+		taskService.addDependency(taskService.getById(id), taskService.getById(taskDependencyForm.getDependencyId()));
     	
     	return "redirect:details?id=" + id;
     }    

@@ -47,6 +47,15 @@ public class TaskService {
     			.createQuery("FROM Task WHERE project = ? AND iteration IS NULL")
     			.setEntity(0, projectService.getById(projectId)).list();
 	}     
+
+	public List<Task> getDependencyCandidates(Task task) {
+    	
+    	List<Task> projectTasks = getList(task.getProject().getId());
+    	projectTasks.remove(task);
+    	projectTasks.removeAll(task.getDependsOn());
+    	
+    	return projectTasks;
+	}     
     
 	public Task getById(Integer id) {
 
@@ -61,5 +70,15 @@ public class TaskService {
 
 		comment.setTask(task);
 		sessionFactory.getCurrentSession().saveOrUpdate(comment);	
-	}	
+	}
+	
+	public void addDependency(Task task, Task dependency) {
+		task.getDependsOn().add(dependency);
+		save(task);
+	}
+	
+	public void removeDependency(Task task, Task dependency) {
+		task.getDependsOn().remove(task);
+		save(task);		
+	}
 }

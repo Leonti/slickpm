@@ -23,12 +23,14 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
+	<script data-main="../resources/js/<c:out value="${param.js}" default="main" />" src="../resources/js/require-jquery.js"></script>
+
   </head>
   <body>
   	<div class="wrapper">
       <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container">
+        <div class="container-fluid">
 
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
@@ -36,9 +38,30 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="/"><spring:message code="navigation.brand" /></a>
+          <div class="nav-collapse">
+            <ul class="nav">
+	            <li><a href="/project/list"><spring:message code="navigation.projects" /></a></li>	                       
+            </ul>
+            
+            <ul class="nav pull-right">
+	            <li class="divider-vertical"></li>  
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<spring:message code="navigation.administration" />
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="/user/list"><spring:message code="navigation.users" /></a></li>
+						<li><a href="/taskstage/list"><spring:message code="navigation.taskStages" /></a></li>  
+						<!-- <li class = "divider"></li>
+						<li><a href="/auth/logout"></a></li> -->
+					</ul> 
+				</li>            
+            </ul>	
              
           </div><!--/.nav-collapse -->
         </div>
+      </div>
       </div>
 
   

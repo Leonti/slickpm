@@ -24,6 +24,13 @@
 				${comment.content}
 			</div>
 		    </c:forEach>
+		    
+		    Dependencies:
+		    <c:forEach var="dependency" items="${task.dependsOn}">
+			<div class="span12">
+				${dependency.title}
+			</div>
+		    </c:forEach>		    
 	    </div>
 	    <div class="row">
 	    	<div class="span12">

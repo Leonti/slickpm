@@ -10,7 +10,8 @@ body {
 	margin: 0 auto -40px;
 }
 
-.wrapper > .container {
+.wrapper > .container,
+.wrapper > .container-fluid {
 	padding-top: 60px;
 }
 
@@ -22,4 +23,72 @@ body {
 
 .footerPush {
 	height: 40px;
+}
+
+.task {
+	background: grey;
+	border-bottom: 2px solid #ccc;	
+}
+
+.task, .task .details {
+	overflow: hidden; 
+	_overflow: visible;
+	zoom: 1;
+}
+
+.task .details {
+	padding-top: 5px;
+}
+
+.task .title {
+	font-size: 120%;
+	font-weight: bold;	
+}
+
+.task .user {
+	float: left; 
+	margin-right: 10px;
+}
+.task .user img{
+	display: block;
+	width: 60px;
+	height: 60px;
+}
+
+/* TaskBoard */
+#taskboard .stages {
+	width: 100%;
+	table-layout: fixed;
+}
+#taskboard .stages td {
+	border: 1px solid black;
+}
+
+#taskboard .stages h3 {
+	margin-left: 10px;
+}
+
+#taskboard .taskList {
+	min-height: 600px;
+	background: #EEEEEE;
+}
+
+#taskboard .taskList .task {
+	min-height: 80px;
+	cursor: pointer;
+}
+
+#taskboard .taskList .task .user img {
+	width: 60px;
+	height: 60px;
+}
+
+#taskboard .taskList.hover {
+	background: #c5f193;
+}
+
+/* Scrum */
+.iteration .title {
+	font-size: 120%;
+	font-weight: bold;
 }

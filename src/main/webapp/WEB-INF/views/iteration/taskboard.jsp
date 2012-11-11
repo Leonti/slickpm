@@ -7,33 +7,47 @@
     
 <spring:message code="iteration.taskboardPageTitle" var="title"/>    
 <jsp:include page="../common/header.jsp" flush="true" >
-	<jsp:param name="title" value="${title}" /> 
+	<jsp:param name="title" value="${title}" />
+	<jsp:param name="js" value="taskboard" /> 	 
 </jsp:include>
 
-    <div class="container">
-		<h2>${iteration.title}</h2>
-		<div class="row">
-			<div class="span2">
-				<spring:message code="iteration.pointsPlanned" />: ${plannedPoints}<br> 
-				<spring:message code="iteration.pointsDone" />: ${donePoints}
+    <div class="container-fluid" id="taskboard" data-iterationid="${iteration.id}">
+		
+		<div class="row-fluid">
+			<div class="span10">
+			<h2>${iteration.title}</h2>
 			</div>
+			<div class="span1">
+				<spring:message code="iteration.pointsPlanned" />:<br>
+				<spring:message code="iteration.pointsDone" />:
+			</div>
+			<div class="span1">
+				<span class="badge plannedPoints"></span><br> 
+				<span class="badge donePoints"></span>
+			</div>			
 		</div>
 
-	    <div class="row">
-			<c:forEach var="taskStage" items="${taskStageList}">
-		    <div class="span2">		    
-	        	<h3>${taskStage.title}</h3>
-	        	<c:forEach var="task" items="${tasks[taskStage]}">
-	        		<div>${task.title}</div>
-					<form:form modelAttribute="taskTaskStageForm" action="/iteration/changeTaskStage?taskId=${task.id}" method="POST" class="form-inline">
-						<form:select path="taskStageId" items="${taskStageList}" itemValue="id" itemLabel="title" />							
-						<spring:message code="iteration.changeTaskStage" var="submit" /> 
-						<input type="submit" value="${submit}" class="btn" />		
-					</form:form>						        		
-	        	</c:forEach>
-		    </div>
-			</c:forEach>
-	    </div>
+		<table class="stages">
+			<tr>
+				<c:forEach var="taskStage" items="${taskStageList}">
+			    <td>		    
+		        	<h3>${taskStage.title}</h3>
+		        	<div class="taskList" data-taskstageid="${taskStage.id}">
+			        	<c:forEach var="task" items="${tasks[taskStage]}">
+			        		<div class="task" id="task-${task.id}">
+			        			<div class="user">
+			        				<img src="http://www.abload.de/img/me_gusta_moar_random_s9u9s.png" />
+			        			</div>
+			        			<div class="details">
+			        				<span class="title">${task.title}</span> 
+			        			</div>
+			        		</div>					        		
+			        	</c:forEach>	        	
+		        	</div>
+			    </td>
+				</c:forEach>	
+			</tr>
+		</table>
 
     </div> <!-- /container -->
     

@@ -7,7 +7,8 @@
     
 <spring:message code="project.scrumPageTitle" var="title"/>    
 <jsp:include page="../common/header.jsp" flush="true" >
-	<jsp:param name="title" value="${title}" /> 
+	<jsp:param name="title" value="${title}" />
+	<jsp:param name="js" value="scrum" /> 
 </jsp:include>
 
     <div class="container">
@@ -17,35 +18,44 @@
 		    	<h2><spring:message code="backlog" /></h2>
 		    	<a href="/task/add?projectId=${projectId}"><spring:message code="task.addLink" /></a>  
 
-	    		<c:forEach var="task" items="${backlogList}">
-	    			<div class="span6">
-	    				<a href="/task/details?id=${task.id}">${task.title}</a>
-	    			</div>
-					<form:form modelAttribute="iterationTaskForm" action="/iteration/addTask?taskId=${task.id}" method="POST" class="form-inline">
-						<form:select path="iterationId" items="${iterationList}" itemValue="id" itemLabel="title" />							
-						<spring:message code="task.addToIteration" var="submit" /> 
-						<input type="submit" value="${submit}" class="btn" />		
-					</form:form>						
-	    		</c:forEach>
+				<div id="backlog" class="taskList">
+		    		<c:forEach var="task" items="${backlogList}">
+		        		<div class="task" id="backlogTask-${task.id}">
+		        			<div class="user">
+		        				<img src="http://www.abload.de/img/me_gusta_moar_random_s9u9s.png" />
+		        			</div>
+		        			<div class="details">
+		        				<a href="/task/details?id=${task.id}" class="title">${task.title}</a> 
+		        			</div>
+		        		</div>							
+		    		</c:forEach>				
+				</div>
 		    </div>
 		    <div class="span6">
 		    	<h2><spring:message code="iterations" /></h2>
 		    	<a href="/iteration/add?projectId=${projectId}"><spring:message code="iteration.addLink" /></a>  
 		    	
-	    		<c:forEach var="iteration" items="${iterationList}">
-	    			<div class="span6">
-	    				<a href="/iteration/taskboard?id=${iteration.id}">${iteration.title}</a>
-	    			</div>
-	    			<c:forEach var="task" items="${iteration.tasks}">
-	    				<div class="span6">
-	    					<a href="/task/details?id=${task.id}">${task.title}</a>
-	    					<form action="/iteration/removeTask?taskId=${task.id}" method="POST" class="form-inline">
-								<spring:message code="task.removeFromIteration" var="submit" /> 
-								<input type="submit" value="${submit}" class="btn" />	    					
-	    					</form>
-	    				</div>
-	    			</c:forEach>	
-	    		</c:forEach>		    			    
+		    	<div id="iterations">
+		    		<c:forEach var="iteration" items="${iterationList}">
+		    			<div class="iteration">
+		    				<div class="title">
+		    					<a href="/iteration/taskboard?id=${iteration.id}">${iteration.title}</a>		    				
+		    				</div>
+		    			</div>
+		    			<div class="taskList" data-iterationid="${iteration.id}"> 			
+		    			<c:forEach var="task" items="${sortedIterationTasks[iteration]}">		    			
+			        		<div class="task" id="iterationTask-${task.id}">
+			        			<div class="user">
+			        				<img src="http://www.abload.de/img/me_gusta_moar_random_s9u9s.png" />
+			        			</div>
+			        			<div class="details">
+			        				<a href="/task/details?id=${task.id}" class="title">${task.title}</a> 
+			        			</div>
+			        		</div>			    				
+		    			</c:forEach>
+		    			</div>		    				
+		    		</c:forEach>		    	
+		    	</div>		    			    
 		    </div>
 	    </div>
 

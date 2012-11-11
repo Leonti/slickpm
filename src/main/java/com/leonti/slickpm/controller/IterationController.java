@@ -1,5 +1,6 @@
 package com.leonti.slickpm.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +15,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.leonti.slickpm.domain.Iteration;
+import com.leonti.slickpm.domain.IterationPosition;
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.TaskStage;
+import com.leonti.slickpm.domain.TaskStagePosition;
 import com.leonti.slickpm.form.IterationForm;
-import com.leonti.slickpm.form.IterationTaskForm;
-import com.leonti.slickpm.form.TaskTaskStageForm;
 import com.leonti.slickpm.hook.EmailNotificationHook;
 import com.leonti.slickpm.service.IterationService;
+import com.leonti.slickpm.service.PositionService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskStageService;
@@ -43,6 +46,9 @@ public class IterationController {
 
 	@Resource(name="TaskStageService")
 	TaskStageService taskStageService;	
+
+	@Resource(name="PositionService")
+	PositionService positionService;	
 	
 	@Autowired
 	IterationFormValidator iterationFormValidator;	
@@ -128,35 +134,6 @@ public class IterationController {
     	return "redirect:list?projectId=" + projectId;
 	} 
     
-    @RequestMapping(value = "/addTask", method = RequestMethod.POST)
-    public String addTask(@RequestParam(value="taskId", required=true) Integer taskId,
-			@ModelAttribute("iterationTaskForm") IterationTaskForm iterationTaskForm, 
-			Model model) {
-    	
-    	Iteration iteration = iterationService.getById(iterationTaskForm.getIterationId());
-    	Task task = taskService.getById(taskId);
-
-    	if (taskStageService.getFirstStage() != null) {
-    		task.setTaskStage(taskStageService.getFirstStage());
-    		taskService.save(task);   		
-    	}
-    	 	
-    	iterationService.addTask(iteration, task);
-    	
-    	return "redirect:/project/scrum?id=" + iteration.getProject().getId();
-    }
-    
-    @RequestMapping(value = "/removeTask", method = RequestMethod.POST)
-    public String removeTask(@RequestParam(value="taskId", required=true) Integer taskId,
-			Model model) {
-    	
-    	Task task = taskService.getById(taskId);
-    	Integer projectId = task.getProject().getId();
-    	iterationService.removeTask(task.getIteration(), task);
-    	
-    	return "redirect:/project/scrum?id=" + projectId;
-    }
-    
     @RequestMapping(value = "/taskboard", method = RequestMethod.GET)
     public String taskboard(@RequestParam(value="id", required=true) Integer id,
     							Model model) {
@@ -167,35 +144,71 @@ public class IterationController {
     	Map<TaskStage, List<Task>> tasks = new HashMap<TaskStage, List<Task>>();
     	
     	for (TaskStage taskStage : taskStages) {    		
-    		tasks.put(taskStage, taskStageService.getTasksForStage(iteration, taskStage));
+ 
+    		List<TaskStagePosition> positions = positionService.getTaskStagePositions(taskStageService.getTasksForStage(iteration, taskStage));
+    		
+        	List<Task> sorted = new ArrayList<Task>();    	
+        	for (TaskStagePosition position : positions) {
+        		sorted.add(position.getTask());
+        	}      		
+    		
+    		tasks.put(taskStage, sorted);
     	}
     	
-    	model.addAttribute("iteration", iteration);
-    	model.addAttribute("plannedPoints", iterationService.getPlannedPoints(iteration));
-    	model.addAttribute("donePoints", iterationService.getDonePoints(iteration));    	
+    	model.addAttribute("iteration", iteration);  	
 		model.addAttribute("taskStageList", taskStages);
 		model.addAttribute("tasks", tasks);
-		model.addAttribute("taskTaskStageForm", new TaskTaskStageForm());
 		
 		return "iteration/taskboard";
     }
 
-    @RequestMapping(value = "/changeTaskStage", method = RequestMethod.POST)
-    public String changeTaskStage(@RequestParam(value="taskId", required=true) Integer taskId,
-			@ModelAttribute("taskTaskStageForm") TaskTaskStageForm taskTaskStageForm, 
-			Model model) {
+    @RequestMapping(value = "/updateTaskStage", method = RequestMethod.GET)
+    public @ResponseBody Map<String, String> updateTaskStage(
+    		@RequestParam(value="taskStageId", required=true) Integer taskStageId,
+    		@RequestParam(value="idList", required=true) String idList,
+    		@RequestParam(value="newId", required=false) Integer newId) {
     	
-    	Task task = taskService.getById(taskId);
-    	TaskStage previousStage = task.getTaskStage();
-    	task.setTaskStage(taskStageService.getById(taskTaskStageForm.getTaskStageId()));
+    	if (newId != null) {
+        	Task task = taskService.getById(newId);
+        	TaskStage previousStage = task.getTaskStage();
+        	
+        	task.setTaskStage(taskStageService.getById(taskStageId));
+        	taskService.save(task);
+        	
+        	EmailNotificationHook emailNotificationHook = new EmailNotificationHook();
+        	emailNotificationHook.execute(task, previousStage);        	
+    	}
+   
+    	int positionCount = 0;
+    	if (idList.length() > 0) {
+	    	for (String id : idList.split(",")) {
+	    		
+	    		TaskStagePosition position = positionService.getOrCreateTaskStagePosition(taskService.getById(Integer.parseInt(id)));
+	    		position.setPosition(positionCount);
+	    		positionService.save(position);
+	    		positionCount++;
+	    	}      		
+    	}  	
     	
-    	taskService.save(task);
+    	Map<String, String> result = new HashMap<String, String>();
+    	result.put("result", "OK");
     	
-    	EmailNotificationHook emailNotificationHook = new EmailNotificationHook();
-    	
-    	emailNotificationHook.execute(task, previousStage);
-    	
-    	return "redirect:taskboard?id=" + task.getIteration().getId();
-    }    
+    	return result;
+    }
     
+    @RequestMapping(value = "/getStats", method = RequestMethod.GET)
+    public @ResponseBody Map<String, String> getStats(
+    		@RequestParam(value="id", required=true) Integer id) {    
+    	
+    	Iteration iteration = iterationService.getById(id);
+    	
+    	Map<String, String> result = new HashMap<String, String>();
+ 
+    	result.put("plannedPoints", iterationService.getPlannedPoints(iteration).toString());
+    	result.put("donePoints", iterationService.getDonePoints(iteration).toString());      	    	
+    	result.put("result", "OK");
+    	
+    	return result;
+    }
+  
 }

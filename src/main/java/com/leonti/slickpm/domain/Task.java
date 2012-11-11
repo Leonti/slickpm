@@ -7,9 +7,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -29,8 +32,9 @@ public class Task {
     @ManyToOne
     private Points points;    
     
-    @ManyToOne
-    private Task parent;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany
+    private List<Task> dependsOn;
     
     @ManyToOne
     private TaskType taskType;
@@ -88,20 +92,12 @@ public class Task {
 		this.points = points;
 	}
 
-	public Task getParent() {
-		return parent;
-	}
-
 	public TaskType getTaskType() {
 		return taskType;
 	}
 
 	public void setTaskType(TaskType taskType) {
 		this.taskType = taskType;
-	}
-
-	public void setParent(Task parent) {
-		this.parent = parent;
 	}
 
 	public Project getProject() {
@@ -143,4 +139,32 @@ public class Task {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public List<Task> getDependsOn() {
+		return dependsOn;
+	}
+
+	public void setDependsOn(List<Task> dependsOn) {
+		this.dependsOn = dependsOn;
+	}
+	
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31).
+            append(this.id).
+            toHashCode();
+    }
+    
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (obj == this)
+            return true;
+        if (obj.getClass() != getClass())
+            return false;
+
+        Task task = (Task) obj;
+        return new EqualsBuilder().
+            append(this.id, task.getId()).
+            isEquals();
+    }   
 }

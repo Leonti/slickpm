@@ -1,5 +1,10 @@
 package com.leonti.slickpm.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +15,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.leonti.slickpm.domain.BacklogPosition;
+import com.leonti.slickpm.domain.Iteration;
+import com.leonti.slickpm.domain.IterationPosition;
 import com.leonti.slickpm.domain.Project;
+import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.form.ProjectForm;
-import com.leonti.slickpm.form.IterationTaskForm;
 import com.leonti.slickpm.service.IterationService;
+import com.leonti.slickpm.service.PositionService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
+import com.leonti.slickpm.service.TaskStageService;
 import com.leonti.slickpm.validator.ProjectFormValidator;
 
 @Controller
@@ -31,6 +42,12 @@ public class ProjectController {
 	
 	@Resource(name="TaskService")
 	TaskService taskService;	
+	
+	@Resource(name="PositionService")
+	PositionService positionService;	
+
+	@Resource(name="TaskStageService")
+	TaskStageService taskStageService;		
 	
 	@Autowired
 	ProjectFormValidator projectFormValidator;
@@ -98,12 +115,97 @@ public class ProjectController {
     public String scrumView(@RequestParam(value="id", required=true) Integer id,
     							Model model) {
     	
-    	model.addAttribute("backlogList", taskService.getBacklogList(id));
+    	List<BacklogPosition> positions = positionService.getBacklogPositions(taskService.getBacklogList(id));
+    	
+    	List<Task> sortedTasks = new ArrayList<Task>();    	
+    	for (BacklogPosition position : positions) {
+    		sortedTasks.add(position.getTask());
+    	}
+    	
+    	Map<Iteration, List<Task>> sortedIterationTasks = new HashMap<Iteration, List<Task>>();
+    	
+    	List<Iteration> iterations = iterationService.getList(id);
+    	
+    	for (Iteration iteration : iterations) {
+    		
+    		List<IterationPosition> iterationPositions = positionService.getIterationPositions(iteration.getTasks());
+    		
+        	List<Task> sorted = new ArrayList<Task>();    	
+        	for (IterationPosition position : iterationPositions) {
+        		sorted.add(position.getTask());
+        	}  
+
+        	sortedIterationTasks.put(iteration, sorted);
+    	}
+    	
+    	model.addAttribute("backlogList", sortedTasks);
     	model.addAttribute("iterationList", iterationService.getList(id));
-    	model.addAttribute("iterationTaskForm", new IterationTaskForm());
+    	model.addAttribute("sortedIterationTasks", sortedIterationTasks);
     	model.addAttribute("projectId", id);
     	
 		return "project/scrum";
-    }   
+    }
+    
+    @RequestMapping(value = "/updateBacklog", method = RequestMethod.GET)
+    public @ResponseBody Map<String, String> updateBacklog(
+    		@RequestParam(value="idList", required=true) String idList,
+    		@RequestParam(value="toBacklogId", required=false) Integer toBacklogId) {
+    	
+    	if (toBacklogId != null) {
+        	Task task = taskService.getById(toBacklogId);
+        	iterationService.removeTask(task.getIteration(), task);
+    	}
+    	
+    	int positionCount = 0;
+    	if (idList.length() > 0) {
+	    	for (String id : idList.split(",")) {
+	    		
+	    		BacklogPosition position = positionService.getOrCreateBacklogPosition(taskService.getById(Integer.parseInt(id)));
+	    		position.setPosition(positionCount);
+	    		positionService.save(position);
+	    		positionCount++;
+	    	}
+    	}
+    	
+    	Map<String, String> result = new HashMap<String, String>();
+    	result.put("result", "OK");
+    	
+    	return result;
+    }
+    
+    @RequestMapping(value = "/updateIteration", method = RequestMethod.GET)
+    public @ResponseBody Map<String, String> updateIteration(
+    		@RequestParam(value="iterationId", required=true) Integer iterationId,
+    		@RequestParam(value="idList", required=true) String idList,
+    		@RequestParam(value="newId", required=false) Integer newId) {
+
+    	if (newId != null) {
+	    	Iteration iteration = iterationService.getById(iterationId);
+	    	Task task = taskService.getById(newId);
+	
+	    	if (taskStageService.getFirstStage() != null) {
+	    		task.setTaskStage(taskStageService.getFirstStage());
+	    		taskService.save(task);    		
+	    	}
+	    	 	
+	    	iterationService.addTask(iteration, task);    		
+    	}
+
+    	int positionCount = 0;
+    	if (idList.length() > 0) {
+	    	for (String id : idList.split(",")) {
+	    		
+	    		IterationPosition position = positionService.getOrCreateIterationPosition(taskService.getById(Integer.parseInt(id)));
+	    		position.setPosition(positionCount);
+	    		positionService.save(position);
+	    		positionCount++;
+	    	} 
+    	}
+    	   	
+    	Map<String, String> result = new HashMap<String, String>();
+    	result.put("result", "OK");
+    	
+    	return result;
+    }
 	
 }

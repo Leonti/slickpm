@@ -33,7 +33,13 @@
 					<form:select path="userId" items="${userList}" itemValue="id" itemLabel="name" />							
 					<spring:message code="task.assignToUser" var="submit" /> 
 					<input type="submit" value="${submit}" class="btn" />		
-				</form:form>									        
+				</form:form>
+				
+				<form:form modelAttribute="taskDependencyForm" action="/task/addDependency?id=${task.id}" method="POST" class="form-inline">
+					<form:select path="dependencyId" items="${taskList}" itemValue="id" itemLabel="title" />							
+					<spring:message code="task.addDependency" var="submit" /> 
+					<input type="submit" value="${submit}" class="btn" />		
+				</form:form>													        
 		    </div>
 	    </div>
 
