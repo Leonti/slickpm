@@ -7,7 +7,8 @@
     
 <spring:message code="user.editPageTitle" var="title"/>    
 <jsp:include page="../common/header.jsp" flush="true" >
-	<jsp:param name="title" value="${title}" /> 
+	<jsp:param name="title" value="${title}" />
+	<jsp:param name="js" value="user" /> 
 </jsp:include>
 
     <div class="container">
@@ -23,12 +24,21 @@
 						<spring:message code="user.editSubmit" var="submit" /> 
 						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
 					</div>		
-				</form:form>	        
+				</form:form>
+
+				<form id="avatarupload" action="/file/upload" method="POST" enctype="multipart/form-data" data-userid="${userId}">
+					<div class="avatar">
+						<div class="image fileinput-button">
+							<div class="change"><spring:message code="user.changeAvatar" /></div>
+							<img class="background" src="${avatarImage}" />
+							<input type="file" name="file" multiple>
+						</div>
+					</div>
+				</form>
+    
 		    </div>
 	    </div>
 
     </div> <!-- /container -->
     
-    
-
 <jsp:include page="../common/footer.jsp" flush="true" />

@@ -27,27 +27,27 @@
 			</div>			
 		</div>
 
-		<table class="stages">
-			<tr>
+		<div class="stages">
+
 				<c:forEach var="taskStage" items="${taskStageList}">
-			    <td>		    
+			    <div class="column">		    
 		        	<h3>${taskStage.title}</h3>
 		        	<div class="taskList" data-taskstageid="${taskStage.id}">
 			        	<c:forEach var="task" items="${tasks[taskStage]}">
 			        		<div class="task" id="task-${task.id}">
 			        			<div class="user">
-			        				<img src="http://www.abload.de/img/me_gusta_moar_random_s9u9s.png" />
+			        				<img src="${avatars[task]}" />
 			        			</div>
 			        			<div class="details">
-			        				<span class="title">${task.title}</span> 
+			        				<a href="/task/details?id=${task.id}" class="title">${task.title}</a>  
 			        			</div>
 			        		</div>					        		
 			        	</c:forEach>	        	
 		        	</div>
-			    </td>
+			    </div>
 				</c:forEach>	
-			</tr>
-		</table>
+
+		</div>
 
     </div> <!-- /container -->
     

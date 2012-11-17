@@ -1,5 +1,8 @@
 package com.leonti.slickpm.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +13,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.leonti.slickpm.domain.Task;
+import com.leonti.slickpm.domain.UploadedFile;
 import com.leonti.slickpm.domain.User;
 import com.leonti.slickpm.form.UserForm;
+import com.leonti.slickpm.service.UploadedFileService;
 import com.leonti.slickpm.service.UserService;
 import com.leonti.slickpm.validator.UserFormValidator;
 
@@ -23,6 +29,9 @@ public class UserController {
 
 	@Resource(name="UserService")
 	UserService userService;
+
+	@Resource(name="UploadedFileService")
+	UploadedFileService uploadedFileService;	
 	
 	@Autowired
 	UserFormValidator userFormValidator;
@@ -61,7 +70,17 @@ public class UserController {
     public String edit(@RequestParam(value="id", required=true) Integer id,
     							Model model) {
     	
-		model.addAttribute("userForm", new UserForm(userService.getById(id)));
+    	User user = userService.getById(id);
+    	
+    	model.addAttribute("userId", id);
+    	
+    	UploadedFile avatar = user.getAvatar();  	
+    	model.addAttribute("avatarImage", 
+    			avatar != null ? 
+    			"/file/download/" + avatar.getId() + "/" + avatar.getFilename() 
+    			: "/resources/images/avatar_placeholder.png");
+    	
+		model.addAttribute("userForm", new UserForm(user));
 		
 		return "user/edit";
     }    
@@ -103,5 +122,19 @@ public class UserController {
         userService.delete(user);   	
 		       
     	return "redirect:list";
+	}
+    
+	@RequestMapping(value="/avatar", method=RequestMethod.POST)
+	public @ResponseBody Map<String, String> upload(
+			@RequestParam(value="id", required=true) Integer id,
+			@RequestParam(value="fileId", required=true) Integer fileId) {
+		
+		User user = userService.getById(id);      
+		user.setAvatar(uploadedFileService.getById(fileId));
+		userService.save(user);
+		
+    	Map<String, String> result = new HashMap<String, String>();  	
+    	result.put("result", "OK");
+    	return result;		
 	}    
 }

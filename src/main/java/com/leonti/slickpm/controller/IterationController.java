@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.leonti.slickpm.domain.Iteration;
-import com.leonti.slickpm.domain.IterationPosition;
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.TaskStage;
 import com.leonti.slickpm.domain.TaskStagePosition;
+import com.leonti.slickpm.domain.UploadedFile;
 import com.leonti.slickpm.form.IterationForm;
 import com.leonti.slickpm.hook.EmailNotificationHook;
 import com.leonti.slickpm.service.IterationService;
@@ -142,6 +142,7 @@ public class IterationController {
     	List<TaskStage> taskStages = taskStageService.getList();
     	  	
     	Map<TaskStage, List<Task>> tasks = new HashMap<TaskStage, List<Task>>();
+    	Map<Task, String> avatars = new HashMap<Task, String>();
     	
     	for (TaskStage taskStage : taskStages) {    		
  
@@ -149,7 +150,9 @@ public class IterationController {
     		
         	List<Task> sorted = new ArrayList<Task>();    	
         	for (TaskStagePosition position : positions) {
-        		sorted.add(position.getTask());
+        		Task task = position.getTask();
+        		sorted.add(task);
+        		avatars.put(task, getTaskAvatar(task));
         	}      		
     		
     		tasks.put(taskStage, sorted);
@@ -158,8 +161,20 @@ public class IterationController {
     	model.addAttribute("iteration", iteration);  	
 		model.addAttribute("taskStageList", taskStages);
 		model.addAttribute("tasks", tasks);
+		model.addAttribute("avatars", avatars);
 		
 		return "iteration/taskboard";
+    }
+    
+    private String getTaskAvatar(Task task) {
+    	if (task.getUser() == null)
+    		return "no_user";
+    	
+    	UploadedFile avatar = task.getUser().getAvatar();
+    	if (avatar == null)
+    		return "/resources/images/avatar_placeholder.png";
+    	  	
+    	return "/file/download/" + avatar.getId() + "/" + avatar.getFilename();
     }
 
     @RequestMapping(value = "/updateTaskStage", method = RequestMethod.GET)
