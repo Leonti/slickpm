@@ -3,6 +3,8 @@ package com.leonti.slickpm.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class TaskStageService {
 
     @Autowired
     private SessionFactory sessionFactory;	     
+ 
+	@Resource(name="ProjectService")
+	ProjectService projectService;     
     
 	public TaskStage save(TaskStage taskStage) {
 		sessionFactory.getCurrentSession().saveOrUpdate(taskStage);
@@ -27,9 +32,16 @@ public class TaskStageService {
     public void delete(TaskStage taskStage) {
     	sessionFactory.getCurrentSession().delete(taskStage);
     }
-    
+  
     @SuppressWarnings("unchecked")
 	public List<TaskStage> getList() {
+    	
+    	return (ArrayList<TaskStage>) sessionFactory.getCurrentSession()
+    			.createQuery("FROM TaskStage").list();
+	}    
+    
+    @SuppressWarnings("unchecked")
+	public List<TaskStage> getDefaultList() {
     	
     	return (ArrayList<TaskStage>) sessionFactory.getCurrentSession()
     			.createQuery("FROM TaskStage").list();

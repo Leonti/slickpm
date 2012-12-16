@@ -1,7 +1,6 @@
 package com.leonti.slickpm.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -12,8 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.leonti.slickpm.domain.Points;
+import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.UploadedFile;
+import com.leonti.slickpm.domain.User;
 
 @Service("UploadedFileService")
 @Transactional
@@ -76,4 +76,23 @@ public class UploadedFileService {
     			.uniqueResult();
 	}
 	
+    public String getTaskAvatar(Task task) {
+    	if (task.getUser() == null)
+    		return "/resources/images/no_user.png";
+    	
+    	UploadedFile avatar = task.getUser().getAvatar();
+    	if (avatar == null)
+    		return "/resources/images/avatar_placeholder.png";
+    	  	
+    	return "/file/download/" + avatar.getId() + "/" + avatar.getFilename();
+    }	
+	
+    public String getUserAvatar(User user) {
+  	
+    	UploadedFile avatar = user.getAvatar();
+    	if (avatar == null)
+    		return "/resources/images/avatar_placeholder.png";
+    	  	
+    	return "/file/download/" + avatar.getId() + "/" + avatar.getFilename();
+    }    
 }

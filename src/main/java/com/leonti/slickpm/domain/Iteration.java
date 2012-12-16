@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.leonti.slickpm.domain.dto.IterationDTO;
+
 @Entity
 public class Iteration {
     @Id
@@ -74,6 +76,11 @@ public class Iteration {
 
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
+	}
+	
+	public IterationDTO getDTO() {
+		return new IterationDTO(this.id, this.title, this.description,
+				this.project.getId());
 	}
 
     public int hashCode() {

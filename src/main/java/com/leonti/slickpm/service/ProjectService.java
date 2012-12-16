@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.leonti.slickpm.domain.Project;
-import com.leonti.slickpm.domain.Task;
 
 @Service("ProjectService")
 @Transactional
@@ -28,9 +27,9 @@ public class ProjectService {
     }
     
     @SuppressWarnings("unchecked")
-	public List<Task> getList() {
+	public List<Project> getList() {
     	
-    	return (ArrayList<Task>) sessionFactory.getCurrentSession()
+    	return (ArrayList<Project>) sessionFactory.getCurrentSession()
     			.createQuery("FROM Project").list();
 	}
     

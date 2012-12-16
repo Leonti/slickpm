@@ -1,24 +1,22 @@
 package com.leonti.slickpm.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.leonti.slickpm.domain.UploadedFile;
 import com.leonti.slickpm.domain.User;
-import com.leonti.slickpm.form.UserForm;
+import com.leonti.slickpm.domain.dto.UserDTO;
 import com.leonti.slickpm.service.UploadedFileService;
 import com.leonti.slickpm.service.UserService;
 import com.leonti.slickpm.validator.UserFormValidator;
@@ -35,106 +33,63 @@ public class UserController {
 	
 	@Autowired
 	UserFormValidator userFormValidator;
-	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(Model model) {
-		model.addAttribute("list", userService.getList());
+
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public @ResponseBody List<UserDTO> RESTList(Model model) {
 		
-		return "user/list";
-	}
-	
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String add(Model model) {
+		List<UserDTO> users = new ArrayList<UserDTO> ();
 		
-		model.addAttribute("userForm", new UserForm());
+		for (User user: userService.getList()) {
+			users.add(user.getDTO());
+		}
 		
-		return "user/add";
+		return users;
 	}	
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addPost(@ModelAttribute("userForm") UserForm userForm, 
-    					Model model,
-    					BindingResult result) {
-    	   	
-    	userFormValidator.validate(userForm, result); 
-        if (result.hasErrors()) { 
-        	return "user/add"; 
-        } 
-        
-        userService.save(userForm.getUser());   	
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	public @ResponseBody UserDTO RESTDetails(@PathVariable("id") Integer id) {
 		
-    	return "redirect:list";
-	}
-    
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String edit(@RequestParam(value="id", required=true) Integer id,
-    							Model model) {
-    	
-    	User user = userService.getById(id);
-    	
-    	model.addAttribute("userId", id);
-    	
-    	UploadedFile avatar = user.getAvatar();  	
-    	model.addAttribute("avatarImage", 
-    			avatar != null ? 
-    			"/file/download/" + avatar.getId() + "/" + avatar.getFilename() 
-    			: "/resources/images/avatar_placeholder.png");
-    	
-		model.addAttribute("userForm", new UserForm(user));
-		
-		return "user/edit";
-    }    
-	
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editPost(@RequestParam(value="id", required=true) Integer id,
-    					@ModelAttribute("userForm") UserForm userForm, 
-    					Model model,
-    					BindingResult result) {
-    	
-    	userFormValidator.validate(userForm, result); 
-        if (result.hasErrors()) { 
-        	return "user/edit"; 
-        } 
+		return userService.getById(id).getDTO();
+	}	
 
-        User user = userService.getById(id);
-        user.setName(userForm.getName());      
-        userService.save(user);   	
-		
-    	return "redirect:list";
-	} 
-    
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(@RequestParam(value="id", required=true) Integer id,
-    							Model model) {
-		
-		model.addAttribute("messageCode", "user.deleteConfirmation");
-		model.addAttribute("backUrl", "/user/list");
-		
-		return "confirmation";
-    }    
 	
-    
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deletePost(@RequestParam(value="id", required=true) Integer id,
-    					Model model) { 
-
-    	User user = userService.getById(id);        
-        userService.delete(user);   	
-		       
-    	return "redirect:list";
-	}
-    
-	@RequestMapping(value="/avatar", method=RequestMethod.POST)
-	public @ResponseBody Map<String, String> upload(
-			@RequestParam(value="id", required=true) Integer id,
-			@RequestParam(value="fileId", required=true) Integer fileId) {
+	@RequestMapping(value = "", method = RequestMethod.POST)
+	@ResponseBody
+	public UserDTO RESTAdd(@RequestBody UserDTO userDTO) {
 		
-		User user = userService.getById(id);      
-		user.setAvatar(uploadedFileService.getById(fileId));
+		User user = new User();
+		
+		user.setName(userDTO.getName());		
+		if (userDTO.getAvatarId() != null) {
+			UploadedFile avatar = uploadedFileService.getById(userDTO.getAvatarId());
+			user.setAvatar(avatar);
+		}		
 		userService.save(user);
 		
-    	Map<String, String> result = new HashMap<String, String>();  	
-    	result.put("result", "OK");
-    	return result;		
-	}    
+		return user.getDTO();
+	}	
+
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	public UserDTO RESTUpdate(
+			@RequestBody UserDTO userDTO,
+			@PathVariable("id") Integer id) {
+		
+		User user = userService.getById(id);
+		user.setName(userDTO.getName());		
+		if (userDTO.getAvatarId() != null) {
+			UploadedFile avatar = uploadedFileService.getById(userDTO.getAvatarId());
+			user.setAvatar(avatar);
+		}		
+		userService.save(user);		
+		
+		return user.getDTO();
+	}	
+	
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public void RESTDelete(@PathVariable("id") Integer id) {
+		
+		userService.delete(userService.getById(id));
+	}	
 }

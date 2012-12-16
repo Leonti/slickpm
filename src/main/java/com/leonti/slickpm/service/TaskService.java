@@ -22,13 +22,18 @@ public class TaskService {
 
 	@Resource(name="ProjectService")
 	ProjectService projectService;    
-    
+
+	@Resource(name="PositionService")
+	PositionService positionService;  	
+	
 	public Task save(Task task) {
 		sessionFactory.getCurrentSession().saveOrUpdate(task);
 		return task;
 	}	
     
     public void delete(Task task) {
+    	
+    	positionService.removeTaskPositions(task);
     	sessionFactory.getCurrentSession().delete(task);
     }
     
@@ -78,7 +83,7 @@ public class TaskService {
 	}
 	
 	public void removeDependency(Task task, Task dependency) {
-		task.getDependsOn().remove(task);
+		task.getDependsOn().remove(dependency);
 		save(task);		
 	}
 }

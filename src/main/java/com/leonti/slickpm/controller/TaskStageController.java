@@ -1,18 +1,26 @@
 package com.leonti.slickpm.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.leonti.slickpm.domain.StagePosition;
 import com.leonti.slickpm.domain.TaskStage;
-import com.leonti.slickpm.form.TaskStageForm;
+import com.leonti.slickpm.domain.dto.TaskStageDTO;
+import com.leonti.slickpm.service.PositionService;
+import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskStageService;
 import com.leonti.slickpm.validator.TaskStageFormValidator;
 
@@ -22,88 +30,97 @@ public class TaskStageController {
 	
 	@Resource(name="TaskStageService")
 	TaskStageService taskStageService;		
+
+	@Resource(name="ProjectService")
+	ProjectService projectService;		
+
+	@Resource(name="PositionService")
+	PositionService positionService;	
 	
 	@Autowired
 	TaskStageFormValidator taskStageFormValidator;
+
 	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(Model model) {
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public TaskStageDTO RESTDetails(@PathVariable("id") Integer id) {
 		
-		model.addAttribute("list", taskStageService.getList());
+		return taskStageService.getById(id).getDTO();
+	}	
+	
+	@RequestMapping(value = "", method = RequestMethod.POST)
+	@ResponseBody
+	public TaskStageDTO RESTAdd(@RequestBody TaskStageDTO taskStageDTO) {
 		
-		return "taskstage/list";
+		TaskStage taskStage = new TaskStage();
+		taskStage.setTitle(taskStageDTO.getTitle());
+		taskStage.setDescription(taskStageDTO.getDescription());
+		
+		taskStageService.save(taskStage);
+		
+		return taskStage.getDTO();
 	}
 	
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String add(Model model) {
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	public TaskStageDTO RESTUpdate(
+			@RequestBody TaskStageDTO taskStageDTO,
+			@PathVariable("id") Integer id) {
 		
-		model.addAttribute("taskStageForm", new TaskStageForm());
+		TaskStage taskStage = taskStageService.getById(id);
+		taskStage.setTitle(taskStageDTO.getTitle());
+		taskStage.setDescription(taskStageDTO.getDescription());
+		taskStageService.save(taskStage);
 		
-		return "taskstage/add";
+		return taskStage.getDTO();
 	}	
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addPost(@ModelAttribute("taskStageForm") TaskStageForm taskStageForm, 
-		Model model,
-		BindingResult result) {
-    	   	
-    	taskStageFormValidator.validate(taskStageForm, result); 
-        if (result.hasErrors()) { 
-        	return "taskstage/add"; 
-        } 
-        
-        taskStageService.save(taskStageForm.getTaskStage());   	
-		
-    	return "redirect:list";
-	}
-    
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String edit(@RequestParam(value="id", required=true) Integer id,
-    							Model model) {
-    	
-    	TaskStage taskStage = taskStageService.getById(id);
-		model.addAttribute("taskStageForm", new TaskStageForm(taskStage));
-		
-		return "taskstage/edit";
-    }    
 	
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editPost(@RequestParam(value="id", required=true) Integer id,
-    					@ModelAttribute("taskStageForm") TaskStageForm taskStageForm, 
-    					Model model,
-    					BindingResult result) {
-    	
-    	taskStageFormValidator.validate(taskStageForm, result); 
-        if (result.hasErrors()) { 
-        	return "taskstage/edit"; 
-        } 
-
-        TaskStage taskStage = taskStageService.getById(id);
-        taskStage.setTitle(taskStageForm.getTitle());
-        taskStage.setDescription(taskStageForm.getDescription());
-        
-        taskStageService.save(taskStage);   	
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public void RESTDelete(@PathVariable("id") Integer id) {
 		
-    	return "redirect:list";
-	}
-
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(@RequestParam(value="id", required=true) Integer id,
-    							Model model) {
-		
-		model.addAttribute("messageCode", "taskStage.deleteConfirmation");
-		model.addAttribute("backUrl", "/taskstage/list");
-		
-		return "confirmation";
-    }    
-	   
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deletePost(@RequestParam(value="id", required=true) Integer id,
-    					Model model) { 
-
-        TaskStage taskStage = taskStageService.getById(id);        
-        taskStageService.delete(taskStage);   	
-		       
-    	return "redirect:list";
+		TaskStage taskStage = taskStageService.getById(id);
+		positionService.removeStagePositions(taskStage);
+		taskStageService.delete(taskStage);
 	}	
+	
+
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public @ResponseBody List<TaskStageDTO> RESTTaskStageList() {
+		
+		List<TaskStageDTO> taskStageDTOList = new ArrayList<TaskStageDTO>();
+		
+		List<StagePosition> positions = positionService.getStagePositions(taskStageService.getList());
+		
+		for(StagePosition stagePosition : positions) {
+			taskStageDTOList.add(stagePosition.getTaskStage().getDTO());
+		}
+		
+		return taskStageDTOList;
+	}
+	
+    @RequestMapping(value = "/updateOrder", method = RequestMethod.POST)
+    public @ResponseBody Map<String, String> updateStages(
+    		@RequestParam(value="idList", required=true) String idList) {
+ 
+    	
+    	if (idList.length() > 0) {
+    		
+    		
+    		int positionCount = 0;
+	    	for (String id : idList.split(",")) {
+	    		
+	    		StagePosition position = positionService.getOrCreateStagePosition(taskStageService.getById(Integer.parseInt(id)));
+	    		position.setPosition(positionCount);
+	    		positionService.save(position);
+	    		positionCount++;
+	    	}
+    	}
+   	
+    	Map<String, String> result = new HashMap<String, String>();
+    	result.put("result", "OK");
+    	
+    	return result;
+    }	
 }

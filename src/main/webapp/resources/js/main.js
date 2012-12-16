@@ -1,3 +1,32 @@
-require(["jquery", "bootstrap"], function($) {
+require.config({
+	shim: {
+		'underscore': {
+			exports: '_'
+		},
+		'backbone': {
+			deps: [
+				'underscore',
+				'jquery'
+			],
+			exports: 'Backbone'
+		}
+	},
+	paths: {
+		jquery: 'lib/jquery/jquery.min',
+		jqueryui: 'lib/jqueryui',
+		underscore: 'lib/backbone/underscore',
+		backbone: 'lib/backbone/backbone',
+		text: 'lib/require/text',
+		fileupload: 'lib/fileupload'
+	},
+	
+	urlArgs: "bust=" +  (new Date()).getTime()
+});
 
+require([
+	'routers/mainRouter'
+	], function(Workspace) {
+
+	new Workspace();
+	Backbone.history.start();
 });

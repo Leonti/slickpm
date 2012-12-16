@@ -11,6 +11,12 @@ public class GeneralController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
 		
-		return "home";
+		return "main";
+	}
+	
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public String backbone(Model model) {
+		
+		return "admin";
 	}	
 }

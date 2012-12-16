@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.leonti.slickpm.domain.dto.TaskTypeDTO;
+
 @Entity
 public class TaskType {
 
@@ -43,5 +45,9 @@ public class TaskType {
 
 	public Integer getId() {
 		return id;
-	}    
+	}
+	
+	public TaskTypeDTO getDTO() {
+		return new TaskTypeDTO(id, title, description);
+	}
 }

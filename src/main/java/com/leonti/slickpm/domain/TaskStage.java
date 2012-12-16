@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.leonti.slickpm.domain.dto.TaskStageDTO;
 
 @Entity
 public class TaskStage {
@@ -16,7 +19,7 @@ public class TaskStage {
     private String title;
     
     @Column
-    private String description;
+    private String description;  
 
     public TaskStage() {}
     
@@ -43,5 +46,10 @@ public class TaskStage {
 
 	public Integer getId() {
 		return id;
+	}
+	
+
+	public TaskStageDTO getDTO() {
+		return new TaskStageDTO(this.id, this.title, this.description);
 	}
 }

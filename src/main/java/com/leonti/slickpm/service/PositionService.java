@@ -13,7 +13,9 @@ import com.leonti.slickpm.domain.BacklogPosition;
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.IterationPosition;
 import com.leonti.slickpm.domain.Position;
+import com.leonti.slickpm.domain.StagePosition;
 import com.leonti.slickpm.domain.Task;
+import com.leonti.slickpm.domain.TaskStage;
 import com.leonti.slickpm.domain.TaskStagePosition;
 
 @Service("PositionService")
@@ -30,6 +32,30 @@ public class PositionService {
     
     public void delete(Position position) {
     	sessionFactory.getCurrentSession().delete(position);
+    }
+    
+    public void removeTaskPositions(Task task) {
+    	sessionFactory.getCurrentSession()
+		.createQuery("DELETE FROM BacklogPosition WHERE task = ?")
+		.setEntity(0, task)
+		.executeUpdate();   
+ 	
+    	sessionFactory.getCurrentSession()
+		.createQuery("DELETE FROM IterationPosition WHERE task = ?")
+		.setEntity(0, task)
+		.executeUpdate();  
+ 
+    	sessionFactory.getCurrentSession()
+		.createQuery("DELETE FROM TaskStagePosition WHERE task = ?")
+		.setEntity(0, task)
+		.executeUpdate();         	
+    }
+    
+    public void removeStagePositions(TaskStage taskStage) {
+    	sessionFactory.getCurrentSession()
+		.createQuery("DELETE FROM StagePosition WHERE taskStage = ?")
+		.setEntity(0, taskStage)
+		.executeUpdate();     	
     }
     
     public List<BacklogPosition> getBacklogPositions(List<Task> tasks) {
@@ -161,5 +187,49 @@ public class PositionService {
     		
     	return 0;	
     }       
+ 
+    /* Order of stages on iteration */
     
+    public List<StagePosition> getStagePositions(List<TaskStage> taskStages) {
+
+    	List<StagePosition> positions = new ArrayList<StagePosition>();
+    	for (TaskStage taskStage : taskStages) {    		
+    		positions.add(getOrCreateStagePosition(taskStage));
+    	}    	  	
+    	Collections.sort(positions);
+    	
+    	return positions;
+    }
+    
+    public StagePosition getOrCreateStagePosition(TaskStage taskStage) {
+    	if (getStagePosition(taskStage) == null) {
+			StagePosition position = new StagePosition(taskStage, getNextStagePosition());
+			save(position);    		
+    	}
+    	
+    	return getStagePosition(taskStage);
+    }
+ 
+    private StagePosition getStagePosition(TaskStage taskStage) {
+    	
+    	return (StagePosition) sessionFactory.getCurrentSession()
+    			.createQuery("FROM StagePosition WHERE taskStage = ?")
+    			.setEntity(0, taskStage)
+    			.setMaxResults(1)
+    			.uniqueResult();    	
+    }
+    
+    private Integer getNextStagePosition() {
+    	
+    	StagePosition position = (StagePosition) sessionFactory.getCurrentSession()
+    			.createQuery("FROM StagePosition ORDER BY position DESC")
+    			.setMaxResults(1)
+    			.uniqueResult();
+    	
+    	if (position != null) {
+    		return position.getPosition() + 1;
+    	}
+    		
+    	return 0;	
+    }     
 }

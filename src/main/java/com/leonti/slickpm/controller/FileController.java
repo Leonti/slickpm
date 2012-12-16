@@ -1,6 +1,5 @@
 package com.leonti.slickpm.controller;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,19 +44,19 @@ public class FileController {
 	}
 	
     @RequestMapping(value = "/download/{id}/*", method=RequestMethod.GET)
-	    public void getFile(HttpServletResponse response, @PathVariable("id") Integer id) throws IOException {
-    		
-    		UploadedFile uploadedFile = uploadedFileService.getById(id);
+    public void getFile(HttpServletResponse response, @PathVariable("id") Integer id) throws IOException {
+		
+		UploadedFile uploadedFile = uploadedFileService.getById(id);
 
-    		if (uploadedFile == null) {
-        		response.setStatus(404);  			
-    		} else {
-        		response.setContentType(uploadedFile.getContentType());
-		   		
-        		InputStream in;
-    	        in = new FileInputStream(uploadedFileService.getFile(uploadedFile));
-    	        ServletOutputStream out = response.getOutputStream();
-    	        IOUtils.copy(in, out);    			
-    		}
-	    }	
+		if (uploadedFile == null) {
+    		response.setStatus(404);  			
+		} else {
+    		response.setContentType(uploadedFile.getContentType());
+	   		
+    		InputStream in;
+	        in = new FileInputStream(uploadedFileService.getFile(uploadedFile));
+	        ServletOutputStream out = response.getOutputStream();
+	        IOUtils.copy(in, out);    			
+		}
+    }	
 }

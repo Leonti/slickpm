@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.leonti.slickpm.domain.dto.ProjectDTO;
+
 @Entity
 public class Project {
 
@@ -41,7 +43,15 @@ public class Project {
 		this.description = description;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public Integer getId() {
 		return id;
+	}
+	
+	public ProjectDTO getDTO() {
+		return new ProjectDTO(id, title, description);
 	}
 }

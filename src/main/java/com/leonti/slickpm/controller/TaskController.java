@@ -1,5 +1,9 @@
 package com.leonti.slickpm.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,20 +11,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.leonti.slickpm.domain.Comment;
 import com.leonti.slickpm.domain.Task;
-import com.leonti.slickpm.form.CommentForm;
-import com.leonti.slickpm.form.TaskDependencyForm;
+import com.leonti.slickpm.domain.User;
+import com.leonti.slickpm.domain.dto.TaskDTO;
 import com.leonti.slickpm.form.TaskForm;
-import com.leonti.slickpm.form.TaskUserForm;
 import com.leonti.slickpm.service.CommentService;
 import com.leonti.slickpm.service.PointsService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskTypeService;
+import com.leonti.slickpm.service.UploadedFileService;
 import com.leonti.slickpm.service.UserService;
 import com.leonti.slickpm.validator.TaskFormValidator;
 
@@ -45,30 +53,56 @@ public class TaskController {
 	
 	@Resource(name="CommentService")
 	CommentService commentService;		
+
+	@Resource(name="UploadedFileService")
+	UploadedFileService uploadedFileService;	
 	
 	@Autowired
 	TaskFormValidator taskFormValidator;
-	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(@RequestParam(value="projectId", required=true) Integer projectId,
-			Model model) {
+
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	public @ResponseBody TaskDTO RESTDetails(@PathVariable("id") Integer id) {
 		
-		model.addAttribute("projectId", projectId);
-		model.addAttribute("list", taskService.getList(projectId));
-		
-		return "task/list";
-	}
-	
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String add(@RequestParam(value="projectId", required=true) Integer projectId,
-			Model model) {
-		
-		model.addAttribute("projectId", projectId);
-		model.addAttribute("taskTypeList", taskTypeService.getList());
-		model.addAttribute("taskForm", new TaskForm());
-		
-		return "task/add";
+		return taskService.getById(id).getDTO();
 	}	
+	
+	@RequestMapping(value = "", method = RequestMethod.POST)
+	@ResponseBody
+	public TaskDTO RESTAdd(@RequestBody TaskDTO taskDTO) {
+	
+		Task task = new Task();
+		
+		task.setTitle(taskDTO.getTitle());
+		task.setDescription(taskDTO.getDescription());
+		task.setProject(projectService.getById(taskDTO.getProjectId()));
+		taskService.save(task);
+		
+		return task.getDTO();
+	}	
+
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	public TaskDTO RESTUpdate(
+			@RequestBody TaskDTO taskDTO,
+			@PathVariable("id") Integer id) {
+		
+		Task task = taskService.getById(taskDTO.getId());
+		task.setTitle(taskDTO.getTitle());
+		task.setDescription(taskDTO.getDescription());
+		taskService.save(task);
+		
+		return taskDTO;
+	}	
+	
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public void RESTDelete(@PathVariable("id") Integer id) {
+		
+		taskService.delete(taskService.getById(id));
+	}		
+	
+	/* pre backbone code */
+		
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addPost(@RequestParam(value="projectId", required=true) Integer projectId,
@@ -98,8 +132,6 @@ public class TaskController {
     	model.addAttribute("userList", userService.getList());
     	model.addAttribute("task", task);
 		model.addAttribute("taskForm", new TaskForm(task));
-		model.addAttribute("taskUserForm", new TaskUserForm());
-		model.addAttribute("taskDependencyForm", new TaskDependencyForm());
 		model.addAttribute("taskList", taskService.getDependencyCandidates(task));
 		
 		return "task/edit";
@@ -131,6 +163,27 @@ public class TaskController {
 		
     	return "redirect:list?projectId=" + task.getProject().getId();
 	}
+    
+	@RequestMapping(value="/updateField", method=RequestMethod.POST)
+	public @ResponseBody Map<String, String> updateField(
+			@RequestParam(value="id", required=true) Integer id,
+			@RequestParam(value="field", required=true) String field,
+			@RequestParam(value="value", required=true) String value) {
+		
+		Task task = taskService.getById(id);
+		
+		if (field.equals("title")) {
+			task.setTitle(value);
+		} else if (field.equals("description")) {
+			task.setDescription(value);
+		}
+		
+		taskService.save(task); 
+		
+		Map<String, String> result = new HashMap<String, String>();  	
+    	result.put("result", "OK");   	
+    	return result;		
+	}    
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(@RequestParam(value="id", required=true) Integer id,
@@ -162,45 +215,87 @@ public class TaskController {
     							Model model) {
     	
     	Task task = taskService.getById(id);
+    	
+    	List<User> userList = userService.getList();   	    	
+		Map<User, String> avatars = new HashMap<User, String>();	
+		
+		for (User user : userList) {
+			avatars.put(user, uploadedFileService.getUserAvatar(user));
+		}
+		
+		userList.remove(task.getUser());
+	
+		List<Task> dependencyCandidates = taskService.getDependencyCandidates(task);
+		Map<Task, String> dependencyAvatars = new HashMap<Task, String>();	
+		for (Task dependencyTask : dependencyCandidates) {
+			dependencyAvatars.put(dependencyTask, uploadedFileService.getTaskAvatar(dependencyTask));
+		}		
+		
+		for (Task dependencyTask : task.getDependsOn()) {
+			dependencyAvatars.put(dependencyTask, uploadedFileService.getTaskAvatar(dependencyTask));
+		}
+		
     	model.addAttribute("task", task);
-    	model.addAttribute("commentForm", new CommentForm()); 
+    	model.addAttribute("userList", userList);
+		model.addAttribute("avatars", avatars);
+		model.addAttribute("dependencyCandidates", dependencyCandidates);
+		model.addAttribute("dependencyAvatars", dependencyAvatars); 
     	
 		return "task/details";
     }      
     
     @RequestMapping(value = "/addComment", method = RequestMethod.POST)
-    public String addComment(@RequestParam(value="id", required=true) Integer id,
-    		@ModelAttribute("commentForm") CommentForm commentForm,
+    public @ResponseBody Map<String, String> addComment(
+    		@RequestParam(value="id", required=true) Integer id,
+    		@RequestParam(value="comment", required=true) String comment,
 			Model model) {
 
     	Task task = taskService.getById(id);
-		taskService.addComment(task, commentService.save(commentForm.getComment(task)));  	
+		taskService.addComment(task, commentService.save(new Comment(comment, task)));  	
     	
-    	return "redirect:details?id=" + id;
+		Map<String, String> result = new HashMap<String, String>();  	
+    	result.put("result", "OK");   	
+    	return result;
     }
 
     @RequestMapping(value = "/assignToUser", method = RequestMethod.POST)
-    public String assignToUser(@RequestParam(value="id", required=true) Integer id,
-    		@ModelAttribute("taskUserForm") TaskUserForm taskUserForm,
+    public @ResponseBody Map<String, String>  assignToUser(
+    		@RequestParam(value="id", required=true) Integer id,
+    		@RequestParam(value="userId", required=true) Integer userId,
 			Model model) {
 
     	Task task = taskService.getById(id); 	
-    	task.setUser(userService.getById(taskUserForm.getUserId()));
+    	task.setUser(userService.getById(userId));
 		taskService.save(task);  	
     	
-    	return "redirect:details?id=" + id;
+		Map<String, String> result = new HashMap<String, String>();  	
+    	result.put("result", "OK");   	
+    	return result;
     } 
     
     @RequestMapping(value = "/addDependency", method = RequestMethod.POST)
-    public String addDependency(@RequestParam(value="id", required=true) Integer id,
-    		@ModelAttribute("taskDependencyForm") TaskDependencyForm taskDependencyForm,
+    public @ResponseBody Map<String, String>  addDependency(
+    		@RequestParam(value="id", required=true) Integer id,
+    		@RequestParam(value="taskId", required=true) Integer taskId,
 			Model model) {
     	
-    	System.out.println("DEPENDENCY ID: " + taskDependencyForm.getDependencyId());
+		taskService.addDependency(taskService.getById(id), taskService.getById(taskId));
     	
-		taskService.addDependency(taskService.getById(id), taskService.getById(taskDependencyForm.getDependencyId()));
-    	
-    	return "redirect:details?id=" + id;
+		Map<String, String> result = new HashMap<String, String>();  	
+    	result.put("result", "OK");   	
+    	return result;
     }    
-    
+
+    @RequestMapping(value = "/removeDependency", method = RequestMethod.POST)
+    public @ResponseBody Map<String, String>  removeDependency(
+    		@RequestParam(value="id", required=true) Integer id,
+    		@RequestParam(value="taskId", required=true) Integer taskId,
+			Model model) {
+    	
+		taskService.removeDependency(taskService.getById(id), taskService.getById(taskId));
+    	
+		Map<String, String> result = new HashMap<String, String>();  	
+    	result.put("result", "OK");   	
+    	return result;
+    }     
 }
