@@ -12,11 +12,13 @@ define([
 		template: _.template(commentListTemplate),
 		className: 'list',
 	 
-	    initialize:function () {
+	    initialize: function(options) {
 	        this.model.bind("reset", this.render, this);
 	        this.model.bind("add", function (comment) {
 	            $(this.el).find('ul').append(new CommentListItemView({model: comment}).render().el);
 	        }, this);
+	        
+	        this.task = options.task;
 	    },
 	 
 	    render:function (eventName) {
@@ -37,7 +39,7 @@ define([
 	 
 	    addComment: function () {
 	        
-	    	var model = new CommentModel({taskId: 3});
+	    	var model = new CommentModel({taskId: this.task.attributes.id});
 	    	
 	    	model.set({
 	            content: $('.content', $(this.el)).val()

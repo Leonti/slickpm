@@ -3,8 +3,6 @@ package com.leonti.slickpm.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.leonti.slickpm.domain.UploadedFile;
+import com.leonti.slickpm.domain.dto.UploadedFileDTO;
 import com.leonti.slickpm.service.UploadedFileService;
 
 @Controller
@@ -30,17 +29,12 @@ public class FileController {
 	UploadedFileService uploadedFileService;
 	
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
-	public @ResponseBody Map<String, String> upload(
+	public @ResponseBody UploadedFileDTO upload(
 		@RequestParam("file") MultipartFile file) {
 		
 		UploadedFile uploadedFile = uploadedFileService.save(file);
-		
-    	Map<String, String> result = new HashMap<String, String>();  	
-    	result.put("filename", uploadedFile.getFilename());
-    	result.put("id", String.valueOf(uploadedFile.getId()));
-    	result.put("result", "OK");
     	
-    	return result;		
+    	return uploadedFile.getDTO();		
 	}
 	
     @RequestMapping(value = "/download/{id}/*", method=RequestMethod.GET)

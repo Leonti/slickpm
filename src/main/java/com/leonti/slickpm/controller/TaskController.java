@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.leonti.slickpm.domain.Comment;
 import com.leonti.slickpm.domain.Task;
+import com.leonti.slickpm.domain.UploadedFile;
 import com.leonti.slickpm.domain.User;
 import com.leonti.slickpm.domain.dto.CommentDTO;
 import com.leonti.slickpm.domain.dto.TaskDTO;
+import com.leonti.slickpm.domain.dto.UploadedFileDTO;
 import com.leonti.slickpm.form.TaskForm;
 import com.leonti.slickpm.service.CommentService;
 import com.leonti.slickpm.service.PointsService;
@@ -160,7 +162,33 @@ public class TaskController {
 		commentService.delete(commentService.getById(id));
 	}
 	
-
+	@RequestMapping(value = "{taskId}/file", method = RequestMethod.GET)
+	public @ResponseBody List<UploadedFileDTO> RESTFiletList(
+			@PathVariable("taskId") Integer taskId) {
+		
+		Task task = taskService.getById(taskId);
+		List<UploadedFileDTO> files = new ArrayList<UploadedFileDTO>();
+		for (UploadedFile uploadedFile : task.getFiles()) {
+			files.add(uploadedFile.getDTO());
+		}
+		
+		return files;
+	}
+	
+	@RequestMapping(value = "{taskId}/addFile", method = RequestMethod.POST)
+	public @ResponseBody Map<String, String> addFile(
+			@PathVariable("taskId") Integer taskId,
+			@RequestParam(value="id", required=true) Integer id) {
+		
+		taskService.addUploadedFile(taskService.getById(taskId), uploadedFileService.getById(id));
+		
+    	Map<String, String> result = new HashMap<String, String>();
+    	result.put("result", "OK");
+    	
+    	return result;		
+	}	
+		
+	
 	
 	/* pre backbone code */
 		

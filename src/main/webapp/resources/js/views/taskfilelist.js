@@ -1,0 +1,53 @@
+define([
+	'jquery',
+	'underscore',
+	'backbone',
+	'models/file',
+	'views/filelistitem',
+	'text!templates/taskFileList.html',
+	'fileupload/jquery.iframe-transport', 
+	'fileupload/jquery.fileupload'
+], function( $, _, Backbone, FileModel, FileListItemView, taskFileListTemplate ) {
+	
+	var TaskFileListView = Backbone.View.extend({
+		 
+		template: _.template(taskFileListTemplate),
+		className: 'list',
+	 
+	    initialize: function(options) {
+	        this.model.bind("reset", this.render, this);
+	        this.model.bind("add", function (file) {
+	            $(this.el).find('ul').append(new FileListItemView({model: file}).render().el);
+	        }, this);
+	        
+	        this.task = options.task;
+	    },
+	 
+	    render:function (eventName) {
+	    	
+	    	$(this.el).html(this.template());
+	    	
+	        _.each(this.model.models, function (file) {
+	        	
+	        	var commentListItemView = new FileListItemView({ model: file });	        	
+	            $(this.el).find('ul').append(commentListItemView.render().el);	            
+	        }, this);
+	        
+	        var self = this;
+	        $('#taskFileUpload', $(this.el)).fileupload()
+			.bind('fileuploaddone', function (e, data) {    			
+				console.log(data.result.id);
+				
+				var file = new FileModel(data.result);				
+				self.model.add(file);
+				
+				file.addToTask(self.task.attributes.id);
+			});
+	        
+	        return this;
+	    },
+	    
+	});
+	
+	return TaskFileListView;
+});

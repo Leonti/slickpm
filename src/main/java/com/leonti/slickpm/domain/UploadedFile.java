@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.leonti.slickpm.domain.dto.UploadedFileDTO;
+
 @Entity
 public class UploadedFile {
 
@@ -69,5 +71,10 @@ public class UploadedFile {
 
 	public Integer getId() {
 		return id;
+	}
+	
+	public UploadedFileDTO getDTO() {
+		return new UploadedFileDTO(this.id, this.filename, this.contentType,
+				this.size, this.uploadDate);
 	}
 }

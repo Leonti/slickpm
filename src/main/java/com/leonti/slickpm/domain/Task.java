@@ -43,6 +43,10 @@ public class Task {
     @ManyToMany
     private List<Task> dependsOn;
     
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany
+    private List<UploadedFile> files;
+    
     @ManyToOne
     private TaskType taskType;
     
@@ -155,6 +159,18 @@ public class Task {
 		this.dependsOn = dependsOn;
 	}
 	
+	public List<UploadedFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<UploadedFile> files) {
+		this.files = files;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public TaskDTO getDTO() {
 		
 		return new TaskDTO(id, title, description, 

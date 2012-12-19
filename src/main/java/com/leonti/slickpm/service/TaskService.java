@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.leonti.slickpm.domain.Comment;
 import com.leonti.slickpm.domain.Task;
+import com.leonti.slickpm.domain.UploadedFile;
 
 @Service("TaskService")
 @Transactional
@@ -79,6 +80,11 @@ public class TaskService {
 	
 	public void addDependency(Task task, Task dependency) {
 		task.getDependsOn().add(dependency);
+		save(task);
+	}
+	
+	public void addUploadedFile(Task task, UploadedFile uploadedFile) {
+		task.getFiles().add(uploadedFile);
 		save(task);
 	}
 	

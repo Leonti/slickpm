@@ -3,10 +3,18 @@ define([
 	'underscore',
 	'backbone',
 	'collections/comments',
+	'collections/taskFiles',
 	'views/commentlist',
+	'views/taskfilelist',
 	'text!templates/taskDetails.html',
 	'bootstrap'
-], function( $, _, Backbone, CommentCollection, CommentListView, taskDetailsTemplate, bootstrap ) {
+], function( $, _, Backbone, 
+		CommentCollection, 
+		TaskFileCollection, 
+		CommentListView, 
+		TaskFileListView, 
+		taskDetailsTemplate, 
+		bootstrap ) {
 	
 	var TaskDetailsView = Backbone.View.extend({
 		 
@@ -18,6 +26,18 @@ define([
 	        this.model.bind("change", this.render, this);	        
 	    },
 	    
+	    listFiles: function() {
+	    	if (!this.fileList) {
+	    		this.fileList = new TaskFileCollection(null, {taskId: this.model.attributes.id});
+	    		
+	    		var self = this;
+	    		this.fileList.deferred.done(function() {
+	    			var taskFileListView = new TaskFileListView({task: self.model, model: self.fileList});
+	    			$('#attachments').html(taskFileListView.render().el);	
+	    		});
+	    	}
+	    },
+	    
 	    listComments: function() {
 	    	
 	    	if (!this.commentList) {
@@ -25,15 +45,16 @@ define([
 	    		
 	    		var self = this;   		
 	    		this.commentList.deferred.done(function() {	    			
-	    			self.commentListView = new CommentListView({model: self.commentList});
-		    		$('#comments').html(self.commentListView.render().el);	    			
-	    		}, this);
+	    			var commentListView = new CommentListView({task: self.model, model: self.commentList});
+		    		$('#comments').html(commentListView.render().el);	    			
+	    		});
 	    	} 
 	    },
 	 
 	    render: function (eventName) {
 	        $(this.el).html(this.template(this.model.toJSON()));
 	        this.listComments();
+	        this.listFiles();
 	        return this;
 	    },
 	 
