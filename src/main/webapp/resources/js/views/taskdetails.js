@@ -4,15 +4,19 @@ define([
 	'backbone',
 	'collections/comments',
 	'collections/taskFiles',
+	'collections/dependencyCandidates',
 	'views/commentlist',
 	'views/taskfilelist',
+	'views/TaskSelector',
 	'text!templates/taskDetails.html',
 	'bootstrap'
 ], function( $, _, Backbone, 
 		CommentCollection, 
 		TaskFileCollection, 
+		DependencyCandidatesCollection,
 		CommentListView, 
 		TaskFileListView, 
+		TaskSelectorView,
 		taskDetailsTemplate, 
 		bootstrap ) {
 	
@@ -32,7 +36,7 @@ define([
 	    		
 	    		var self = this;
 	    		this.fileList.deferred.done(function() {
-	    			var taskFileListView = new TaskFileListView({task: self.model, model: self.fileList});
+	    			var taskFileListView = new TaskFileListView({task: self.model, collection: self.fileList});
 	    			$('#attachments').html(taskFileListView.render().el);	
 	    		});
 	    	}
@@ -45,7 +49,7 @@ define([
 	    		
 	    		var self = this;   		
 	    		this.commentList.deferred.done(function() {	    			
-	    			var commentListView = new CommentListView({task: self.model, model: self.commentList});
+	    			var commentListView = new CommentListView({task: self.model, collection: self.commentList});
 		    		$('#comments').html(commentListView.render().el);	    			
 	    		});
 	    	} 
@@ -60,7 +64,8 @@ define([
 	 
 	    events:{
 	        "click .save": "saveTask",
-	        "click .delete": "deleteTask"
+	        "click .delete": "deleteTask",
+	        "click .addDependency": "addDependency"
 	    },
 	 
 	    saveTask:function () {
@@ -89,6 +94,15 @@ define([
 	            }
 	        });
 	        return false;
+	    },
+	    
+	    addDependency: function() {
+	    	
+	    	var dependencyCandidates = new DependencyCandidatesCollection(null, {taskId: this.model.id});	    	
+	    	var taskSelectorView = new TaskSelectorView({collection: dependencyCandidates});
+	    	taskSelectorView.bind("taskSelected", function(id) {
+	    		alert(id);
+	    	});
 	    },
 	 
 	    close:function () {

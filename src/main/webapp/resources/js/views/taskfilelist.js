@@ -15,8 +15,8 @@ define([
 		className: 'list',
 	 
 	    initialize: function(options) {
-	        this.model.bind("reset", this.render, this);
-	        this.model.bind("add", function (file) {
+	        this.collection.bind("reset", this.render, this);
+	        this.collection.bind("add", function (file) {
 	            $(this.el).find('ul').append(new FileListItemView({model: file}).render().el);
 	        }, this);
 	        
@@ -27,7 +27,7 @@ define([
 	    	
 	    	$(this.el).html(this.template());
 	    	
-	        _.each(this.model.models, function (file) {
+	        _.each(this.collection.models, function (file) {
 	        	
 	        	var commentListItemView = new FileListItemView({ model: file });	        	
 	            $(this.el).find('ul').append(commentListItemView.render().el);	            
@@ -39,7 +39,7 @@ define([
 				console.log(data.result.id);
 				
 				var file = new FileModel(data.result);				
-				self.model.add(file);
+				self.collection.add(file);
 				
 				file.addToTask(self.task.attributes.id);
 			});

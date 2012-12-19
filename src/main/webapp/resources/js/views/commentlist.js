@@ -13,8 +13,8 @@ define([
 		className: 'list',
 	 
 	    initialize: function(options) {
-	        this.model.bind("reset", this.render, this);
-	        this.model.bind("add", function (comment) {
+	        this.collection.bind("reset", this.render, this);
+	        this.collection.bind("add", function (comment) {
 	            $(this.el).find('ul').append(new CommentListItemView({model: comment}).render().el);
 	        }, this);
 	        
@@ -25,7 +25,7 @@ define([
 	    	
 	    	$(this.el).html(this.template());
 	    	
-	        _.each(this.model.models, function (comment) {
+	        _.each(this.collection.models, function (comment) {
 	        	
 	        	var commentListItemView = new CommentListItemView({ model: comment });	        	
 	            $(this.el).find('ul').append(commentListItemView.render().el);	            
@@ -48,7 +48,7 @@ define([
 	    	$('.content', $(this.el)).val('');
 	    	
         	var self = this;
-            this.model.create(model, {
+            this.collection.create(model, {
             	success: function() {
             		self.trigger("commentCreated", model.id);
             	}

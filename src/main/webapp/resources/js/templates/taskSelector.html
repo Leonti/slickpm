@@ -1,0 +1,5 @@
+<div class="taskSelector">
+	<% _.each(tasks, function(task) { %> 
+	    <span class="taskTitle" data-id="<%= task.id %>"><%= task.title %></span><br>
+	<% }); %>
+</div>

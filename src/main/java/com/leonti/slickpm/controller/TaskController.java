@@ -188,7 +188,18 @@ public class TaskController {
     	return result;		
 	}	
 		
-	
+	@RequestMapping(value = "{taskId}/dependencyCandidates", method = RequestMethod.GET)
+	public @ResponseBody List<TaskDTO> dependencyCandidates(
+			@PathVariable("taskId") Integer taskId) {
+		
+		List<TaskDTO> tasks = new ArrayList<TaskDTO>();      	
+		
+		for (Task task : taskService.getDependencyCandidates(taskService.getById(taskId))) {
+			tasks.add(task.getDTO());
+		}
+		
+		return tasks;
+	}	
 	
 	/* pre backbone code */
 		
