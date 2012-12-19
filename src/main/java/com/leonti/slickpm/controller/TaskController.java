@@ -1,5 +1,7 @@
 package com.leonti.slickpm.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.leonti.slickpm.domain.Comment;
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.User;
+import com.leonti.slickpm.domain.dto.CommentDTO;
 import com.leonti.slickpm.domain.dto.TaskDTO;
 import com.leonti.slickpm.form.TaskForm;
 import com.leonti.slickpm.service.CommentService;
@@ -99,7 +102,65 @@ public class TaskController {
 	public void RESTDelete(@PathVariable("id") Integer id) {
 		
 		taskService.delete(taskService.getById(id));
-	}		
+	}
+	
+	@RequestMapping(value = "{taskId}/comment", method = RequestMethod.GET)
+	public @ResponseBody List<CommentDTO> RESTCommentList(
+			@PathVariable("taskId") Integer taskId) {
+		
+		List<CommentDTO> comments = new ArrayList<CommentDTO>();
+		for (Comment comment : commentService.getList(taskId)) {
+			comments.add(comment.getDTO());
+		}
+		
+		return comments;
+	}
+	
+	@RequestMapping(value = "{taskId}/comment/{id}", method = RequestMethod.GET)
+	public @ResponseBody CommentDTO RESTGetComment(
+			@PathVariable("id") Integer id) {
+		return commentService.getById(id).getDTO();
+	}	
+	
+	@RequestMapping(value = "{taskId}/comment", method = RequestMethod.POST)
+	@ResponseBody
+	public CommentDTO RESTAddComment(
+			@PathVariable("taskId") Integer taskId,
+			@RequestBody CommentDTO commentDTO) {
+	
+		Comment comment = new Comment();
+		
+		comment.setContent(commentDTO.getContent());
+		comment.setDate(new Date());
+		comment.setTask(taskService.getById(taskId));
+		commentService.save(comment);
+		
+		return comment.getDTO();
+	}	
+
+	@RequestMapping(value = "{taskId}/comment/{id}", method = RequestMethod.PUT)
+	@ResponseBody
+	public CommentDTO RESTUpdateComment(
+			@PathVariable("taskId") Integer taskId,
+			@RequestBody CommentDTO commentDTO,
+			@PathVariable("id") Integer id) {
+
+		Comment comment = commentService.getById(id);
+		
+		comment.setContent(commentDTO.getContent());
+		commentService.save(comment);
+		
+		return comment.getDTO();		
+	}	
+	
+	@RequestMapping(value = "{taskId}/comment/{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public void RESTDeleteComment(@PathVariable("id") Integer id) {
+		
+		commentService.delete(commentService.getById(id));
+	}
+	
+
 	
 	/* pre backbone code */
 		

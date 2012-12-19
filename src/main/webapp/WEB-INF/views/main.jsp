@@ -62,33 +62,17 @@
 
     <div class="container">
 
-	    <div class="row">
-	    
+		<div id="task" class="span6 offset3">
+		</div>
 
-	    
-	    <div id="task" class="span8">
-	    </div>
-	    
-	    <div id="backlog" class="span6" >
-	    </div>
-	    
-	    <div id="iterations" class="iterationList span6">
-	    </div>
-		
-		<div id="content">
-
-		</div>	    
-	    
+	    <div class="row">	    
+		    <div id="backlog" class="span6" ></div>    
+		    <div id="iterations" class="span6"></div>    	    
 	    </div>
 	</div>
 	
 	<div class="container-fluid" id="taskboard">
 	</div>    
-
-
-
-
-
      		<div class="footerPush"></div>     
      	</div><!-- wrapper div -->
 

@@ -1,13 +1,27 @@
-<div class="form-left-col">
-    <label>Id:</label>
-    <input type="text" id="taskId" name="id" value="<%= id %>" disabled />
-    <label>Title:</label>
-    <input type="text" id="title" name="name" value="<%= title %>" required/>
+<div class="tabbable">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="#details" data-toggle="tab">Details</a>
+		</li>
+		<li><a href="#comments" data-toggle="tab">Comments</a></li>
+		<li><a href="#attachments" data-toggle="tab">Attachments</a></li>
+	</ul>
 
-    <button class="save">Save</button>
-    <button class="delete">Delete</button>
-</div>
-<div>
-    <label>Description:</label>
-    <textarea id="description" name="description"><%= description %></textarea>
+	<div class="tab-content">
+		<div class="tab-pane active" id="details">
+			<label>Title:</label>
+			<input type="text" class="title" value="<%= title %>" required />
+			<label>Description:</label>
+			<textarea class="description"><%= description %></textarea><br>
+			<button class="save btn">Save</button>
+			<button class="delete btn">Delete</button>		
+		</div>
+		<div class="tab-pane" id="comments">
+			Comments
+		</div>
+		<div class="tab-pane" id="attachments">
+			Attachments
+		</div>	
+	</div>
+
 </div>

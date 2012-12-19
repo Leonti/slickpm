@@ -2,8 +2,11 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'text!templates/taskDetails.html'
-], function( $, _, Backbone, taskDetailsTemplate ) {
+	'collections/comments',
+	'views/commentlist',
+	'text!templates/taskDetails.html',
+	'bootstrap'
+], function( $, _, Backbone, CommentCollection, CommentListView, taskDetailsTemplate, bootstrap ) {
 	
 	var TaskDetailsView = Backbone.View.extend({
 		 
@@ -11,12 +14,26 @@ define([
 	    
 	    initialize: function (options) {
 	    	this.taskList = options.taskList;
-	    	
+	    		    	
 	        this.model.bind("change", this.render, this);	        
+	    },
+	    
+	    listComments: function() {
+	    	
+	    	if (!this.commentList) {
+	    		this.commentList = new CommentCollection(null, {taskId: this.model.attributes.id});
+	    		
+	    		var self = this;   		
+	    		this.commentList.deferred.done(function() {	    			
+	    			self.commentListView = new CommentListView({model: self.commentList});
+		    		$('#comments').html(self.commentListView.render().el);	    			
+	    		}, this);
+	    	} 
 	    },
 	 
 	    render: function (eventName) {
 	        $(this.el).html(this.template(this.model.toJSON()));
+	        this.listComments();
 	        return this;
 	    },
 	 
@@ -27,8 +44,8 @@ define([
 	 
 	    saveTask:function () {
 	        this.model.set({
-	            title: $('#title').val(),
-	            description: $('#description').val()
+	            title: $('.title', $(this.el)).val(),
+	            description: $('.description', $(this.el)).val()
 	        });
 	        if (this.model.isNew()) {
 	        	

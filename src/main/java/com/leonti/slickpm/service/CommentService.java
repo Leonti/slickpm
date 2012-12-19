@@ -33,16 +33,16 @@ public class CommentService {
     }
     
     @SuppressWarnings("unchecked")
-	public List<Task> getList(Integer taskId) {
+	public List<Comment> getList(Integer taskId) {
     	
-    	return (ArrayList<Task>) sessionFactory.getCurrentSession()
+    	return (ArrayList<Comment>) sessionFactory.getCurrentSession()
     			.createQuery("FROM Comment WHERE task = ?")
     			.setEntity(0, taskService.getById(taskId)).list();
 	}     
     
-	public Task getById(Integer id) {
+	public Comment getById(Integer id) {
 
-    	return (Task) sessionFactory.getCurrentSession()
+    	return (Comment) sessionFactory.getCurrentSession()
     			.createQuery("FROM Comment WHERE id = ?")
     			.setLong(0, id)
     			.setMaxResults(1)

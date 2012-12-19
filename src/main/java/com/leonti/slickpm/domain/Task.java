@@ -163,7 +163,7 @@ public class Task {
 				iteration == null ? null : iteration.getId(), 
 				taskStage == null ? null : taskStage.getId(), 
 				project == null ? null : project.getId(), 
-				user == null ? null : user.getId());
+				user == null ? null : user.getDTO());
 	}
 	
     public int hashCode() {

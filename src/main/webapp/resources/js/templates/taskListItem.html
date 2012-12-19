@@ -1,6 +1,10 @@
 <div class="task" data-id="<%= id %>">
-	<div class="user">
- 		<img src="" />
+	<div class="user"> 		
+		<% if (userDTO && userDTO.avatarId) { %>
+			<img src="/file/download/<%= userDTO.avatarId %>/avatar" />
+		<% } else { %>
+			<img src="/resources/images/avatar_placeholder.png" />
+		<% } %> 		
  	</div>
  	<div class="details">
  		<a href="#project/<%= projectId %>/task/<%= id %>" class="title"><%= title %></a> 

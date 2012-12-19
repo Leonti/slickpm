@@ -7,22 +7,23 @@ define([
 	var Workspace = Backbone.Router.extend({
 		 
 	    routes:{
-	        "project/:projectId/iteration": "iterationList",
+	    	
+	        "project/:projectId": "project",
 	        "project/:projectId/iteration/add": "addIteration",
 	        "project/:projectId/iteration/:id": "iterationDetails",
-	        "project/:projectId/backlog": "backlog",
 	        "project/:projectId/task/add": "addTask",
 	        "project/:projectId/task/:taskId": "taskDetails",
 	        "taskboard/:id" : "taskboard"
 	    },
 
+	    project: function(projectId) {
+	    	this.appView.listIterations(projectId);
+	    	this.appView.backlog(projectId);
+	    },	    
+	    
 	    initialize:function () {	        
 	    	this.appView = new AppView({router: this});
 	    },	    
-	    
-	    iterationList: function (projectId) {
-	    	this.appView.listIterations(projectId);
-	    },
 
 	    addIteration: function(projectId) {
 	    	this.appView.addIteration(projectId);
@@ -30,11 +31,6 @@ define([
 	    
 	    iterationDetails: function (projectId, id) {
 	    	this.appView.iterationDetails(projectId, id);
-	    },
-	    
-	    backlog: function(projectId) {
-	    	this.appView.listIterations(projectId);
-	    	this.appView.backlog(projectId);
 	    },
 
 	    addTask: function(projectId) {

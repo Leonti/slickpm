@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.leonti.slickpm.domain.dto.CommentDTO;
+
 @Entity
 public class Comment {
 
@@ -58,5 +60,9 @@ public class Comment {
 
 	public void setTask(Task task) {
 		this.task = task;
+	}
+	
+	public CommentDTO getDTO() {
+		return new CommentDTO(this.id, this.task.getId(), this.content, this.date);
 	}
 }
