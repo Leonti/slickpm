@@ -4,19 +4,19 @@ define([
 	'backbone',
 	'collections/comments',
 	'collections/taskFiles',
-	'collections/dependencyCandidates',
+	'collections/dependencies',
 	'views/commentlist',
 	'views/taskfilelist',
-	'views/TaskSelector',
+	'views/dependencyList',
 	'text!templates/taskDetails.html',
 	'bootstrap'
 ], function( $, _, Backbone, 
 		CommentCollection, 
 		TaskFileCollection, 
-		DependencyCandidatesCollection,
+		DependencyCollection,
 		CommentListView, 
-		TaskFileListView, 
-		TaskSelectorView,
+		TaskFileListView,
+		DependencyListView,
 		taskDetailsTemplate, 
 		bootstrap ) {
 	
@@ -54,18 +54,30 @@ define([
 	    		});
 	    	} 
 	    },
+	    
+	    listDependencies: function() {
+	    	if (!this.dependencyList) {
+	    		this.dependencyList = new DependencyCollection(null, {taskId: this.model.attributes.id});
+	    		
+	    		var self = this;   		
+	    		this.dependencyList.deferred.done(function() {	    			
+	    			var dependencyListView = new DependencyListView({task: self.model, collection: self.dependencyList});
+		    		$('#dependencies').html(dependencyListView.render().el);	    			
+	    		});
+	    	} 	    	
+	    },
 	 
 	    render: function (eventName) {
 	        $(this.el).html(this.template(this.model.toJSON()));
 	        this.listComments();
 	        this.listFiles();
+	        this.listDependencies();
 	        return this;
 	    },
 	 
 	    events:{
 	        "click .save": "saveTask",
-	        "click .delete": "deleteTask",
-	        "click .addDependency": "addDependency"
+	        "click .delete": "deleteTask"
 	    },
 	 
 	    saveTask:function () {
@@ -94,15 +106,6 @@ define([
 	            }
 	        });
 	        return false;
-	    },
-	    
-	    addDependency: function() {
-	    	
-	    	var dependencyCandidates = new DependencyCandidatesCollection(null, {taskId: this.model.id});	    	
-	    	var taskSelectorView = new TaskSelectorView({collection: dependencyCandidates});
-	    	taskSelectorView.bind("taskSelected", function(id) {
-	    		alert(id);
-	    	});
 	    },
 	 
 	    close:function () {

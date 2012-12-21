@@ -15,7 +15,29 @@ define([
 	    
 	    initialize: function(options) {
 	    	this.defaults.projectId = options.projectId;
-	    }
+	    },
+	    
+	    addDependency: function(dependencyId) {
+	    	
+	    	var self = this;
+			$.post('/task/' + this.id + '/addDependency', 
+					{
+						dependencyId: dependencyId,
+					}, function(response) {
+				self.trigger("dependencyAdded");
+			}, 'json');
+	    },
+	    
+	    removeDependency: function(dependencyId) {
+	    	
+	    	var self = this;
+			$.post('/task/' + this.id + '/removeDependency', 
+					{
+						dependencyId: dependencyId,
+					}, function(response) {
+				self.trigger("dependencyRemoved");
+			}, 'json');
+	    },
 	});
 	
 	return TaskModel;

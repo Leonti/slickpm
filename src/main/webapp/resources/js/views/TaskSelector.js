@@ -30,15 +30,15 @@ define([
 			var self = this;
 			$('.taskTitle', this.el).on('click', function() {
 				self.el.dialog('close');
-				self.triggerSelection($(this).data('id'));
+				self.triggerSelection(self.collection.get($(this).data('id')));
 			});
 			
 			this.delegateEvents(this.events);
 			return this;
 		},
 		
-		triggerSelection: function(id) {
-			this.trigger("taskSelected", id);
+		triggerSelection: function(task) {
+			this.trigger("taskSelected", task);
 		}
 		
 	});

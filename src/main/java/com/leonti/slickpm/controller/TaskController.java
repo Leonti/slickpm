@@ -200,6 +200,45 @@ public class TaskController {
 		
 		return tasks;
 	}	
+
+	@RequestMapping(value = "{taskId}/dependency", method = RequestMethod.GET)
+	public @ResponseBody List<TaskDTO> dependencyList(
+			@PathVariable("taskId") Integer taskId) {
+		
+		List<TaskDTO> tasks = new ArrayList<TaskDTO>();      	
+		
+		for (Task task : taskService.getById(taskId).getDependsOn()) {
+			tasks.add(task.getDTO());
+		}
+		
+		return tasks;
+	}		
+
+	@RequestMapping(value = "{taskId}/addDependency", method = RequestMethod.POST)
+	public @ResponseBody Map<String, String> addDependency(
+			@PathVariable("taskId") Integer taskId,
+			@RequestParam(value="dependencyId", required=true) Integer dependencyId) {
+		
+		taskService.addDependency(taskService.getById(taskId), taskService.getById(dependencyId));
+		
+    	Map<String, String> result = new HashMap<String, String>();
+    	result.put("result", "OK");
+    	
+    	return result;		
+	}		
+
+	@RequestMapping(value = "{taskId}/removeDependency", method = RequestMethod.POST)
+	public @ResponseBody Map<String, String> removeDependency(
+			@PathVariable("taskId") Integer taskId,
+			@RequestParam(value="dependencyId", required=true) Integer dependencyId) {
+		
+		taskService.removeDependency(taskService.getById(taskId), taskService.getById(dependencyId));
+		
+    	Map<String, String> result = new HashMap<String, String>();
+    	result.put("result", "OK");
+    	
+    	return result;		
+	}		
 	
 	/* pre backbone code */
 		
