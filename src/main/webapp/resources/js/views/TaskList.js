@@ -2,7 +2,7 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'views/tasklistitem',
+	'views/TaskListItem',
 	'jqueryui/sortable'
 ], function( $, _, Backbone, TaskListItemView ) {
 	

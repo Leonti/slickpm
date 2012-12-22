@@ -94,6 +94,13 @@ public class TaskController {
 		Task task = taskService.getById(taskDTO.getId());
 		task.setTitle(taskDTO.getTitle());
 		task.setDescription(taskDTO.getDescription());
+		
+		if (taskDTO.getUserDTO() != null) {
+			task.setUser(userService.getById(taskDTO.getUserDTO().getId()));
+		} else {
+			task.setUser(null);
+		}
+		
 		taskService.save(task);
 		
 		return taskDTO;

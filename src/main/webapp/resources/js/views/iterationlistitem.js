@@ -3,7 +3,7 @@ define([
 	'underscore',
 	'backbone',
 	'collections/iterationTasks',
-	'views/tasklist',
+	'views/TaskList',
 	'text!templates/iterationListItem.html'
 ], function( $, _, Backbone, IterationTaskCollection, TaskListView, iterationListItemTemplate ) {
 	

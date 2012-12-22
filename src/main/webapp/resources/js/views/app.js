@@ -6,11 +6,11 @@ define([
 	'models/iteration',
 	'collections/backlog',
 	'models/task',
-	'views/iterationlist',
-	'views/iterationdetails',
-	'views/tasklist',
-	'views/taskdetails',
-	'views/taskboard'
+	'views/IterationList',
+	'views/IterationDetails',
+	'views/TaskList',
+	'views/TaskDetails',
+	'views/Taskboard'
 	
 ], function( $, _, Backbone, 
 		IterationCollection, 

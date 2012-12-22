@@ -4,7 +4,7 @@ define([
 	'backbone',
 	'collections/stages',
 	'collections/stageTasks',
-	'views/tasklist',
+	'views/TaskList',
 	'text!templates/taskboard.html',
 	'text!templates/taskboardStage.html'
 ], function( $, _, Backbone, 

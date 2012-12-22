@@ -6,7 +6,7 @@ define([
 	'models/project',
 	'collections/stages',
 	'models/stage',
-	'collections/users',
+	'collections/Users',
 	'models/user',
 	'views/projectlist',
 	'views/projectdetails',

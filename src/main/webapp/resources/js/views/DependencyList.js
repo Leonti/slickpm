@@ -2,8 +2,8 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'collections/dependencyCandidates',
-	'views/dependencyListItem',
+	'collections/DependencyCandidates',
+	'views/DependencyListItem',
 	'views/TaskSelector',
 	'text!templates/dependencyList.html'
 ], function( $, _, Backbone, 

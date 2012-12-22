@@ -1,9 +1,9 @@
 <div class="task" data-id="<%= id %>">
 	<div class="user"> 		
 		<% if (userDTO && userDTO.avatarId) { %>
-			<img src="/file/download/<%= userDTO.avatarId %>/avatar" />
+			<img class="avatar" src="/file/download/<%= userDTO.avatarId %>/avatar" />
 		<% } else { %>
-			<img src="/resources/images/avatar_placeholder.png" />
+			<img class="avatar" src="/resources/images/avatar_placeholder.png" />
 		<% } %> 		
  	</div>
  	<div class="details">

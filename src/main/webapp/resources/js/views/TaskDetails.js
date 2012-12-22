@@ -2,27 +2,34 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'collections/comments',
-	'collections/taskFiles',
-	'collections/dependencies',
-	'views/commentlist',
-	'views/taskfilelist',
-	'views/dependencyList',
+	'collections/Comments',
+	'collections/TaskFiles',
+	'collections/Dependencies',
+	'collections/Users',
+	'views/CommentList',
+	'views/TaskFileList',
+	'views/DependencyList',
+	'views/UserSelector',
 	'text!templates/taskDetails.html',
+	'text!templates/userItem.html',
 	'bootstrap'
 ], function( $, _, Backbone, 
 		CommentCollection, 
 		TaskFileCollection, 
 		DependencyCollection,
+		UserCollection,
 		CommentListView, 
 		TaskFileListView,
 		DependencyListView,
-		taskDetailsTemplate, 
+		UserSelectorView,
+		taskDetailsTemplate,
+		userItemTemplate,
 		bootstrap ) {
 	
 	var TaskDetailsView = Backbone.View.extend({
 		 
-	    template:_.template(taskDetailsTemplate),
+	    template: _.template(taskDetailsTemplate),
+	    userTemplate: _.template(userItemTemplate),
 	    
 	    initialize: function (options) {
 	    	this.taskList = options.taskList;
@@ -68,7 +75,14 @@ define([
 	    },
 	 
 	    render: function (eventName) {
+	    	
 	        $(this.el).html(this.template(this.model.toJSON()));
+
+	        
+	        if (this.model.get('userDTO')) {	        	
+		    	$(this.el).find('.assignedUser').html(this.userTemplate(this.model.toJSON().userDTO));	        	
+	        }
+	        
 	        this.listComments();
 	        this.listFiles();
 	        this.listDependencies();
@@ -77,7 +91,8 @@ define([
 	 
 	    events:{
 	        "click .save": "saveTask",
-	        "click .delete": "deleteTask"
+	        "click .delete": "deleteTask",
+	        "click .assignedUser": "assignUser"
 	    },
 	 
 	    saveTask:function () {
@@ -106,6 +121,23 @@ define([
 	            }
 	        });
 	        return false;
+	    },
+	    
+	    assignUser: function() {
+	    	var userList = new UserCollection();
+	    	var userSelectorView = new UserSelectorView({collection: userList});
+	    	
+	    	var self = this;
+	    	userSelectorView.bind("userSelected", function(user) {
+	    		
+	    		self.model.set({
+	    			userDTO : user
+	    		});
+	    			    		
+	    		$(self.el).find('.assignedUser').html(self.userTemplate(user.toJSON()));	
+	    	});
+	    	
+	    	return false;	    	
 	    },
 	 
 	    close:function () {
