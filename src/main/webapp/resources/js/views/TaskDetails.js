@@ -2,6 +2,7 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'editable',
 	'collections/Comments',
 	'collections/TaskFiles',
 	'collections/Dependencies',
@@ -13,7 +14,7 @@ define([
 	'text!templates/taskDetails.html',
 	'text!templates/userItem.html',
 	'bootstrap'
-], function( $, _, Backbone, 
+], function( $, _, Backbone, editable,
 		CommentCollection, 
 		TaskFileCollection, 
 		DependencyCollection,
@@ -79,9 +80,18 @@ define([
 	        $(this.el).html(this.template(this.model.toJSON()));
 
 	        
-	        if (this.model.get('userDTO')) {	        	
-		    	$(this.el).find('.assignedUser').html(this.userTemplate(this.model.toJSON().userDTO));	        	
+	        if (this.model.get('user')) {	        	
+		    	$(this.el).find('.assignedUser').html(this.userTemplate(this.model.toJSON().user));	        	
 	        }
+	        
+	        var self = this;
+	        $(this.el).find('.title').editable({
+	        	onSave: function() { self.saveTask(); }
+	        });
+	        $(this.el).find('.description').editable({
+	        	type: 'textarea',
+	        	onSave: function() { self.saveTask(); }
+	        });
 	        
 	        this.listComments();
 	        this.listFiles();
@@ -90,27 +100,17 @@ define([
 	    },
 	 
 	    events:{
-	        "click .save": "saveTask",
-	        "click .delete": "deleteTask",
 	        "click .assignedUser": "assignUser"
 	    },
 	 
-	    saveTask:function () {
+	    saveTask: function () {
 	        this.model.set({
-	            title: $('.title', $(this.el)).val(),
-	            description: $('.description', $(this.el)).val()
+	            title: $('.title', $(this.el)).text(),
+	            description: $('.description', $(this.el)).text()
 	        });
-	        if (this.model.isNew()) {
-	        	
-	        	var self = this;
-	            this.taskList.create(this.model, {
-	            	success: function() {	            		
-	            		self.trigger("taskCreated", self.model.attributes.projectId, self.model.id);
-	            	}
-	            });
-	        } else {
-	            this.model.save();
-	        }
+
+	        this.model.save();
+	        
 	        return false;
 	    },
 	 
@@ -131,9 +131,10 @@ define([
 	    	userSelectorView.bind("userSelected", function(user) {
 	    		
 	    		self.model.set({
-	    			userDTO : user
+	    			user : user
 	    		});
-	    			    		
+	    		self.model.save();
+	    		
 	    		$(self.el).find('.assignedUser').html(self.userTemplate(user.toJSON()));	
 	    	});
 	    	

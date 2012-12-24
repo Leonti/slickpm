@@ -18,7 +18,8 @@ require.config({
 		backbone: 'lib/backbone/backbone',
 		text: 'lib/require/text',
 		fileupload: 'lib/fileupload',
-		bootstrap: 'lib/bootstrap'
+		bootstrap: 'lib/bootstrap',
+		editable: 'lib/editable'
 	},
 	
 	urlArgs: "bust=" +  (new Date()).getTime()

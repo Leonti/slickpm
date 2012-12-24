@@ -4,8 +4,9 @@ define([
 	'backbone',
 	'collections/Users',
 	'views/UserSelector',
+	'views/TaskPopup',
 	'text!templates/taskListItem.html'
-], function( $, _, Backbone, UserCollection, UserSelectorView, taskListItemTemplate ) {
+], function( $, _, Backbone, UserCollection, UserSelectorView, TaskPopupView, taskListItemTemplate ) {
 	
 	var TaskListItemView = Backbone.View.extend({
 		 
@@ -30,7 +31,8 @@ define([
 	    },
 	    
 	    events:{
-	        "click .avatar": "assignUser"
+	        "click .avatar": "assignUser",
+	        "click .title": "openTaskPopup"
 	    },
 	    
 	    assignUser: function() {
@@ -41,14 +43,24 @@ define([
 	    	userSelectorView.bind("userSelected", function(user) {
 	    		
 	    		self.model.set({
-	    			userDTO : user
+	    			user : user
 	    		});
 	    			    		
 	    		self.model.save();	
 	    	});
 	    	
 	    	return false;	    	
-	    }	    
+	    },
+	    
+	    openTaskPopup: function(event) {
+
+	    	var taskPopupView = new TaskPopupView({model: this.model});
+	    	taskPopupView.render();
+	    	
+	    //	alert($(this.el).find('.task').data('id'));
+	    	
+	    	return false;
+	    }
 	 
 	});
 	

@@ -16,8 +16,11 @@ define([
 		},
 		
 		render: function() {
-			var dialogString = this.template({users: this.collection.toJSON()});
-			$(dialogString).dialog({
+			$('#userSelector').dialog("destroy").remove();
+						
+			var selectorDialog = $(this.template({users: this.collection.toJSON()}));			
+			selectorDialog.attr('id', 'userSelector');
+			selectorDialog.dialog({
 				autoOpen: true,
 				height: 460,
 				width: 350,

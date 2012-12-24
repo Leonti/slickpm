@@ -11,7 +11,7 @@ public class TaskDTO {
     private Integer iterationId;
     private Integer taskStageId;
     private Integer projectId;
-    private UserDTO userDTO;
+    private UserDTO user;
     
     public TaskDTO() {}
 
@@ -27,7 +27,7 @@ public class TaskDTO {
 		this.iterationId = iterationId;
 		this.taskStageId = taskStageId;
 		this.projectId = projectId;
-		this.userDTO = userDTO;
+		this.user = userDTO;
 	}
 
 	public Integer getId() {
@@ -94,11 +94,11 @@ public class TaskDTO {
 		this.projectId = projectId;
 	}
 
-	public UserDTO getUserDTO() {
-		return userDTO;
+	public UserDTO getUser() {
+		return user;
 	}
 
-	public void setUserDTO(UserDTO userDTO) {
-		this.userDTO = userDTO;
+	public void setUser(UserDTO userDTO) {
+		this.user = userDTO;
 	}
 }

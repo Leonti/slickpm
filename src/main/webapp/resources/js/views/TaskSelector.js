@@ -16,8 +16,13 @@ define([
 		},
 		
 		render: function() {
-			var dialogString = this.template({tasks: this.collection.toJSON()});
-			$(dialogString).dialog({
+			$('#taskSelector').dialog("destroy").remove();
+						
+			var selectorDialog = $(this.template({tasks: this.collection.toJSON()}));			
+			selectorDialog.attr('id', 'taskSelector');
+			$('body').append(selectorDialog);
+			
+			selectorDialog.dialog({
 				autoOpen: true,
 				height: 460,
 				width: 350,

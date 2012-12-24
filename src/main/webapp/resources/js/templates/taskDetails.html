@@ -11,13 +11,11 @@
 	<div class="tab-content">
 		<div class="tab-pane active" id="details">
 			<label>Title:</label>
-			<input type="text" class="title" value="<%= title %>" required />
+			<span class="title"><%= title %></span><br>
 			<label>Description:</label>
-			<textarea class="description"><%= description %></textarea><br>
+			<span class="description"><%= description %></span><br>
 			<label>Assigned to:</label>
 			<div class="assignedUser"></div>
-			<button class="save btn">Save</button>
-			<button class="delete btn">Delete</button>	
 		</div>
 		<div class="tab-pane" id="comments">
 		</div>

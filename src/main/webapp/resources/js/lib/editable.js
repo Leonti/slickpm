@@ -11,7 +11,6 @@ define(["jquery"], function(jQuery) {
 				
 				el.on('click', function() {
 					
-
 					var editor = $('<input type="text">');
 					if (opts.type == 'textarea') {
 						editor = $('<textarea></textarea>');
@@ -23,9 +22,7 @@ define(["jquery"], function(jQuery) {
 						.prev().text($(this).val()).show();
 						
 						if (opts.onSave) {
-							opts.onSave.call(this, {
-								value: $(this).val()
-							});
+							opts.onSave.call(this, $(this).val());
 						}
 					});
 					
