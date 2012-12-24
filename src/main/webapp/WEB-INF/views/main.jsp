@@ -65,6 +65,17 @@
 		<div id="task" class="span6 offset3">
 		</div>
 
+		<div class="row">
+			<div class="span6">
+				<a class="addTaskLink" href="#">Add task</a>			
+			</div>
+		</div>
+		<div class="row">	
+			<div class="span6">
+				<div id="addTask"></div>
+			</div>
+		</div>
+
 	    <div class="row">	    
 		    <div id="backlog" class="span6" ></div>    
 		    <div id="iterations" class="span6"></div>    	    

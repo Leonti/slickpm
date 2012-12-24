@@ -10,7 +10,8 @@ define([
 	'views/IterationDetails',
 	'views/TaskList',
 	'views/TaskDetails',
-	'views/Taskboard'
+	'views/Taskboard',
+	'views/TaskAdd'
 	
 ], function( $, _, Backbone, 
 		IterationCollection, 
@@ -21,7 +22,8 @@ define([
 		IterationDetailsView,
 		TaskListView,
 		TaskDetailsView,
-		TaskboardView) {
+		TaskboardView,
+		TaskAddView) {
 	
 	var AppView = Backbone.View.extend({
 		
@@ -95,6 +97,8 @@ define([
 	    		
 	    		var taskListView = new TaskListView({model: self.backlogTaskList});
 		        $('#backlog').html(taskListView.render().el);
+		        
+		        $('.addTaskLink').attr('href', '/#project/' + projectId + '/task/add');
 	    	}
 	    },
 
@@ -102,15 +106,16 @@ define([
 
 	    	this.backlog(projectId);
 	    	
-	    	if (self.taskView) self.taskView.close();
+	    	if (self.taskAddView) self.taskAddView.close();
 
-	    	self.taskView = new TaskDetailsView({ model: new TaskModel({projectId: projectId}), taskList: self.backlogTaskList});
-	        self.taskView.bind("taskCreated", self.taskCreated);
-	        $('#content').html(self.taskView.render().el);	    	
+	    	self.taskAddView = new TaskAddView({ model: new TaskModel({projectId: projectId}), collection: self.backlogTaskList});
+	        self.taskAddView.bind("taskCreated", self.taskCreated, self);
+	        $('#addTask').html(self.taskAddView.render().el);	    	
 	    },	    
 
-	    taskCreated: function(projectId, id) {
-	    	self.router.navigate('project/' + projectId + '/task/' + id, false);
+	    taskCreated: function(id) {
+	    	window.history.back();
+	    	this.taskAddView.close();
 	    },	    
 	    
 	    taskDetails: function(projectId, id) {
