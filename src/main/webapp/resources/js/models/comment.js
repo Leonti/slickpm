@@ -1,14 +1,15 @@
 define([
 	'underscore',
-	'backbone'
-], function( _, Backbone ) {
+	'backbone',
+	'moment'
+], function( _, Backbone, moment ) {
 
 	var CommentModel = Backbone.Model.extend({
 	    urlRoot: "task/{taskId}/comment",
 	    defaults:{
 	        "id": null,
 	        "content": "",
-	        "date": null
+	        "date": moment().toDate()
 	    },
 	    
 	    initialize: function(options) {

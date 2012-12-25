@@ -11,6 +11,7 @@ define([
 	'views/TaskList',
 	'views/TaskDetails',
 	'views/Taskboard',
+	'views/Dashboard',
 	'views/TaskAdd'
 	
 ], function( $, _, Backbone, 
@@ -23,6 +24,7 @@ define([
 		TaskListView,
 		TaskDetailsView,
 		TaskboardView,
+		DashboardView,
 		TaskAddView) {
 	
 	var AppView = Backbone.View.extend({
@@ -34,6 +36,11 @@ define([
 	        this.loadedTasks = {};
 	        
 	        self = this;
+	    },
+	    
+	    dashboard: function () {
+	    	self.dashboardView = new DashboardView();
+	    	$('#dashboard').html(self.dashboardView.render().el);	  
 	    },
 	    
 	    listIterations: function(projectId) {
@@ -88,6 +95,9 @@ define([
 	    
 	    
 	    backlog: function(projectId) {
+	    	
+	    	$('#taskboard').hide();
+	    	$('#projectView').show();
 
 	    	if (!self.backlogTaskList) {
 	    		self.backlogTaskList = new BacklogTaskCollection(null, {projectId: projectId});
@@ -143,6 +153,9 @@ define([
 	    },
 	    
 	    taskboard: function(iterationId) {
+	    	
+	    	$('#taskboard').show();
+	    	$('#projectView').hide();
 	    	
     		self.taskboardView = new TaskboardView({iterationId: iterationId});
 	        $('#taskboard').html(self.taskboardView.render().el);	  

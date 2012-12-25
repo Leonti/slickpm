@@ -4,7 +4,7 @@ define([
 	'backbone',
 	'moment',
 	'text!templates/fileListItem.html'
-], function( $, _, Backbone, moment, fileListItemTemplate ) {
+], function( $, _, Backbone, momentList, fileListItemTemplate ) {
 	
 	var FileListItemView = Backbone.View.extend({
 		 

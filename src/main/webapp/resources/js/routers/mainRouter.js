@@ -1,13 +1,13 @@
 define([
 	'jquery',
 	'backbone',
-	'views/app',	
+	'views/App',	
 ], function( $, Backbone, AppView ) {
 
 	var Workspace = Backbone.Router.extend({
 		 
 	    routes:{
-	    	
+	    	"": "dashboard",
 	        "project/:projectId": "project",
 	        "project/:projectId/iteration/add": "addIteration",
 	        "project/:projectId/iteration/:id": "iterationDetails",
@@ -16,6 +16,10 @@ define([
 	        "taskboard/:id" : "taskboard"
 	    },
 
+	    dashboard: function() {
+	    	this.appView.dashboard();
+	    },
+	    
 	    project: function(projectId) {
 	    	this.appView.listIterations(projectId);
 	    	this.appView.backlog(projectId);

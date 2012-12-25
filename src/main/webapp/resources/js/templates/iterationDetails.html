@@ -1,9 +1,9 @@
 <label>Title:</label>
 <input type="text" class="title" value="<%= title %>" required/>
 <label>Start date:</label>
-<input type="text" class="startDate" value="<%= moment(startDate).format('L') %>" required/>
+<input type="text" class="startDate" value="<%= startDate != null ? moment(startDate).format('L') : "" %>" required/>
 <label>End Date:</label>
-<input type="text" class="endDate" value="<%= moment(endDate).format('L') %>" required/>
+<input type="text" class="endDate" value="<%= endDate != null ? moment(endDate).format('L') : "" %>" required/>
 <label>Description:</label>
 <textarea class="description"><%= description %></textarea><br>
 

@@ -199,6 +199,11 @@ body {
 	display: block;
 }
 
+/* Project View */
+.taskListHolder .taskList {
+	min-height: 50px;
+}
+
 /* Admin interface */
 
 

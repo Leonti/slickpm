@@ -22,7 +22,6 @@
 	<script data-main="../resources/js/main" default="main" src="../resources/js/lib/require/require.js"></script>
 </head>
 <body>
-  <body>
   	<div class="wrapper">
       <div class="navbar navbar-fixed-top">
 	      <div class="navbar-inner">
@@ -59,8 +58,13 @@
 	        </div>
 	      </div>
       </div>
+    
+    <div id="dashboard" class="container">
+    </div>
+      
+	<div class="container-fluid" id="taskboard"></div>
 
-    <div class="container">
+    <div id="projectView" class="container">
 
 		<div id="task" class="span6 offset3">
 		</div>
@@ -87,9 +91,7 @@
 		    <div id="iterations" class="span6"></div>    	    
 	    </div>
 	</div>
-	
-	<div class="container-fluid" id="taskboard">
-	</div>    
+	    
      		<div class="footerPush"></div>     
      	</div><!-- wrapper div -->
 

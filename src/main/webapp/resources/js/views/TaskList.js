@@ -31,8 +31,7 @@ define([
 	        	}
 	        });
 	    },
-	    
-	 
+	    	 
 	    render: function (eventName) {
 	        _.each(this.model.models, function (task) {
 	            $(this.el).append(new TaskListItemView({ model: task }).render().el);

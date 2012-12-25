@@ -25,12 +25,13 @@ define([
 	    
 	    render:function (eventName) {
 	        $(this.el).html(this.template(this.model.toJSON()));
+	        
 	        return this;
 	    },
 	    
 	    events: {
 	    	"click .tasks" : "showTasks",
-	    	"click .title": "openIterationPopup"
+	    	"click .details": "openIterationPopup"
 	    },
 	    
 	    close: function() {
@@ -41,17 +42,22 @@ define([
 	    showTasks: function() {
 
 	    	if (!this.taskList) {
-	    		this.taskList = new IterationTaskCollection(null, {iterationId: this.model.attributes.id});	    		
+	    		this.taskList = new IterationTaskCollection(null, {iterationId: this.model.attributes.id});
+	    	}
+	    			    	
+	    	if (!this.taskListView) {
 	    		this.taskListView = new TaskListView({model: this.taskList});
 	    		
-	    		$(this.el).find('.taskList').html(this.taskListView.render().el);
+	    		$(this.el).find('.taskListHolder').html(this.taskListView.render().el);
 	    		
 	    		var self = this;
 	    		this.taskList.deferred.done(function() {
 		    		self.trigger("tasksLoaded", self.taskList);	    			
 	    		});
 
-	    	}	    	
+	    	} else {
+	    		$(this.el).find('.taskListHolder').toggle();
+	    	} 	    	
 	    },
 	    
 	    openIterationPopup: function(event) {
