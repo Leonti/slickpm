@@ -1,7 +1,7 @@
 define([
 	'jquery',
 	'backbone',
-	'views/admin'	
+	'views/Admin'	
 ], function( $, Backbone, AdminView ) {
 
 	var Workspace = Backbone.Router.extend({

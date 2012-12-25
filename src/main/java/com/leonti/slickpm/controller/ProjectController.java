@@ -125,6 +125,14 @@ public class ProjectController {
 		return backlogTasks;
 	}	
 
+	@RequestMapping(value = "user/{userId}", method = RequestMethod.GET)
+	public @ResponseBody List<Project> RESTUserProjectList(
+			@PathVariable("userId") Integer userId) {
+		
+		// TODO: implement logic to return only projects for given user
+		return projectService.getList();
+	}	
+	
     @RequestMapping(value = "{projectId}/updateBacklog", method = RequestMethod.POST)
     public @ResponseBody Map<String, String> updateBacklog(
     		@PathVariable("projectId") Integer projectId,
@@ -196,5 +204,5 @@ public class ProjectController {
     	
     	return result;
     }	
-	
+    
 }
