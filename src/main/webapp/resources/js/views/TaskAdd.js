@@ -17,7 +17,8 @@ define([
 	    },
 	 
 	    events:{
-	        "click .save": "saveTask"
+	        "click .save": "saveTask",
+	        "click .cancel": "cancel"
 	    },
 	 
 	    saveTask:function () {
@@ -34,6 +35,11 @@ define([
             	}
             });
 	        return false;
+	    },
+	    
+	    cancel: function() {
+	    	this.close();
+	    	this.trigger("cancel");
 	    },
 	 
 	    close:function () {

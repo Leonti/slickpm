@@ -57,8 +57,6 @@ define([
 	    	var taskPopupView = new TaskPopupView({model: this.model});
 	    	taskPopupView.render();
 	    	
-	    //	alert($(this.el).find('.task').data('id'));
-	    	
 	    	return false;
 	    }
 	 

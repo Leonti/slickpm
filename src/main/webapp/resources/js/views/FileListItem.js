@@ -2,14 +2,15 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'text!templates/commentListItem.html'
-], function( $, _, Backbone, commentListItemTemplate ) {
+	'moment',
+	'text!templates/fileListItem.html'
+], function( $, _, Backbone, moment, fileListItemTemplate ) {
 	
-	var CommentListItemView = Backbone.View.extend({
+	var FileListItemView = Backbone.View.extend({
 		 
 	    tagName: "li",
 	 
-	    template: _.template(commentListItemTemplate),
+	    template: _.template(fileListItemTemplate),
 
 	    initialize:function () {
 	        this.model.bind("change", this.render, this);
@@ -18,7 +19,7 @@ define([
 	    
 	    render: function (eventName) {
 	    	
-	        $(this.el).html(this.template(this.model.toJSON()));
+	        $(this.el).html(this.template(_.extend(this.model.toJSON(), {moment: moment})));
 	        return this;
 	    },
 	    
@@ -29,5 +30,5 @@ define([
 	 
 	});
 	
-	return CommentListItemView;
+	return FileListItemView;
 });

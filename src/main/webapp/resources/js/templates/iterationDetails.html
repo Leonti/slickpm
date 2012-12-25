@@ -1,13 +1,12 @@
-<div class="form-left-col">
-    <label>Id:</label>
-    <input type="text" id="iterationId" name="id" value="<%= id %>" disabled />
-    <label>Title:</label>
-    <input type="text" id="title" name="name" value="<%= title %>" required/>
+<label>Title:</label>
+<input type="text" class="title" value="<%= title %>" required/>
+<label>Start date:</label>
+<input type="text" class="startDate" value="<%= moment(startDate).format('L') %>" required/>
+<label>End Date:</label>
+<input type="text" class="endDate" value="<%= moment(endDate).format('L') %>" required/>
+<label>Description:</label>
+<textarea class="description"><%= description %></textarea><br>
 
-    <button class="save">Save</button>
-    <button class="delete">Delete</button>
-</div>
-<div>
-    <label>Description:</label>
-    <textarea id="description" name="description"><%= description %></textarea>
-</div>
+<button class="btn save">Save</button>
+<button class="btn cancel">Cancel</button>
+<button class="btn delete">Delete</button>

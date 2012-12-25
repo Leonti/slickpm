@@ -72,6 +72,8 @@ public class IterationController {
 		iteration.setTitle(iterationDTO.getTitle());
 		iteration.setDescription(iterationDTO.getDescription());
 		iteration.setProject(projectService.getById(iterationDTO.getProjectId()));
+		iteration.setStartDate(iterationDTO.getStartDate());
+		iteration.setEndDate(iterationDTO.getEndDate());
 		
 		iterationService.save(iteration);
 		
@@ -87,6 +89,9 @@ public class IterationController {
 		Iteration iteration = iterationService.getById(id);
 		iteration.setTitle(iterationDTO.getTitle());
 		iteration.setDescription(iterationDTO.getDescription());
+		iteration.setStartDate(iterationDTO.getStartDate());
+		iteration.setEndDate(iterationDTO.getEndDate());		
+		
 		iterationService.save(iteration);
 		
 		return iteration.getDTO();

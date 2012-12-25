@@ -1,14 +1,17 @@
 define([
 	'underscore',
-	'backbone'
-], function( _, Backbone ) {
+	'backbone',
+	'moment'
+], function( _, Backbone, moment ) {
 
 	var IterationModel = Backbone.Model.extend({
 	    urlRoot:"iteration",
 	    defaults:{
-	        "id": null,
-	        "title": "",
-	        "description": ""
+	        id: null,
+	        title: "",
+	        description: "",
+	        startDate: moment().toDate(),
+	        endDate: moment().add('days', 14).toDate()	
 	    },
 	    
 	    initialize: function(options) {

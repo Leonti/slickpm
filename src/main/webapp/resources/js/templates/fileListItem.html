@@ -1,2 +1,2 @@
 <a href="/file/download/<%= id %>/<%= filename %>"><%= filename %></a><br>
-Date: <%= uploadDate %>
+Date: <%= moment(uploadDate).format('LLL') %>

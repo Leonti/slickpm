@@ -4,8 +4,13 @@ define([
 	'backbone',
 	'collections/iterationTasks',
 	'views/TaskList',
+	'views/IterationPopup',
 	'text!templates/iterationListItem.html'
-], function( $, _, Backbone, IterationTaskCollection, TaskListView, iterationListItemTemplate ) {
+], function( $, _, Backbone, 
+		IterationTaskCollection, 
+		TaskListView, 
+		IterationPopupView, 
+		iterationListItemTemplate ) {
 	
 	var IterationListItemView = Backbone.View.extend({
 		 
@@ -24,7 +29,8 @@ define([
 	    },
 	    
 	    events: {
-	    	"click .tasks" : "showTasks"
+	    	"click .tasks" : "showTasks",
+	    	"click .title": "openIterationPopup"
 	    },
 	    
 	    close: function() {
@@ -46,6 +52,14 @@ define([
 	    		});
 
 	    	}	    	
+	    },
+	    
+	    openIterationPopup: function(event) {
+
+	    	var iterationPopupView = new IterationPopupView({model: this.model});
+	    	iterationPopupView.render();
+	    	
+	    	return false;
 	    }
 	 
 	});

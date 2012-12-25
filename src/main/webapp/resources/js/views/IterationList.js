@@ -2,7 +2,7 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'views/iterationlistitem'
+	'views/IterationListItem'
 ], function( $, _, Backbone, IterationListItemView ) {
 	
 	var IterationListView = Backbone.View.extend({
@@ -11,13 +11,11 @@ define([
 	 
 	    initialize:function () {
 	        this.model.bind("reset", this.render, this);
-	        var self = this;
-	        this.model.bind("add", function (iteration) {
-	            $(self.el).append(new IterationListItemView({model: iteration}).render().el);
-	        });
 	    },
 	 
 	    render:function (eventName) {
+	    	
+	    	var list = $('<div>');
 	        _.each(this.model.models, function (iteration) {
 	        	
 	        	var iterationListItemView = new IterationListItemView({ model: iteration });
@@ -27,8 +25,11 @@ define([
 	        		self.trigger("tasksLoaded", taskList);	    	
 	        	});
 	        	
-	            $(this.el).append(iterationListItemView.render().el);
+	            list.append(iterationListItemView.render().el);
 	        }, this);
+	        
+	        $(this.el).empty();
+	        $(this.el).append(list);
 	        return this;
 	    }
 	 

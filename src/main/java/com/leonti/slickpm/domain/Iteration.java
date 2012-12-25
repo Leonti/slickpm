@@ -1,5 +1,6 @@
 package com.leonti.slickpm.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,6 +28,12 @@ public class Iteration {
     
     @Column
     private String description;
+    
+    @Column
+    private Date startDate;
+
+    @Column
+    private Date endDate;    
 
 	@OneToMany(mappedBy = "iteration", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Task> tasks;
@@ -78,9 +85,25 @@ public class Iteration {
 		this.tasks = tasks;
 	}
 	
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	public IterationDTO getDTO() {
 		return new IterationDTO(this.id, this.title, this.description,
-				this.project.getId());
+				this.project.getId(), this.startDate, this.endDate);
 	}
 
     public int hashCode() {

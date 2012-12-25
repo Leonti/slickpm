@@ -2,8 +2,8 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'models/file',
-	'views/filelistitem',
+	'models/File',
+	'views/FileListItem',
 	'text!templates/taskFileList.html',
 	'fileupload/jquery.iframe-transport', 
 	'fileupload/jquery.fileupload'

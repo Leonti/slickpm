@@ -19,7 +19,8 @@ require.config({
 		text: 'lib/require/text',
 		fileupload: 'lib/fileupload',
 		bootstrap: 'lib/bootstrap',
-		editable: 'lib/editable'
+		editable: 'lib/editable',
+		moment: 'lib/moment'
 	},
 	
 	urlArgs: "bust=" +  (new Date()).getTime()

@@ -67,13 +67,19 @@
 
 		<div class="row">
 			<div class="span6">
-				<a class="addTaskLink" href="#">Add task</a>			
+				<a class="addTaskLink" href="#" style="display: none;">Add task</a>			
 			</div>
+			<div class="span6">
+				<a class="addIterationLink" href="#" style="display: none;">Add iteration</a>			
+			</div>			
 		</div>
 		<div class="row">	
 			<div class="span6">
 				<div id="addTask"></div>
 			</div>
+			<div class="span6 offset6">
+				<div id="addIteration"></div>
+			</div>			
 		</div>
 
 	    <div class="row">	    

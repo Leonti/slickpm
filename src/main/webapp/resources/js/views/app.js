@@ -49,7 +49,9 @@ define([
 		    			self.loadedTasks['task_' + task.id] = tasks.get(task.id);
 		    		});
 	    		});
-		        $('#iterations').html(self.iterationListView.render().el);		    		
+		        $('#iterations').html(self.iterationListView.render().el);
+		        $('.addIterationLink').show();
+		        $('.addIterationLink').attr('href', '/#project/' + projectId + '/iteration/add');
 	    	}	    	
 	    },
 	    
@@ -65,23 +67,23 @@ define([
 	    	}, id);
 	    },
 	    
-	    addIterationCallback: function(projectId) {
-	        self.router.navigate('project/' + projectId + '/iteration/add', true);
-	    },
-	    
 	    addIteration: function(projectId) {
 
 	    	this.listIterations(projectId);
 	    	
 	        if (self.iterationView) self.iterationView.close();
 
-	        self.iterationView = new IterationDetailsView({model: new IterationModel({projectId: projectId}), iterationList: self.iterationList});
-	        self.iterationView.bind("iterationCreated", self.iterationCreated);
-	        $('#content').html(self.iterationView.render().el);	    	
+	        self.iterationView = new IterationDetailsView({model: new IterationModel({projectId: projectId}), collection: self.iterationList});
+	        self.iterationView.bind("iterationCreated", self.iterationCreated, self);
+	        self.iterationView.bind("cancel", function() {
+	        	window.history.back();
+	        }, self);
+	        $('#addIteration').html(self.iterationView.render().el);	    	
 	    },
 	    
-	    iterationCreated: function(projectId, id) {
-	    	self.router.navigate('project/' + projectId + '/iteration/' + id, false);
+	    iterationCreated: function(id) {
+	    	window.history.back();
+	    	this.iterationView.close();
 	    },
 	    
 	    
@@ -97,7 +99,7 @@ define([
 	    		
 	    		var taskListView = new TaskListView({model: self.backlogTaskList});
 		        $('#backlog').html(taskListView.render().el);
-		        
+		        $('.addTaskLink').show();
 		        $('.addTaskLink').attr('href', '/#project/' + projectId + '/task/add');
 	    	}
 	    },
@@ -110,6 +112,9 @@ define([
 
 	    	self.taskAddView = new TaskAddView({ model: new TaskModel({projectId: projectId}), collection: self.backlogTaskList});
 	        self.taskAddView.bind("taskCreated", self.taskCreated, self);
+	        self.taskAddView.bind("cancel", function() {
+	        	window.history.back();
+	        }, self);
 	        $('#addTask').html(self.taskAddView.render().el);	    	
 	    },	    
 

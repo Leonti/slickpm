@@ -1,9 +1,9 @@
 define([
 	'jquery',
 	'underscore',
-	'backbone',
+	'backbone',	
 	'models/comment',
-	'views/commentlistitem',
+	'views/CommentListItem',
 	'text!templates/commentList.html'
 ], function( $, _, Backbone, CommentModel, CommentListItemView, commentListTemplate ) {
 	
