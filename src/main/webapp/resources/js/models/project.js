@@ -8,7 +8,8 @@ define([
 	    defaults:{
 	        "id": null,
 	        "title": "",
-	        "description": ""
+	        "description": "",
+	        "vcs": null
 	    }
 	});
 	

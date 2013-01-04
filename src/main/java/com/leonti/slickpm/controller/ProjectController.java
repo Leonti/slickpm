@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.leonti.slickpm.domain.BacklogPosition;
+import com.leonti.slickpm.domain.GitVcs;
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.IterationPosition;
 import com.leonti.slickpm.domain.Project;
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.dto.IterationDTO;
+import com.leonti.slickpm.domain.dto.ProjectDTO;
 import com.leonti.slickpm.domain.dto.TaskDTO;
 import com.leonti.slickpm.service.IterationService;
 import com.leonti.slickpm.service.PositionService;
@@ -30,6 +32,7 @@ import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskStageService;
 import com.leonti.slickpm.service.UploadedFileService;
+import com.leonti.slickpm.service.VcsService;
 import com.leonti.slickpm.validator.ProjectFormValidator;
 
 @Controller
@@ -53,41 +56,84 @@ public class ProjectController {
 
 	@Resource(name="UploadedFileService")
 	UploadedFileService uploadedFileService;	
+
+	@Resource(name="VcsService")
+	VcsService vcsService;	
 	
 	@Autowired
 	ProjectFormValidator projectFormValidator;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public @ResponseBody List<Project> RESTList(Model model) {
+	public @ResponseBody List<ProjectDTO> RESTList(Model model) {
 		
-		return projectService.getList();
+		List<ProjectDTO> projectDTOList = new ArrayList<ProjectDTO>();
+		
+		for (Project project : projectService.getList()) {
+			projectDTOList.add(project.getDTO());
+		}
+		
+		return projectDTOList;
 	}	
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public @ResponseBody Project RESTDetails(@PathVariable("id") Integer id) {
+	public @ResponseBody ProjectDTO RESTDetails(@PathVariable("id") Integer id) {
 		
-		return projectService.getById(id);
+		return projectService.getById(id).getDTO();
 	}	
 
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
-	public Project RESTAdd(@RequestBody Project project) {
+	public ProjectDTO RESTAdd(@RequestBody ProjectDTO projectDTO) {
+		
+		Project project = new Project();
+		project.setTitle(projectDTO.getTitle());
+		project.setDescription(projectDTO.getDescription());
+		if (projectDTO.getVcs() != null) {
+			GitVcs gitVcs = new GitVcs();
+			gitVcs.setUri(projectDTO.getVcs().getUri());
+			vcsService.save(gitVcs);
+			
+			vcsService.checkAndCreateVcsCache(gitVcs);
+			
+			project.setVcs(gitVcs);
+		}
 		
 		projectService.save(project);
 		
-		return project;
+		return project.getDTO();
 	}	
 
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Project RESTUpdate(
-			@RequestBody Project project,
+	public ProjectDTO RESTUpdate(
+			@RequestBody ProjectDTO projectDTO,
 			@PathVariable("id") Integer id) {
+		
+		Project project = projectService.getById(projectDTO.getId());
+		project.setTitle(projectDTO.getTitle());
+		project.setDescription(projectDTO.getDescription());
+		if (projectDTO.getVcs() != null) {
+			GitVcs gitVcs = new GitVcs();
+			gitVcs.setUri(projectDTO.getVcs().getUri());
+			vcsService.save(gitVcs);
+			
+			// we are updating git repo - create dir for it
+			if (!gitVcs.equals(project.getVcs())) {
+				vcsService.checkAndCreateVcsCache(gitVcs);
+			}
+			
+			project.setVcs(gitVcs);
+		} else {
+			if (project.getVcs() != null) {
+				
+				project.setVcs(null);
+			}
+		}		
 		
 		projectService.save(project);
 		
-		return project;
+		return projectDTO;
 	}	
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -204,5 +250,26 @@ public class ProjectController {
     	
     	return result;
     }	
+  
+	@RequestMapping(value = "checkVcs", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, String> checkVcs(
+			@RequestParam(value="uri", required=true) String uri) {
+		
+		GitVcs gitVcs = new GitVcs();
+		gitVcs.setUri(uri);
+		
+		Map<String, String> result = new HashMap<String, String>();
+			
+		if (vcsService.checkAndCreateVcsCache(gitVcs).equals(VcsService.VcsStatus.INVALID_URI)) {
+			result.put("result", "ERROR");
+			result.put("message", "Invalid uri for git repo");
+			return result;
+		}
+		  	
+    	result.put("result", "OK");
+    	
+    	return result;
+	}    
     
 }

@@ -14,8 +14,12 @@
 			<span class="title"><%= title %></span><br>
 			<label>Description:</label>
 			<span class="description"><%= description %></span><br>
+			
+			<% if (project.vcs != null) { %>
+			<span class="vcs btn btn-link">View commits for task</span><br>
+			<% } %>
 			<label>Assigned to:</label>
-			<div class="assignedUser"></div>
+			<div class="assignedUser btn btn-link"></div>
 		</div>
 		<div class="tab-pane" id="comments">
 		</div>

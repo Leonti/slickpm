@@ -11,6 +11,7 @@ define([
 	'views/TaskFileList',
 	'views/DependencyList',
 	'views/UserSelector',
+	'views/DiffsPopup',
 	'text!templates/taskDetails.html',
 	'text!templates/userItem.html',
 	'bootstrap'
@@ -23,6 +24,7 @@ define([
 		TaskFileListView,
 		DependencyListView,
 		UserSelectorView,
+		DiffsPopupView,
 		taskDetailsTemplate,
 		userItemTemplate,
 		bootstrap ) {
@@ -100,7 +102,8 @@ define([
 	    },
 	 
 	    events:{
-	        "click .assignedUser": "assignUser"
+	        "click .assignedUser": "assignUser",
+	        "click .vcs": "showCommits"
 	    },
 	 
 	    saveTask: function () {
@@ -137,6 +140,13 @@ define([
 	    		
 	    		$(self.el).find('.assignedUser').html(self.userTemplate(user.toJSON()));	
 	    	});
+	    	
+	    	return false;	    	
+	    },
+	    
+	    showCommits: function() {
+	    	var diffsPopupView = new DiffsPopupView({model: this.model});
+	    	diffsPopupView.render();
 	    	
 	    	return false;	    	
 	    },

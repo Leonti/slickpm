@@ -15,6 +15,7 @@ define([
 	    
 	    initialize: function(options) {
 	    	this.defaults.projectId = options.projectId;
+	    	this.set({ fullTitle: '#' + this.id + ' - ' + this.get('title')});
 	    },
 	    
 	    addDependency: function(dependencyId) {

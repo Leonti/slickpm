@@ -6,14 +6,16 @@ public class ProjectDTO {
 	private Integer id;
     private String title;
     private String description;
+    private VcsDTO vcs;
     
     public ProjectDTO() {}
     
-	public ProjectDTO(Integer id, String title, String description) {
+	public ProjectDTO(Integer id, String title, String description, VcsDTO vcsDTO) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
+		this.vcs = vcsDTO;
 	}
 	
 	public Integer getId() {
@@ -33,5 +35,13 @@ public class ProjectDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public VcsDTO getVcs() {
+		return vcs;
+	}
+
+	public void setVcs(VcsDTO vcs) {
+		this.vcs = vcs;
 	}
 }

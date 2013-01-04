@@ -1,0 +1,11 @@
+<div class="commit">
+	<div class="id"><%= id %></div>
+	<div class="message"><%= message %></div>
+
+	<% for (var i = 0; i < diffs.length; i++) { %> 	
+		<div class="diff">
+			<span class="file"><%= diffs[i].file %></span>
+			<pre class="content"><%= diffs[i].content %></pre>
+		</div>
+	<% } %>	
+</div>

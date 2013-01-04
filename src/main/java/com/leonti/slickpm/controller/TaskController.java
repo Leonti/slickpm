@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +22,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.leonti.slickpm.domain.Comment;
+import com.leonti.slickpm.domain.GitVcs;
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.UploadedFile;
 import com.leonti.slickpm.domain.User;
 import com.leonti.slickpm.domain.dto.CommentDTO;
 import com.leonti.slickpm.domain.dto.TaskDTO;
 import com.leonti.slickpm.domain.dto.UploadedFileDTO;
+import com.leonti.slickpm.domain.dto.VcsCommit;
+import com.leonti.slickpm.domain.dto.VcsDiff;
 import com.leonti.slickpm.form.TaskForm;
 import com.leonti.slickpm.service.CommentService;
 import com.leonti.slickpm.service.PointsService;
@@ -35,6 +39,7 @@ import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskTypeService;
 import com.leonti.slickpm.service.UploadedFileService;
 import com.leonti.slickpm.service.UserService;
+import com.leonti.slickpm.service.VcsService;
 import com.leonti.slickpm.validator.TaskFormValidator;
 
 @Controller
@@ -65,6 +70,9 @@ public class TaskController {
 	@Autowired
 	TaskFormValidator taskFormValidator;
 
+	@Resource(name="VcsService")
+	VcsService vcsService;	
+	
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public @ResponseBody TaskDTO RESTDetails(@PathVariable("id") Integer id) {
 		
@@ -79,7 +87,7 @@ public class TaskController {
 		
 		task.setTitle(taskDTO.getTitle());
 		task.setDescription(taskDTO.getDescription());
-		task.setProject(projectService.getById(taskDTO.getProjectId()));
+		task.setProject(projectService.getById(taskDTO.getProject().getId()));
 		taskService.save(task);
 		
 		return task.getDTO();
@@ -245,7 +253,25 @@ public class TaskController {
     	result.put("result", "OK");
     	
     	return result;		
-	}		
+	}
+	
+	@RequestMapping(value = "{taskId}/vcsDiff", method = RequestMethod.GET)
+	public @ResponseBody List<VcsCommit> getVcsDiff(
+			@PathVariable("taskId") Integer taskId) {
+		
+		Task task = taskService.getById(taskId);		
+		List<VcsCommit> commits = vcsService.getDiffForTask((GitVcs) task.getProject().getVcs(), task);
+		
+		for (VcsCommit commit : commits) {
+			
+			for (VcsDiff diff : commit.getDiffs()) {
+				
+				diff.setContent(StringEscapeUtils.escapeHtml4(diff.getContent())); 
+			}
+		}
+		
+		return commits;
+	}	
 	
 	/* pre backbone code */
 		

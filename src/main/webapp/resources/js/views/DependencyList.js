@@ -20,15 +20,16 @@ define([
 	    initialize: function(options) {
 	        this.collection.bind("reset", this.render, this);
 	        this.collection.bind("add", function (dependency) {
-	            $(this.el).find('ul').append(new DependencytListItemView({model: dependency}).render().el);
+	        	this.render();
 	        }, this);
 	        
 	        this.task = options.task;
 	    },
 	 
-	    render:function (eventName) {
+	    render: function (eventName) {
 	    	
 	    	$(this.el).html(this.template());
+	    	$(this.el).find('ul').empty();
 	    	
 	        _.each(this.collection.models, function (dependency) {
 	        	

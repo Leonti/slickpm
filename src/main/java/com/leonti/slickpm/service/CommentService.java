@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.leonti.slickpm.domain.Comment;
-import com.leonti.slickpm.domain.Task;
 
 @Service("CommentService")
 @Transactional

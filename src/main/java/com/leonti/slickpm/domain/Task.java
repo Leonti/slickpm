@@ -178,7 +178,7 @@ public class Task {
 				taskType == null ? null : taskType.getId(),
 				iteration == null ? null : iteration.getId(), 
 				taskStage == null ? null : taskStage.getId(), 
-				project == null ? null : project.getId(), 
+				project == null ? null : project.getDTO(), 
 				user == null ? null : user.getDTO());
 	}
 	

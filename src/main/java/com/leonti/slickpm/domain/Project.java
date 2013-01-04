@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.leonti.slickpm.domain.dto.ProjectDTO;
 
@@ -19,6 +20,9 @@ public class Project {
     
     @Column
     private String description;
+    
+    @ManyToOne
+    private Vcs vcs;
 
     public Project() {}
     
@@ -51,7 +55,15 @@ public class Project {
 		return id;
 	}
 	
+	public Vcs getVcs() {
+		return vcs;
+	}
+
+	public void setVcs(Vcs vcs) {
+		this.vcs = vcs;
+	}
+
 	public ProjectDTO getDTO() {
-		return new ProjectDTO(id, title, description);
+		return new ProjectDTO(id, title, description, vcs != null ? vcs.getDTO() : null );
 	}
 }

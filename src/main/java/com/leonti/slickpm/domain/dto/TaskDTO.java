@@ -5,19 +5,20 @@ public class TaskDTO {
 	
 	private Integer id;
     private String title;
-    private String description;
+
+	private String description;
     private Double points;    
     private Integer taskTypeId;
     private Integer iterationId;
     private Integer taskStageId;
-    private Integer projectId;
+    private ProjectDTO project;
     private UserDTO user;
     
     public TaskDTO() {}
 
 	public TaskDTO(Integer id, String title, String description, Double points,
 			Integer taskTypeId, Integer iterationId, Integer taskStageId,
-			Integer projectId, UserDTO userDTO) {
+			ProjectDTO project, UserDTO userDTO) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -26,7 +27,7 @@ public class TaskDTO {
 		this.taskTypeId = taskTypeId;
 		this.iterationId = iterationId;
 		this.taskStageId = taskStageId;
-		this.projectId = projectId;
+		this.project = project;
 		this.user = userDTO;
 	}
 
@@ -86,12 +87,12 @@ public class TaskDTO {
 		this.taskStageId = taskStageId;
 	}
 
-	public Integer getProjectId() {
-		return projectId;
+	public ProjectDTO getProject() {
+		return project;
 	}
 
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
+	public void setProject(ProjectDTO project) {
+		this.project = project;
 	}
 
 	public UserDTO getUser() {
@@ -100,5 +101,12 @@ public class TaskDTO {
 
 	public void setUser(UserDTO userDTO) {
 		this.user = userDTO;
+	}
+	
+	// Dummy setter for automatic JSON object creation
+	public void setFullTitle(String fullTitle) {}
+	
+	public String getFullTitle() {
+		return "#" + this.id + " - " + this.title;
 	}
 }

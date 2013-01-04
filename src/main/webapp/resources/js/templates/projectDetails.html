@@ -2,5 +2,11 @@
 <input type="text" class="title" value="<%= title %>" required />
 <label>Description:</label>
 <textarea class="description"><%= description %></textarea><br>
+<label>Git uri:</label>
+<% if (vcs) { %>
+<input type="text" class="uri" value="<%= vcs.uri %>" />
+<% } else { %>
+<input type="text" class="uri" value="" />
+<% } %>
 <button class="save btn">Save</button>
 <button class="delete btn">Delete</button>
