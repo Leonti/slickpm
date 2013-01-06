@@ -71,7 +71,7 @@ public class IterationService {
 		List<Task> tasks = iteration.getTasks();
 		for (Task task : tasks) {
 			if (task.getPoints() != null) {
-				total += task.getPoints().getValue();
+				total += task.getPoints();
 			}
 		}
 		
@@ -85,7 +85,7 @@ public class IterationService {
 		List<Task> tasks = taskStageService.getTasksForStage(iteration, taskStageService.getLastStage());
 		for (Task task : tasks) {
 			if (task.getPoints() != null) {
-				total += task.getPoints().getValue();
+				total += task.getPoints();
 			}
 		}
 		

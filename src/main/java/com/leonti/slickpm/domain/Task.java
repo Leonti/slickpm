@@ -36,8 +36,8 @@ public class Task {
     @Column
     private String description;
     
-    @ManyToOne
-    private Points points;    
+    @Column
+    private Double points;    
     
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany
@@ -95,11 +95,11 @@ public class Task {
 		return id;
 	}
 
-	public Points getPoints() {
+	public Double getPoints() {
 		return points;
 	}
 
-	public void setPoints(Points points) {
+	public void setPoints(Double points) {
 		this.points = points;
 	}
 
@@ -174,8 +174,8 @@ public class Task {
 	public TaskDTO getDTO() {
 		
 		return new TaskDTO(id, title, description, 
-				points == null ? null : points.getValue(),
-				taskType == null ? null : taskType.getId(),
+				points,
+				taskType == null ? null : taskType.getDTO(),
 				iteration == null ? null : iteration.getId(), 
 				taskStage == null ? null : taskStage.getId(), 
 				project == null ? null : project.getDTO(), 

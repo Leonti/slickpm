@@ -8,7 +8,7 @@ public class TaskDTO {
 
 	private String description;
     private Double points;    
-    private Integer taskTypeId;
+    private TaskTypeDTO taskType;
     private Integer iterationId;
     private Integer taskStageId;
     private ProjectDTO project;
@@ -17,14 +17,14 @@ public class TaskDTO {
     public TaskDTO() {}
 
 	public TaskDTO(Integer id, String title, String description, Double points,
-			Integer taskTypeId, Integer iterationId, Integer taskStageId,
+			TaskTypeDTO taskType, Integer iterationId, Integer taskStageId,
 			ProjectDTO project, UserDTO userDTO) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.points = points;
-		this.taskTypeId = taskTypeId;
+		this.taskType = taskType;
 		this.iterationId = iterationId;
 		this.taskStageId = taskStageId;
 		this.project = project;
@@ -63,12 +63,12 @@ public class TaskDTO {
 		this.points = points;
 	}
 
-	public Integer getTaskTypeId() {
-		return taskTypeId;
+	public TaskTypeDTO getTaskType() {
+		return taskType;
 	}
 
-	public void setTaskTypeId(Integer taskTypeId) {
-		this.taskTypeId = taskTypeId;
+	public void setTaskType(TaskTypeDTO taskType) {
+		this.taskType = taskType;
 	}
 
 	public Integer getIterationId() {

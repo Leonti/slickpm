@@ -15,6 +15,10 @@ public class IterationDTO {
     private Date startDate;
     
     private Date endDate;
+    
+    private Double plannedPoints = 0d;
+    
+    private Double donePoints = 0d;
    
     public IterationDTO() {}
     
@@ -76,4 +80,20 @@ public class IterationDTO {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+	
+	public Double getPlannedPoints() {
+		return plannedPoints;
+	}
+	
+	public void setPlannedPoints(Double plannedPoints) {
+		this.plannedPoints = plannedPoints;
+	}
+	
+	public Double getDonePoints() {
+		return donePoints;
+	}
+	
+	public void setDonePoints(Double donePoints) {
+		this.donePoints = donePoints;
+	}	
 }

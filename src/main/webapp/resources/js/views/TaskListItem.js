@@ -5,8 +5,16 @@ define([
 	'collections/Users',
 	'views/UserSelector',
 	'views/TaskPopup',
+	'views/Points',
+	'views/TaskTypes',
 	'text!templates/taskListItem.html'
-], function( $, _, Backbone, UserCollection, UserSelectorView, TaskPopupView, taskListItemTemplate ) {
+], function( $, _, Backbone, 
+		UserCollection, 
+		UserSelectorView, 
+		TaskPopupView, 
+		PointsView, 
+		TaskTypesView, 
+		taskListItemTemplate ) {
 	
 	var TaskListItemView = Backbone.View.extend({
 		 
@@ -22,6 +30,13 @@ define([
 	    render:function (eventName) {	
 	    	
 	        $(this.el).html(this.template(this.model.toJSON()));
+	        
+	        var pointsView = new PointsView({ model: this.model });
+	        $(this.el).find('.points').html(pointsView.render().el);
+	        
+	        var taskTypesView = new TaskTypesView({ model: this.model });
+	        $(this.el).find('.taskTypes').html(taskTypesView.render().el);
+	        
 	        return this;
 	    },
 	    
@@ -52,7 +67,7 @@ define([
 	    	return false;	    	
 	    },
 	    
-	    openTaskPopup: function(event) {
+	    openTaskPopup: function() {
 
 	    	var taskPopupView = new TaskPopupView({model: this.model});
 	    	taskPopupView.render();

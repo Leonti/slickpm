@@ -49,19 +49,21 @@ define([
 	    
 	    listIterations: function(projectId) {
 	    	
-    		self.iterationList = new IterationCollection(null, {projectId: projectId});	 
-    		
-    		self.iterationListView = new IterationListView({model: self.iterationList});
-    		
-    		self.iterationListView.bind("tasksLoaded", function(tasks) {
+	    	var self = this;	    	
+	    	if (!self.iterationList) {
+	    		self.iterationList = new IterationCollection(null, {projectId: projectId});	    		
+	    		self.iterationListView = new IterationListView({model: self.iterationList});		
+	    		self.iterationListView.bind("tasksLoaded", function(tasks) {
 
-	    		_.each(tasks.models, function (task) {
-	    			self.loadedTasks['task_' + task.id] = tasks.get(task.id);
+		    		_.each(tasks.models, function (task) {
+		    			self.loadedTasks['task_' + task.id] = tasks.get(task.id);
+		    		});
 	    		});
-    		});
-	        $('#iterations').html(self.iterationListView.render().el);
-	        $('.addIterationLink').show();
-	        $('.addIterationLink').attr('href', '/#project/' + projectId + '/iteration/add');    	
+	    		
+		        $('#iterations').html(self.iterationListView.render().el);
+		        $('.addIterationLink').show();
+		        $('.addIterationLink').attr('href', '/#project/' + projectId + '/iteration/add');   	    		
+	    	}  		  		 	
 	    },
 	    
 	    iterationDetails: function(projectId, id) {
@@ -102,21 +104,25 @@ define([
 	    	$('#projectView').show();
 	    	$('#dashboard').hide();
 	    	
-    		self.backlogTaskList = new BacklogTaskCollection(null, {projectId: projectId});
-    		self.backlogTaskList.deferred.done(function(tasks) {
-	    		_.each(tasks, function (task) {
-	    			self.loadedTasks['task_' + task.id] = self.backlogTaskList.get(task.id);
-	    		});
-    		});
-    		
-    		var taskListView = new TaskListView({model: self.backlogTaskList});
-	        $('#backlog').html(taskListView.render().el);
-	        $('.addTaskLink').show();
-	        $('.addTaskLink').attr('href', '/#project/' + projectId + '/task/add');
+	    	var self = this;
+	    	if (!this.backlogTaskList) {
+	    		this.backlogTaskList = new BacklogTaskCollection(null, {projectId: projectId});
+	    		this.backlogTaskList.deferred.done(function(tasks) {
+	    			self.backlogLoaded = true;
+		    		_.each(tasks, function (task) {
+		    			self.loadedTasks['task_' + task.id] = self.backlogTaskList.get(task.id);
+		    		});
+	    		});	
+	    		
+	    		var taskListView = new TaskListView({model: this.backlogTaskList});
+		        $('#backlog').html(taskListView.render().el);
+		        $('.addTaskLink').show();
+		        $('.addTaskLink').attr('href', '/#project/' + projectId + '/task/add');	    		
+	    	}
 	    },
 
 	    addTask: function(projectId) {
-
+	    	
 	    	this.backlog(projectId);
 	    	
 	    	if (self.taskAddView) self.taskAddView.close();

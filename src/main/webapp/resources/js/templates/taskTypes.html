@@ -1,0 +1,11 @@
+Task Type: 
+<span class="currentType">
+	<% if (taskType != null) { %>
+	<%= taskType.title %>
+	<% } else {%>
+		--
+	<% } %>
+</span>
+<select class="typeSelect" style="display: none;">
+	<option value="null" >--</option>
+</select>

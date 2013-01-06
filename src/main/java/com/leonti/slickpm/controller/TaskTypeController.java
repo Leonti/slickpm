@@ -1,5 +1,8 @@
 package com.leonti.slickpm.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.leonti.slickpm.domain.TaskType;
+import com.leonti.slickpm.domain.dto.TaskTypeDTO;
 import com.leonti.slickpm.form.TaskTypeForm;
 import com.leonti.slickpm.service.TaskTypeService;
 import com.leonti.slickpm.validator.TaskTypeFormValidator;
@@ -25,6 +30,20 @@ public class TaskTypeController {
 	
 	@Autowired
 	TaskTypeFormValidator taskTypeFormValidator;
+	
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public @ResponseBody List<TaskTypeDTO> RESTList(Model model) {
+		
+		List<TaskTypeDTO> taskTypeDTOList = new ArrayList<TaskTypeDTO>();
+		
+		for (TaskType taskType : taskTypeService.getList()) {
+			taskTypeDTOList.add(taskType.getDTO());
+		}
+		
+		return taskTypeDTOList;
+	}	
+	
+	/* pre backbone */
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Model model) {

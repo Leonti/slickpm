@@ -150,7 +150,12 @@ public class ProjectController {
 		List<IterationDTO> iterationDTOList = new ArrayList<IterationDTO>();
 		
 		for(Iteration iteration : iterationService.getList(projectId)) {
-			iterationDTOList.add(iteration.getDTO());
+			
+			IterationDTO iterationDTO = iteration.getDTO();
+			iterationDTO.setPlannedPoints(iterationService.getPlannedPoints(iteration));
+			iterationDTO.setDonePoints(iterationService.getDonePoints(iteration));
+			
+			iterationDTOList.add(iterationDTO);
 		}
 		
 		return iterationDTOList;

@@ -61,7 +61,13 @@ public class IterationController {
 	@ResponseBody
 	public IterationDTO RESTDetails(@PathVariable("id") Integer id) {
 		
-		return iterationService.getById(id).getDTO();
+		Iteration iteration = iterationService.getById(id);
+		IterationDTO iterationDTO = iteration.getDTO();
+		
+		iterationDTO.setPlannedPoints(iterationService.getPlannedPoints(iteration));
+		iterationDTO.setDonePoints(iterationService.getDonePoints(iteration));
+		
+		return iterationDTO;
 	}	
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
