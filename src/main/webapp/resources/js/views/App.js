@@ -6,26 +6,32 @@ define([
 	'models/iteration',
 	'collections/backlog',
 	'models/task',
+	'models/project',
+	'models/iteration',
 	'views/IterationList',
 	'views/IterationDetails',
 	'views/TaskList',
 	'views/TaskDetails',
 	'views/Taskboard',
 	'views/Dashboard',
-	'views/TaskAdd'
+	'views/TaskAdd',
+	'views/ProjectHeader'
 	
 ], function( $, _, Backbone, 
 		IterationCollection, 
 		IterationModel, 
 		BacklogTaskCollection,
 		TaskModel,
+		ProjectModel,
+		IterationModel,
 		IterationListView, 
 		IterationDetailsView,
 		TaskListView,
 		TaskDetailsView,
 		TaskboardView,
 		DashboardView,
-		TaskAddView) {
+		TaskAddView,
+		ProjectHeaderView) {
 	
 	var AppView = Backbone.View.extend({
 		
@@ -62,7 +68,13 @@ define([
 	    		
 		        $('#iterations').html(self.iterationListView.render().el);
 		        $('.addIterationLink').show();
-		        $('.addIterationLink').attr('href', '/#project/' + projectId + '/iteration/add');   	    		
+		        $('.addIterationLink').attr('href', '/#project/' + projectId + '/iteration/add'); 
+		        
+		        var project = new ProjectModel({id: projectId});
+		        project.fetch();
+		        		        
+		        var projectHeaderView = new ProjectHeaderView({model: project});
+		        $('#projectHeader').html(projectHeaderView.render().el);
 	    	}  		  		 	
 	    },
 	    
@@ -165,8 +177,20 @@ define([
 	    	$('#projectView').hide();
 	    	$('#dashboard').hide();
 	    	
-    		self.taskboardView = new TaskboardView({iterationId: iterationId});
-	        $('#taskboard').html(self.taskboardView.render().el);	  
+	    	var self = this;
+	    	var renderIteration = function(iteration) {
+        		self.taskboardView = new TaskboardView({iteration: iteration});
+    	        $('#taskboard').html(self.taskboardView.render().el);	    		
+	    	};
+	    	
+	    	if (this.iterationList) {
+	    		renderIteration(this.iterationList.get(iterationId));
+	    	} else {
+	    		var iteration = new IterationModel({id: iterationId});
+	    		iteration.fetch({success: function() {
+	    			renderIteration(iteration);	
+	    		}});
+	    	}	    	
 	    }	    
 	});
 	

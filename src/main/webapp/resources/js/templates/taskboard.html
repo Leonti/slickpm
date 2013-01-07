@@ -1,4 +1,5 @@
-Taskboard view <%= id %>
+<%= iteration.title %> <%= iteration.description %> (<%= iteration.donePoints %>/<%= iteration.plannedPoints %>) 
+		<%= iteration.startDate != null ? moment(iteration.startDate).format('L') : "" %> - <%= iteration.endDate != null ? moment(iteration.endDate).format('L') : "" %>
 
 	<div class="stages">
 	</div>

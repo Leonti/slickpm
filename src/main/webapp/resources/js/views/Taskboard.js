@@ -1,5 +1,6 @@
 define([
 	'jquery',
+	'moment',
 	'underscore',
 	'backbone',
 	'collections/stages',
@@ -7,7 +8,7 @@ define([
 	'views/TaskList',
 	'text!templates/taskboard.html',
 	'text!templates/taskboardStage.html'
-], function( $, _, Backbone, 
+], function( $, moment, _, Backbone, 
 		StageCollection, 
 		StageTaskCollection, 
 		TaskListView, 
@@ -22,14 +23,14 @@ define([
 	    stageTemplate: _.template(taskboardStageTemplate),
 	    
 	    initialize: function(options) {
-	        this.iterationId = options.iterationId;
+	        this.iteration = options.iteration;
 	        
 	        this.stageList = new StageCollection();
 	        
 	        var self =this;
 	        this.stageList.deferred.done(function(stages) {
 	        	_.each(stages, function(stage) {
-	        		var stageTasks = new StageTaskCollection(null, {iterationId: options.iterationId, stageId: stage.id});
+	        		var stageTasks = new StageTaskCollection(null, {iterationId: options.iteration.id, stageId: stage.id});
 	        		
 		    		var taskListView = new TaskListView({model: stageTasks});
 		    		
@@ -45,7 +46,10 @@ define([
 	 
 	    render: function (eventName) {
 
-	        $(this.el).html(this.template({id: this.iterationId}));
+	        $(this.el).html(this.template({
+	        	iteration: this.iteration.toJSON(), 
+	        	moment: moment
+	        }));
 	        return this;
 	    }
 	 

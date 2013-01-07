@@ -18,7 +18,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.leonti.slickpm.domain.dto.IterationDTO;
 
 @Entity
-public class Iteration {
+public class Iteration implements Comparable<Iteration> {
     @Id
     @GeneratedValue	
 	private Integer id;
@@ -124,5 +124,22 @@ public class Iteration {
         return new EqualsBuilder().
             append(this.id, iteration.getId()).
             isEquals();
-    } 	
+    } 
+    
+    public int compareTo(Iteration other) {
+        final int BEFORE = -1;
+        final int EQUAL = 0;
+        final int AFTER = 1;
+        
+        if (this.getId() < other.getId())
+        	return BEFORE;
+        
+        if (this.getId().equals(other.getId()))
+        	return EQUAL;
+        
+        if (this.getId() > other.getId())
+        	return AFTER; 
+        
+        return EQUAL;
+    }   
 }

@@ -18,6 +18,7 @@
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" media="all" />
     <link href="../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../resources/css/main.css" rel="stylesheet">
+    <link href="../resources/css/jquery.jqplot.css" rel="stylesheet">
 
 	<script data-main="../resources/js/main" default="main" src="../resources/js/lib/require/require.js"></script>
 </head>
@@ -67,6 +68,10 @@
     <div id="projectView" class="container">
 
 		<div id="task" class="span6 offset3">
+		</div>
+
+		<div class="row">
+			<div id="projectHeader"></div>
 		</div>
 
 		<div class="row">

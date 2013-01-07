@@ -1,12 +1,15 @@
 package com.leonti.slickpm.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -275,6 +278,72 @@ public class ProjectController {
     	result.put("result", "OK");
     	
     	return result;
-	}    
+	}
+	
+	@RequestMapping(value = "{projectId}/velocity", method = RequestMethod.GET)
+	public @ResponseBody List<VelocityEntry> velocity(
+			@PathVariable("projectId") Integer projectId) {
+		
+
+		List<VelocityEntry> velocity = new ArrayList<VelocityEntry>();
+		
+		List<Iteration> iterations = iterationService.getList(projectId);
+		Collections.sort(iterations);		
+		for(Iteration iteration : iterations) {
+			
+			if (iteration.getStartDate() != null && iteration.getEndDate() != null) {
+				
+				int days = Days.daysBetween(
+						new DateTime(iteration.getStartDate()), 
+						new DateTime(iteration.getEndDate()))
+					.getDays();
+				
+				velocity.add(new VelocityEntry(
+						days, 
+						iterationService.getDonePoints(iteration),
+						iterationService.getPlannedPoints(iteration)));	
+			}			
+
+		}
+		
+		return velocity;
+	}
+	
+	private class VelocityEntry {
+		
+		private int days;
+		private Double donePoints;
+		private Double plannedPoints;
+		
+		public VelocityEntry() {}
+
+		public VelocityEntry(int days, Double donePoints, Double plannedPoints) {
+			super();
+			this.days = days;
+			this.donePoints = donePoints;
+			this.plannedPoints = plannedPoints;
+		}
+
+		public int getDays() {
+			return days;
+		}
+
+		public Double getDonePoints() {
+			return donePoints;
+		}
+
+		public Double getPlannedPoints() {
+			return plannedPoints;
+		}
+
+		public Double getDoneVelocity() {
+			return donePoints/days;
+		}
+		
+		public Double getPlannedVelocity() {
+			return plannedPoints/days;
+		}
+		
+	}
     
 }

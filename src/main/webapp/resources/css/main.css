@@ -204,6 +204,11 @@ body {
 	min-height: 50px;
 }
 
+.velocityChart {
+	width: 100%; 
+	height: 150px;
+}
+
 /* Admin interface */
 
 

@@ -1,12 +1,13 @@
 define([
 	'jquery',
+	'moment',
 	'underscore',
 	'backbone',
 	'collections/iterationTasks',
 	'views/TaskList',
 	'views/IterationPopup',
 	'text!templates/iterationListItem.html'
-], function( $, _, Backbone, 
+], function( $, moment, _, Backbone, 
 		IterationTaskCollection, 
 		TaskListView, 
 		IterationPopupView, 
@@ -24,7 +25,7 @@ define([
 	    },	    
 	    
 	    render:function (eventName) {
-	        $(this.el).html(this.template(this.model.toJSON()));
+	    	$(this.el).html(this.template(_.extend(this.model.toJSON(), {moment: moment})));
 	        
 	        return this;
 	    },

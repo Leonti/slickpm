@@ -1,6 +1,7 @@
 <div class="iteration">
 	<div class="title">
-		<a href="#taskboard/<%= id %>"><%= title %> (<%= donePoints %>/<%= plannedPoints %>)</a>
+		<a href="#taskboard/<%= id %>"><%= title %> (<%= donePoints %>/<%= plannedPoints %>) 
+		<%= startDate != null ? moment(startDate).format('L') : "" %> - <%= endDate != null ? moment(endDate).format('L') : "" %></a>
 		<i class="icon-pencil details pull-right"></i>		    				
 	</div>
 	<div class="tasks btn btn-link">Tasks</div>

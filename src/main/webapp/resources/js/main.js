@@ -20,7 +20,8 @@ require.config({
 		fileupload: 'lib/fileupload',
 		bootstrap: 'lib/bootstrap',
 		editable: 'lib/editable',
-		moment: 'lib/moment'
+		moment: 'lib/moment',
+		jqplot: 'lib/jqplot/jquery.jqplot'
 	},
 	
 	urlArgs: "bust=" +  (new Date()).getTime()
