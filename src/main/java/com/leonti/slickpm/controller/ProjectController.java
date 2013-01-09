@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,9 +36,9 @@ import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskStageService;
 import com.leonti.slickpm.service.UploadedFileService;
 import com.leonti.slickpm.service.VcsService;
-import com.leonti.slickpm.validator.ProjectFormValidator;
 
 @Controller
+@Secured("ROLE_USER")
 @RequestMapping("/project")
 public class ProjectController {
 
@@ -63,8 +63,6 @@ public class ProjectController {
 	@Resource(name="VcsService")
 	VcsService vcsService;	
 	
-	@Autowired
-	ProjectFormValidator projectFormValidator;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public @ResponseBody List<ProjectDTO> RESTList(Model model) {

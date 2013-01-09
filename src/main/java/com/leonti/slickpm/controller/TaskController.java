@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,9 +34,9 @@ import com.leonti.slickpm.service.TaskTypeService;
 import com.leonti.slickpm.service.UploadedFileService;
 import com.leonti.slickpm.service.UserService;
 import com.leonti.slickpm.service.VcsService;
-import com.leonti.slickpm.validator.TaskFormValidator;
 
 @Controller
+@Secured("ROLE_USER")
 @RequestMapping("/task")
 public class TaskController {
 
@@ -57,9 +57,6 @@ public class TaskController {
 
 	@Resource(name="UploadedFileService")
 	UploadedFileService uploadedFileService;	
-	
-	@Autowired
-	TaskFormValidator taskFormValidator;
 
 	@Resource(name="VcsService")
 	VcsService vcsService;	

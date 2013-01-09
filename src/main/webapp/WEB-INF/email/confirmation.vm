@@ -1,0 +1,11 @@
+<html>
+	<body>
+		<p>Hi!<br>
+			Thank you for creating <a href="${baseUrl}">SlickTM</a> account!
+		</p>
+		<p>
+			Here is your confirmation link:<br>
+			<a href="${baseUrl}/account/confirm?key=${confirmationkey}">Confirm!</a>
+		</p>
+	</body>
+</html>

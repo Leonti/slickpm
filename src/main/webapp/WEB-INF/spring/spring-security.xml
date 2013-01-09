@@ -14,13 +14,19 @@
 			See Spring Security 3.1 Referecne 15.1.1 Common Built-In Expressions
 			- http://static.springsource.org/spring-security/site/docs/3.1.x/reference/el-access.html --> 
 
+<beans:bean id="customAuthenticationEntryPoint"
+		class="com.leonti.slickpm.service.CustomAuthenticationEntryPoint">
+	<beans:property name="loginFormUrl" value="/auth/login" />
+</beans:bean>
+
 	<!-- This is where we configure Spring-Security  -->
-	<security:http auto-config="true" use-expressions="true" >
+	<security:http auto-config="true" use-expressions="true" entry-point-ref="customAuthenticationEntryPoint" >
 
 		<security:form-login
 				login-page="/auth/login" 
 				authentication-failure-url="/auth/login?error=true" 
-				default-target-url="/account/overview"/>
+				default-target-url="/"
+				always-use-default-target="true" />
 			
 		<security:logout 
 				invalidate-session="true" 

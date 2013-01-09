@@ -2,6 +2,7 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'ErrorHandler',
 	'collections/projects',
 	'models/project',
 	'collections/stages',
@@ -15,7 +16,7 @@ define([
 	'views/userlist',
 	'views/userdetails'
 	
-], function( $, _, Backbone, 
+], function( $, _, Backbone, ErrorHandler, 
 		ProjectCollection, 
 		ProjectModel, 
 		StageCollection,

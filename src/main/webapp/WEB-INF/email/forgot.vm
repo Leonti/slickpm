@@ -1,0 +1,11 @@
+<html>
+	<body>
+		<p>Hi!<br>
+			So you forgot you password. Don't worry, it can happen to anyone.
+		</p>
+		<p>
+			By following this link you can create new password:<br>
+			<a href="${baseUrl}/account/reset?key=${forgotkey}">Reset password!</a>
+		</p>	
+	</body>
+</html>

@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +19,9 @@ import com.leonti.slickpm.domain.User;
 import com.leonti.slickpm.domain.dto.UserDTO;
 import com.leonti.slickpm.service.UploadedFileService;
 import com.leonti.slickpm.service.UserService;
-import com.leonti.slickpm.validator.UserFormValidator;
 
 @Controller
+@Secured("ROLE_USER")
 @RequestMapping("/user")
 public class UserController {
 
@@ -30,9 +30,6 @@ public class UserController {
 
 	@Resource(name="UploadedFileService")
 	UploadedFileService uploadedFileService;	
-	
-	@Autowired
-	UserFormValidator userFormValidator;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public @ResponseBody List<UserDTO> RESTList(Model model) {

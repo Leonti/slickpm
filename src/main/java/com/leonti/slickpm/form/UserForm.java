@@ -5,11 +5,35 @@ import com.leonti.slickpm.domain.User;
 public class UserForm {
 
 	private String name;
-
-	public UserForm() {}
 	
-	public UserForm(User user) {
-		this.name = user.getName();
+	private String email;
+	
+	private String password;
+	
+	private String repeatPassword;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getRepeatPassword() {
+		return repeatPassword;
+	}
+
+	public void setRepeatPassword(String repeatPassword) {
+		this.repeatPassword = repeatPassword;
 	}
 	
 	public String getName() {
@@ -19,8 +43,9 @@ public class UserForm {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public User getUser() {
-		return new User(this.name);
+		return new User(name, email,
+				password);
 	}
 }

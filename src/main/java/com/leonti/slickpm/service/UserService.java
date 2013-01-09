@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.User;
 
 @Service("UserService")
@@ -39,6 +38,33 @@ public class UserService {
     	return (User) sessionFactory.getCurrentSession()
     			.createQuery("FROM User WHERE id = ?")
     			.setLong(0, id)
+    			.setMaxResults(1)
+    			.uniqueResult();
+	}
+	
+	public User getByEmail(String email) {
+
+    	return (User) sessionFactory.getCurrentSession()
+    			.createQuery("FROM User u WHERE u.email = ? AND u.deleted != 1")
+    			.setString(0, email)
+    			.setMaxResults(1)
+    			.uniqueResult();
+	}
+
+	public User getByForgotKey(String forgotKey) {
+		
+    	return (User) sessionFactory.getCurrentSession()
+    			.createQuery("FROM User u WHERE u.forgotKey = ? AND u.deleted != 1")
+    			.setString(0, forgotKey)
+    			.setMaxResults(1)
+    			.uniqueResult();
+	}
+
+	public User getByConfirmationKey(String confirmationKey) {
+		
+    	return (User) sessionFactory.getCurrentSession()
+    			.createQuery("FROM User u WHERE u.confirmationKey = ? AND u.deleted != 1")
+    			.setString(0, confirmationKey)
     			.setMaxResults(1)
     			.uniqueResult();
 	}	

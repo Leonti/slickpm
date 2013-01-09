@@ -16,12 +16,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.leonti.slickpm.domain.dto.IterationDTO;
-import com.leonti.slickpm.domain.dto.ProjectDTO;
 import com.leonti.slickpm.domain.dto.TaskDTO;
-import com.leonti.slickpm.domain.dto.TaskStageDTO;
-import com.leonti.slickpm.domain.dto.TaskTypeDTO;
-import com.leonti.slickpm.domain.dto.UserDTO;
 
 @Entity
 public class Task {

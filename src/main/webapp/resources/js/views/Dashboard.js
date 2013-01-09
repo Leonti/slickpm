@@ -21,14 +21,15 @@ define([
 	 
 	    render: function (eventName) {   	
 	        $(this.el).html(this.template());
-	        
-	        this.listUserProjects();
+	        	        
+	        this.listUserProjects(window.user);
 	        return this;
 	    },
 	    
-	    listUserProjects: function() {
+	    listUserProjects: function(user) {
 	    	if (!this.projectList) {
-	    		this.projectList = new UserProjectCollection(null, {userId: 4});
+	    		
+	    		this.projectList = new UserProjectCollection(null, {userId: user.id});
 	    		
 	    		var self = this;
 	    		this.projectList.deferred.done(function() {

@@ -23,11 +23,28 @@ public class User {
     
     @ManyToOne
     private UploadedFile avatar;       
+
+	@Column(name="email")
+	private String email;
+	
+	private String password;
+
+	@Column(name="forgotKey")
+	private String forgotKey = null;
+	
+	@Column(name="confirmationKey")
+	private String confirmationKey = null;
+
+	private Boolean deleted = false;
+	
+	private Integer role = 2;    
     
     public User() {}
     
-    public User(String name) {
+    public User(String name, String email, String password) {
     	this.name = name;
+    	this.password = password;
+    	this.email = email;
     }
 
 	public String getName() {
@@ -49,8 +66,56 @@ public class User {
 	public Integer getId() {
 		return id;
 	}
-	
-    public int hashCode() {
+		
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getForgotKey() {
+		return forgotKey;
+	}
+
+	public void setForgotKey(String forgotKey) {
+		this.forgotKey = forgotKey;
+	}
+
+	public String getConfirmationKey() {
+		return confirmationKey;
+	}
+
+	public void setConfirmationKey(String confirmationKey) {
+		this.confirmationKey = confirmationKey;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+
+	public int hashCode() {
         return new HashCodeBuilder(17, 31).
             append(this.id).
             toHashCode();

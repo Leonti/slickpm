@@ -53,6 +53,7 @@ public class EmailService {
 	        
 	        String emailContent = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, template + ".vm", replacements);
 	        
+	        System.out.println(emailContent);
 	        message.setText(emailContent, true);
 	        	        
 	        // Send email

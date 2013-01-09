@@ -22,6 +22,7 @@
 	<script data-main="../resources/js/admin" src="../resources/js/lib/require/require.js"></script>
 </head>
 <body>
+	<div id="user" data-user='${user}'></div>
 	<div class="wrapper">
 	   <div class="navbar navbar-fixed-top">
 	    <div class="navbar-inner">

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +22,9 @@ import com.leonti.slickpm.domain.dto.TaskStageDTO;
 import com.leonti.slickpm.service.PositionService;
 import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskStageService;
-import com.leonti.slickpm.validator.TaskStageFormValidator;
 
 @Controller
+@Secured("ROLE_USER")
 @RequestMapping("/taskstage")
 public class TaskStageController {
 	
@@ -36,9 +36,6 @@ public class TaskStageController {
 
 	@Resource(name="PositionService")
 	PositionService positionService;	
-	
-	@Autowired
-	TaskStageFormValidator taskStageFormValidator;
 
 	
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)

@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,9 +31,9 @@ import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskStageService;
 import com.leonti.slickpm.service.UploadedFileService;
-import com.leonti.slickpm.validator.IterationFormValidator;
 
 @Controller
+@Secured("ROLE_USER")
 @RequestMapping("/iteration")
 public class IterationController {
 
@@ -52,10 +53,7 @@ public class IterationController {
 	PositionService positionService;
 	
 	@Resource(name="UploadedFileService")
-	UploadedFileService uploadedFileService;	
-	
-	@Autowired
-	IterationFormValidator iterationFormValidator;		
+	UploadedFileService uploadedFileService;		
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	@ResponseBody

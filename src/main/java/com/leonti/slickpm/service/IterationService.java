@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.Task;
-import com.leonti.slickpm.domain.TaskStage;
 
 @Service("IterationService")
 @Transactional

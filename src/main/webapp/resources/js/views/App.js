@@ -2,12 +2,14 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'ErrorHandler',
 	'collections/iterations',
 	'models/iteration',
 	'collections/backlog',
 	'models/task',
 	'models/project',
 	'models/iteration',
+	'models/user',
 	'views/IterationList',
 	'views/IterationDetails',
 	'views/TaskList',
@@ -17,13 +19,14 @@ define([
 	'views/TaskAdd',
 	'views/ProjectHeader'
 	
-], function( $, _, Backbone, 
+], function( $, _, Backbone, ErrorHandler, 
 		IterationCollection, 
 		IterationModel, 
 		BacklogTaskCollection,
 		TaskModel,
 		ProjectModel,
 		IterationModel,
+		UserModel,
 		IterationListView, 
 		IterationDetailsView,
 		TaskListView,
@@ -40,6 +43,8 @@ define([
 	    	this.router = options.router;
 	        
 	        this.loadedTasks = {};
+	        
+	        window.user = new UserModel($('#user').data('user'));
 	        
 	        self = this;
 	    },

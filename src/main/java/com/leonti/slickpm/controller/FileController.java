@@ -9,6 +9,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class FileController {
 	@Resource(name="UploadedFileService")
 	UploadedFileService uploadedFileService;
 	
+	@Secured("ROLE_USER")
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
 	public @ResponseBody UploadedFileDTO upload(
 		@RequestParam("file") MultipartFile file) {

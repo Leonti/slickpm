@@ -13,14 +13,41 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.leonti.slickpm.domain.AuthenticatedUser;
+import com.leonti.slickpm.domain.User;
+
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {	 
+
+	@Resource(name = "UserService")
+	UserService userService; 	
 	
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		
-		return null;
+		User user = userService.getByEmail(username);
+		
+		if (user == null)
+			throw new UsernameNotFoundException("User not found");
+		
+		if (user.getConfirmationKey() != null)
+			throw new UsernameNotFoundException("User not confirmed");
+		
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+		
+		return new AuthenticatedUser (
+				user.getEmail(),
+				user.getPassword(),
+				enabled,
+				accountNonExpired,
+				credentialsNonExpired,
+				accountNonLocked,
+				getAuthorities(user.getRole()),
+				user);
 	}
 
 	public Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
