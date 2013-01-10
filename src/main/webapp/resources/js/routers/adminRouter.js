@@ -7,15 +7,13 @@ define([
 	var Workspace = Backbone.Router.extend({
 		 
 	    routes:{
+	    	"": "projectList",
 	        "projects": "projectList",
 	        "project/add": "addProject",
 	        "project/:id": "projectDetails",
 	        "stages" : "taskStages",
 	        "stage/add" : "addStage",
-	        "stage/:id" : "stageDetails",
-	        "users" : "userList",
-	        "user/add" : "addUser",
-	        "user/:id" : "userDetails"
+	        "stage/:id" : "stageDetails"
 	    },
 
 	    initialize:function () {	        
@@ -46,22 +44,6 @@ define([
 
 	    addStage: function() {
 	    	this.adminView.addStage();
-	    },
-	    
-	    taskboard: function(iterationId) {
-	    	this.appView.taskboard(iterationId);
-	    },
-	    
-	    userList: function() {
-	    	this.adminView.listUsers();
-	    },
-	    
-	    userDetails: function(userId) {
-	    	this.adminView.userDetails(userId);
-	    },
-	    
-	    addUser: function() {
-	    	this.adminView.addUser();
 	    }
 	});
 	

@@ -2,6 +2,10 @@
 	<h2><%= title %></h2>
 	<div class="well">
 		<p><%= description %></p>
+	<% if(vcs != null) { %>
+		<h6>Git repo</h6>
+		<p><%= vcs.uri %></p>
+	<% } %>		
 	</div>
 </div>
 <div class="span6">

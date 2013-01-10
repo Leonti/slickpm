@@ -39,6 +39,6 @@ define([
 		}
 		
 	});
-	
+
 	return TaskPopupView;
 });

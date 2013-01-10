@@ -20,7 +20,7 @@ define([
 	    	
 	        $(this.el).html(this.template(this.model.toJSON()));
 
-	        var velocityChartView = new VelocityChartView({element: $(this.el).find('.projectVelocity')});
+	        var velocityChartView = new VelocityChartView({model: this.model, element: $(this.el).find('.projectVelocity')});
 	        velocityChartView.render();
 	        
 	        return this;

@@ -8,13 +8,15 @@ define([
 		urlRoot: "/task",
 		
 	    defaults:{
-	        "id": null,
-	        "title": "",
-	        "description": ""
+	        id: null,
+	        title: "",
+	        description: "",
+	        points: null,
+	        taskType: null,
+	        user: null
 	    },
 	    
 	    initialize: function(options) {
-	    	this.defaults.projectId = options.projectId;
 	    	this.set({ fullTitle: '#' + this.id + ' - ' + this.get('title')});
 	    },
 	    

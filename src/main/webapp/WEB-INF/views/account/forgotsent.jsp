@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
   
+<jsp:include page="../header_no_menu.jsp" flush="true" />  
 
     <div class="container">
 
@@ -14,3 +15,5 @@
 	    	</div>
 	    </div>
     </div> <!-- /container -->
+
+<jsp:include page="../footer.jsp" flush="true" />

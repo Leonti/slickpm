@@ -11,24 +11,37 @@ define([
 	    template: _.template(userProjectListTemplate),
 	    className: 'userProjects',
 	    
-	    initialize:function () {
-	        this.collection.bind("reset", this.render, this);
-	        this.collection.bind("add", function (project) {
-	            $(this.el).find('ul').append(new UserProjectListItemView({model: project}).render().el);
-	            
-	        }, this);
+	    initialize:function (options) {
+	    	
+	    	this.allProjects = options.allProjects;
+	    	this.allProjects.bind("reset", this.renderAllProjects, this);
+	        this.collection.bind("reset", this.renderUserProjects, this);
+        
+	        this.holder = options.holder;
+	        $(this.el).html(this.template());
 	    },
 	 
-	    render:function (eventName) {
-	    	
-	    	$(this.el).html(this.template());
-	    	
+	    renderUserProjects: function (eventName) {
+
 	        _.each(this.collection.models, function (project) {
-	            $(this.el).find('ul').append(new UserProjectListItemView({ model: project }).render().el);
-	        }, this);
-	        	        
-	        return this;
-	    }	 
+	        		        	
+	        	$(this.el).find('.userProjectList').append(new UserProjectListItemView({ model: project }).render().el);
+	        	
+	        }, this);	    	
+	   	        
+	        $(this.holder).html(this.el);
+	    },
+	    
+	    renderAllProjects: function (eventName) {
+
+	        _.each(this.allProjects.models, function (project) {
+	        		        	
+	        	$(this.el).find('.allProjectList').append(new UserProjectListItemView({ model: project }).render().el);
+	        	
+	        }, this);	    	
+	   	        
+	        $(this.holder).html(this.el);
+	    },	    
 	});
 	
 	return UserProjectListView;

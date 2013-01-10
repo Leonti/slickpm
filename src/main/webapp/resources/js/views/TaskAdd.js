@@ -2,16 +2,24 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'jqBootstrapValidation',
 	'text!templates/taskAdd.html'
-], function( $, _, Backbone, taskAddFormTemplate ) {
+], function( $, _, Backbone, jqBootstrapValidation, taskAddFormTemplate ) {
 	
 	var TaskAddView = Backbone.View.extend({
 		 
 	    template:_.template(taskAddFormTemplate),
 	 
-	    render:function (eventName) {
+	    initialize: function(options) {
+	    	
+	    	this.project = options.project;
+	    },
+	    
+	    render: function (eventName) {
 	    	
 	        $(this.el).html(this.template(this.model.toJSON()));
+	    	
+	        $(this.el).find('input').jqBootstrapValidation();
 	        
 	        return this;
 	    },
@@ -22,10 +30,18 @@ define([
 	    },
 	 
 	    saveTask:function () {
+	    	
+	    	$(this.el).find('input').triggerHandler("submit.validation");
+	    	for (var entry in $(this.el).find('input').jqBootstrapValidation("collectErrors")) {
+	    		
+	    		// don't proceed on validation error
+	    		return false;
+	    	}	    	
+	    	
 	        this.model.set({
 	            title: $('.title', $(this.el)).val(),
 	            description: $('.description', $(this.el)).val(),
-	            user: null
+	            project: this.project,
 	        });
 	        	
         	var self = this;

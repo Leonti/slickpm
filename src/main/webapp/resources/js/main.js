@@ -21,7 +21,8 @@ require.config({
 		bootstrap: 'lib/bootstrap',
 		editable: 'lib/editable',
 		moment: 'lib/moment',
-		jqplot: 'lib/jqplot/jquery.jqplot'
+		jqplot: 'lib/jqplot/jquery.jqplot',
+		jqBootstrapValidation: 'lib/jqBootstrapValidation'
 	},
 	
 	urlArgs: "bust=" +  (new Date()).getTime()

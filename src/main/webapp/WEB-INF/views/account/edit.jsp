@@ -5,22 +5,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+
+<jsp:include page="../header.jsp" flush="true" />
+
     <div class="container">
 
 	    <div class="row">
-		    <div class="span4 offset2">
-				<form:form modelAttribute="editUserForm" method="POST" class="well">
-				
-					<bootstrap:input path="name" labelMessage="register.name" />
-					
-					<div class="form-actions">
-						<spring:message code="edit.submit" var="submit" /> 
-						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
-					</div>		
-				</form:form>	        
-		    </div>
 		    
-		    <div class="span4">
+		    <div class="span4 offset4">
 				<form:form modelAttribute="changePasswordForm" method="POST" action="savepassword" class="well">
 				
 					<bootstrap:input path="password" labelMessage="register.password" type="password" />
@@ -35,3 +27,5 @@
 	    </div>
 
     </div> <!-- /container -->
+    
+<jsp:include page="../footer.jsp" flush="true" />    

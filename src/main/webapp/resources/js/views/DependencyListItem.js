@@ -11,7 +11,7 @@ define([
 	 
 	    template: _.template(dependencyListItemTemplate),
 
-	    initialize:function () {
+	    initialize:function (options) {
 	    	this.model.bind("remove", this.close, this);
 	        this.model.bind("change", this.render, this);
 	        this.model.bind("destroy", this.close, this);

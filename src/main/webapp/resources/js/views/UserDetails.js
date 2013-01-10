@@ -21,11 +21,18 @@ define([
 	    	
 	        $(this.el).html(this.template(this.model.toJSON()));
 	    	
+	        var self = this;
 	        $('#avatarupload', $(this.el)).fileupload()
 			.bind('fileuploaddone', function (e, data) {    			
 				$('.avatar .background').prop("src", '/file/download/' + data.result.id + '/avatar');
-				$('#avatarId').val(data.result.id);
+				$('.avatarId').val(data.result.id);
+				self.saveUser();
 			});
+	        
+	        
+	        $(this.el).find('.name').editable({
+	        	onSave: function() { self.saveUser(); }
+	        });
 	        
 	        return this;
 	    },
@@ -37,7 +44,7 @@ define([
 	 
 	    saveUser:function () {
 	        this.model.set({
-	            name: $('.name', $(this.el)).val(),
+	            name: $('.name', $(this.el)).text(),
 	            avatarId: $('.avatarId', $(this.el)).val()
 	        });
 	        if (this.model.isNew()) {

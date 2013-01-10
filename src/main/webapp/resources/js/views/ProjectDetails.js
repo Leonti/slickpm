@@ -2,9 +2,10 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'jqBootstrapValidation',
 	'models/Vcs',
 	'text!templates/projectDetails.html'
-], function( $, _, Backbone, VcsModel, projectDetailsTemplate ) {
+], function( $, _, Backbone, jqBootstrapValidation, VcsModel, projectDetailsTemplate ) {
 	
 	var ProjectDetailsView = Backbone.View.extend({
 		 
@@ -19,6 +20,9 @@ define([
 	    render:function (eventName) {
 	    	
 	        $(this.el).html(this.template(this.model.toJSON()));
+	        
+	        $(this.el).find('input').jqBootstrapValidation();	        
+	        
 	        return this;
 	    },
 	 
@@ -28,6 +32,13 @@ define([
 	    },
 	 
 	    saveProject:function () {
+	    	
+	    	$(this.el).find('input').triggerHandler("submit.validation");
+	    	for (var entry in $(this.el).find('input').jqBootstrapValidation("collectErrors")) {
+	    		
+	    		// don't proceed on validation error
+	    		return false;
+	    	}
 	    	
 	    	var uri = $.trim($('.uri', $(this.el)).val());
 	    	

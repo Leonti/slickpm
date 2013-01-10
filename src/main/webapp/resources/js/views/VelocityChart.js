@@ -21,7 +21,7 @@ define([
 	        this.holder.html(this.el);
 	        
 	        var self = this;
-	        $.get('project/2/velocity', function(velocities) {
+	        $.get('project/' + this.model.id + '/velocity', function(velocities) {
 	        	
 	        	var doneLine = [];
 	        	var plannedLine = [];
@@ -30,26 +30,13 @@ define([
 	        		
 	        		var velocity = velocities[i];
 	        		days += velocity.days;
-	        		
-	        		
-	        		
+	        			        		
 	        		doneLine.push([days, velocity.donePoints]);
 	        		plannedLine.push([days, velocity.plannedPoints]);
-	        		
-	        		
+	        			        		
 	        		$(self.el).find('.velocityChart').jqplot([doneLine, plannedLine], {
-	        			/*
-	        			   series:[
-	        			           {label:'good line'},
-	        			           {label:'bad line'}
-	        			       ],
-	        			       */
 	        			       legend: {
 	        			    	   show: true,
-	        			    	//   location: 'se',
-	        			    	//   showSwatch: true,
-	        			    	//   textColor: 'red',
-	        			    	//   placement: 'outsideGrid',
 	        			    	   labels: ['Actual velocity', 'Planned velocity'],
 	        			       },
 	        			axes: {
@@ -77,11 +64,7 @@ define([
 	        	}
 	        	
 	        }, 'json');
-	        
-	     //   var line1 = [[1,1], [1.5,2], [3,3]]; 
-	        
-	        
-	        
+	        	        
 	        return this;
 	    },
 	    

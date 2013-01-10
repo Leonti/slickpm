@@ -1,5 +1,5 @@
-<div class="task" data-id="<%= id %>">
-	<div class="user"> 		
+<div class="task media small" data-id="<%= id %>">
+	<div class="avatar"> 		
 		<% if (user && user.avatarId) { %>
 			<img class="avatar" src="/file/download/<%= user.avatarId %>/avatar" />
 		<% } else { %>
@@ -7,8 +7,8 @@
 		<% } %> 		
  	</div>
  	<div class="details">
- 		<a href="#project/<%= project.id %>/task/<%= id %>" class="title"><%= fullTitle %></a> 
+ 		<a href="#project/<%= project.id %>/task/<%= id %>" class="title"><%= fullTitle %></a><br> 
+		<div class="taskTypes"></div>
+		<div class="points"></div>	 		
 	</div>
-	<div class="points"></div>
-	<div class="taskTypes"></div>
 </div>

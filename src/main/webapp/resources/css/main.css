@@ -25,37 +25,6 @@ body {
 	height: 40px;
 }
 
-.task {
-	background: #888;
-	border-bottom: 2px solid #ccc;	
-}
-
-.task, .task .details {
-	overflow: hidden; 
-	_overflow: visible;
-	zoom: 1;
-}
-
-.task .details {
-	padding-top: 5px;
-}
-
-.task .title {
-	font-size: 120%;
-	font-weight: bold;
-	color: #333;	
-}
-
-.task .user {
-	float: left; 
-	margin-right: 10px;
-}
-.task .user img{
-	display: block;
-	width: 60px;
-	height: 60px;
-}
-
 /* Media element */
 
 .media {
@@ -87,12 +56,25 @@ body {
 
 .media {
 	overflow: hidden;
-	margin-bottom: 5px;
 	cursor: pointer;
 }
 
 .media:hover {
 	background: #ccc;
+}
+
+/* Task List item */
+.media.task {
+	border-bottom: 1px #ccc solid;
+}
+
+.media.task .taskTypes {
+	float: left;
+}
+
+.media.task .points {
+	float: right;
+	margin-right: 15px;
 }
 
 /* Global styles */
@@ -117,7 +99,9 @@ body {
 }
 
 .taskboard .stages .stageTitle {
-	margin-left: 10px;
+	margin: 0;
+	padding: 0.3em;
+	background: #F2F2F2;
 }
 
 .taskboard .stages .taskList {
@@ -127,13 +111,16 @@ body {
 /* Scrum */
 
 .iteration {
-	padding: 1em;
-	background: green;
+	padding: 0.5em;
 	border-bottom: 1px solid grey;
 }
 
 .iteration .title {
 	font-weight: bold;
+}
+
+.iteration .title i {
+	cursor: pointer;
 }
 
 /* User edit */
@@ -207,6 +194,10 @@ body {
 .velocityChart {
 	width: 100%; 
 	height: 150px;
+}
+
+.taskAdd, .iterationAdd {
+	margin-bottom: 15px;
 }
 
 /* Admin interface */

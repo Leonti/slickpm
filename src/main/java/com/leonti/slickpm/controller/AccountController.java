@@ -25,14 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.leonti.slickpm.domain.AuthenticatedUser;
 import com.leonti.slickpm.domain.User;
-import com.leonti.slickpm.form.EditUserForm;
 import com.leonti.slickpm.form.ForgotForm;
 import com.leonti.slickpm.form.PasswordForm;
 import com.leonti.slickpm.form.UserForm;
 import com.leonti.slickpm.service.ConfigurationService;
 import com.leonti.slickpm.service.EmailService;
 import com.leonti.slickpm.service.UserService;
-import com.leonti.slickpm.validator.EditUserFormValidator;
 import com.leonti.slickpm.validator.ForgotFormValidator;
 import com.leonti.slickpm.validator.PasswordFormValidator;
 import com.leonti.slickpm.validator.UserFormValidator;
@@ -51,10 +49,7 @@ public class AccountController {
 	ConfigurationService configService;
 	
 	@Autowired
-	UserFormValidator userFormValidator;
-
-	@Autowired
-	EditUserFormValidator editUserFormValidator;	
+	UserFormValidator userFormValidator;	
 	
 	@Autowired
 	ForgotFormValidator forgotFormValidator;
@@ -142,36 +137,10 @@ public class AccountController {
     public String getEdit(Model model) {
     	
     	User user = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-    	EditUserForm editUserForm = new EditUserForm();
-    	editUserForm.setName(user.getName());
-    	
-		model.addAttribute("editUserForm", editUserForm);	
+
 		model.addAttribute("changePasswordForm", new PasswordForm());
 		return "account/edit";
     } 
-    
-    @Secured("ROLE_USER")
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String postEdit(@ModelAttribute("editUserForm") EditUserForm editUserForm,
-    							Model model,
-    							BindingResult result) {
-
-    	User user = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-  		
-		editUserForm.setEmail(user.getEmail()); 	
-    	editUserFormValidator.validate(editUserForm, result);
-    	
-    	if (result.hasErrors()) {
-    		
-    		model.addAttribute("changePasswordForm", new PasswordForm());
-    		return "account/edit";
-    	}
-    	
-		user.setName(editUserForm.getName());
-    	userService.save(user);
-    	
-    	return "redirect:overview";
-    }
     
     @Secured("ROLE_USER")
     @RequestMapping(value = "/savepassword", method = RequestMethod.POST)
@@ -184,12 +153,7 @@ public class AccountController {
     	PasswordFormValidator validator = new PasswordFormValidator();
     	validator.validate(changePasswordForm, result); 
     	   	
-    	if (result.hasErrors()) {
-    		
-        	EditUserForm editUserForm = new EditUserForm();
-        	editUserForm.setName(user.getName());
-        	
-    		model.addAttribute("editUserForm", editUserForm);    		
+    	if (result.hasErrors()) { 		
     		
     		return "account/edit";
     	}
@@ -197,7 +161,7 @@ public class AccountController {
     	user.setPassword(passwordEncoder.encodePassword(changePasswordForm.getPassword(), null));
     	userService.save(user);
     	
-    	return "redirect:overview";    	
+    	return "redirect:..";    	
     }
     
     @RequestMapping(value = "/forgot", method = RequestMethod.GET)

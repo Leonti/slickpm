@@ -10,16 +10,16 @@
 
 	<div class="tab-content">
 		<div class="tab-pane active" id="details">
-			<label>Title:</label>
-			<span class="title"><%= title %></span><br>
+			<h5><span class="title editable"><%= title %></span></h5>
 			<label>Description:</label>
-			<span class="description"><%= description %></span><br>
-			
+			<div class="well well-small">
+				<span class="description" style="display:inline-block; min-width: 100%;"><% if (description.length) { %><%= description %><% } else { %>&nbsp;<% } %></span>
+			</div>			
 			<% if (project.vcs != null) { %>
 			<span class="vcs btn btn-link">View commits for task</span><br>
 			<% } %>
 			<label>Assigned to:</label>
-			<div class="assignedUser btn btn-link"></div>
+			<div class="assignedUser btn btn-link"><span class="assignHandle">Assign user</span></div>
 		</div>
 		<div class="tab-pane" id="comments">
 		</div>

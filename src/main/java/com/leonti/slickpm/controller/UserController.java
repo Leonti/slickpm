@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.leonti.slickpm.domain.AuthenticatedUser;
 import com.leonti.slickpm.domain.UploadedFile;
 import com.leonti.slickpm.domain.User;
 import com.leonti.slickpm.domain.dto.UserDTO;
@@ -78,7 +80,14 @@ public class UserController {
 			UploadedFile avatar = uploadedFileService.getById(userDTO.getAvatarId());
 			user.setAvatar(avatar);
 		}		
-		userService.save(user);		
+		userService.save(user);			
+		
+		// update current logged in user if user is updating himself
+		AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User loggedIn = authUser.getUser();		
+		if (loggedIn.equals(user)) {
+			authUser.setUser(user);
+		}
 		
 		return user.getDTO();
 	}	

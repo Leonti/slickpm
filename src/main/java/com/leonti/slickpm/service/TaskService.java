@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.leonti.slickpm.domain.Comment;
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.UploadedFile;
+import com.leonti.slickpm.domain.User;
 
 @Service("TaskService")
 @Transactional
@@ -54,6 +55,14 @@ public class TaskService {
     			.setEntity(0, projectService.getById(projectId)).list();
 	}     
 
+    @SuppressWarnings("unchecked")
+	public List<Task> getListForUser(User user) {
+    	
+    	return (ArrayList<Task>) sessionFactory.getCurrentSession()
+    			.createQuery("FROM Task WHERE user = ?")
+    			.setEntity(0, user).list();
+	}    
+    
 	public List<Task> getDependencyCandidates(Task task) {
     	
     	List<Task> projectTasks = getList(task.getProject().getId());

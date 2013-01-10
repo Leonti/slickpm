@@ -4,8 +4,9 @@ define([
 	'moment',
 	'underscore',
 	'backbone',
+	'jqBootstrapValidation',
 	'text!templates/iterationDetails.html'
-], function( $, datepicker, moment, _, Backbone, iterationDetailsTemplate ) {
+], function( $, datepicker, moment, _, Backbone, jqBootstrapValidation, iterationDetailsTemplate ) {
 	
 	var IterationDetailsView = Backbone.View.extend({
 		 
@@ -27,6 +28,8 @@ define([
 	        $(this.el).find('.startDate').datepicker();
 	        $(this.el).find('.endDate').datepicker();
 	        
+	        $(this.el).find('input').jqBootstrapValidation();
+	        
 	        return this;
 	    },
 	 
@@ -37,6 +40,14 @@ define([
 	    },
 	 
 	    saveIteration:function () {
+	    	
+	    	$(this.el).find('input').triggerHandler("submit.validation");
+	    	for (var entry in $(this.el).find('input').jqBootstrapValidation("collectErrors")) {
+	    		
+	    		// don't proceed on validation error
+	    		return false;
+	    	}	    	
+	    	
 	        this.model.set({
 	            title: $(this.el).find('.title').val(),
 	            description: $(this.el).find('.description').val(),

@@ -1,5 +1,12 @@
-<label>Title:</label>
-<input type="text" class="title" value="<%= title %>" required />
+<div class="control-group">
+	<label>Title:</label>
+	
+	<div class="controls">
+		<input type="text" class="title" value="<%= title %>" required />
+		<p class="help-block"></p>
+	</div>
+</div>	
+
 <label>Description:</label>
 <textarea class="description"><%= description %></textarea><br>
 <button class="save btn">Save</button>

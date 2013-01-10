@@ -2,10 +2,11 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',	
+	'jqBootstrapValidation',
 	'models/comment',
 	'views/CommentListItem',
 	'text!templates/commentList.html'
-], function( $, _, Backbone, CommentModel, CommentListItemView, commentListTemplate ) {
+], function( $, _, Backbone, jqBootstrapValidation, CommentModel, CommentListItemView, commentListTemplate ) {
 	
 	var CommentListView = Backbone.View.extend({
 		 
@@ -30,6 +31,9 @@ define([
 	        	var commentListItemView = new CommentListItemView({ model: comment });	        	
 	            $(this.el).find('ul').append(commentListItemView.render().el);	            
 	        }, this);
+	        
+	        $(this.el).find('textarea').jqBootstrapValidation();
+	        
 	        return this;
 	    },
 	    
@@ -38,7 +42,14 @@ define([
 	    },	    
 	 
 	    addComment: function () {
-	        
+
+	    	$(this.el).find('textarea').triggerHandler("submit.validation");
+	    	for (var entry in $(this.el).find('textarea').jqBootstrapValidation("collectErrors")) {
+	    		
+	    		// don't proceed on validation error
+	    		return false;
+	    	}	    	
+	    	
 	    	var model = new CommentModel({taskId: this.task.attributes.id});
 	    	
 	    	model.set({

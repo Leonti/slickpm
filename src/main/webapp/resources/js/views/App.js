@@ -43,6 +43,7 @@ define([
 	    	this.router = options.router;
 	        
 	        this.loadedTasks = {};
+	        this.loadedProjects = {};
 	        
 	        window.user = new UserModel($('#user').data('user'));
 	        
@@ -54,14 +55,14 @@ define([
 	    	$('#taskboard').hide();
 	    	$('#projectView').hide();
 	    	    	
-	    	self.dashboardView = new DashboardView();
-	    	$('#dashboard').html(self.dashboardView.render().el);	  
+	    	this.dashboardView = new DashboardView();
+	    	$('#dashboard').html(this.dashboardView.render().el);	  
 	    },
 	    
 	    listIterations: function(projectId) {
 	    	
 	    	var self = this;	    	
-	    	if (!self.iterationList) {
+	    	if (!self.iterationList || this.currentIterationsProjectId != projectId) {
 	    		self.iterationList = new IterationCollection(null, {projectId: projectId});	    		
 	    		self.iterationListView = new IterationListView({model: self.iterationList});		
 	    		self.iterationListView.bind("tasksLoaded", function(tasks) {
@@ -80,6 +81,8 @@ define([
 		        		        
 		        var projectHeaderView = new ProjectHeaderView({model: project});
 		        $('#projectHeader').html(projectHeaderView.render().el);
+		        
+		        this.currentIterationsProjectId = projectId;
 	    	}  		  		 	
 	    },
 	    
@@ -120,12 +123,12 @@ define([
 	    	$('#taskboard').hide();
 	    	$('#projectView').show();
 	    	$('#dashboard').hide();
-	    	
-	    	var self = this;
-	    	if (!this.backlogTaskList) {
+	    		    	
+	    	if (!this.backlogTaskList || this.currentBacklogProjectId != projectId) {
 	    		this.backlogTaskList = new BacklogTaskCollection(null, {projectId: projectId});
+	    		
+	    		var self = this;
 	    		this.backlogTaskList.deferred.done(function(tasks) {
-	    			self.backlogLoaded = true;
 		    		_.each(tasks, function (task) {
 		    			self.loadedTasks['task_' + task.id] = self.backlogTaskList.get(task.id);
 		    		});
@@ -134,7 +137,8 @@ define([
 	    		var taskListView = new TaskListView({model: this.backlogTaskList});
 		        $('#backlog').html(taskListView.render().el);
 		        $('.addTaskLink').show();
-		        $('.addTaskLink').attr('href', '/#project/' + projectId + '/task/add');	    		
+		        $('.addTaskLink').attr('href', '/#project/' + projectId + '/task/add');
+		        this.currentBacklogProjectId = projectId;
 	    	}
 	    },
 
@@ -144,12 +148,25 @@ define([
 	    	
 	    	if (self.taskAddView) self.taskAddView.close();
 
-	    	self.taskAddView = new TaskAddView({ model: new TaskModel({projectId: projectId}), collection: self.backlogTaskList});
-	        self.taskAddView.bind("taskCreated", self.taskCreated, self);
-	        self.taskAddView.bind("cancel", function() {
-	        	window.history.back();
-	        }, self);
-	        $('#addTask').html(self.taskAddView.render().el);	    	
+	    	var renderAddTask = function() {
+		    	self.taskAddView = new TaskAddView({ 
+		    		model: new TaskModel(), 
+		    		collection: self.backlogTaskList, 
+		    		project: self.loadedProjects[projectId]});
+		    	
+		        self.taskAddView.bind("taskCreated", self.taskCreated, self);
+		        self.taskAddView.bind("cancel", function() {
+		        	window.history.back();
+		        }, self);
+		        $('#addTask').html(self.taskAddView.render().el);	    		
+	    	};
+	    	
+	    	if (!this.loadedProjects[projectId]) {
+	    		this.loadedProjects[projectId] = new ProjectModel({id: projectId});
+	    		this.loadedProjects[projectId].fetch({ success: renderAddTask});
+	    	} else {
+	    		renderAddTask();
+	    	}
 	    },	    
 
 	    taskCreated: function(id) {
@@ -165,7 +182,7 @@ define([
 	    		self.taskView = new TaskDetailsView({ model: task, taskList: self.backlogTaskList});
 	    		$('#task').html(self.taskView.render().el);
 	    	} else {
-		    	task = new TaskModel({projectId: projectId, id: id});
+		    	task = new TaskModel({id: id});
 		    	task.fetch({
 		    		success: function() {
 				        

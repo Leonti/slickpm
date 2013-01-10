@@ -87,7 +87,7 @@ define([
 	        }
 	        
 	        var self = this;
-	        $(this.el).find('.title').editable({
+	        $(this.el).find('.title.editable').editable({
 	        	onSave: function() { self.saveTask(); }
 	        });
 	        $(this.el).find('.description').editable({
@@ -108,7 +108,7 @@ define([
 	 
 	    saveTask: function () {
 	        this.model.set({
-	            title: $('.title', $(this.el)).text(),
+	            title: $('.title.editable', $(this.el)).text(),
 	            description: $('.description', $(this.el)).text()
 	        });
 

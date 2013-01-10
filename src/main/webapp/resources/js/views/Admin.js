@@ -7,28 +7,20 @@ define([
 	'models/project',
 	'collections/stages',
 	'models/stage',
-	'collections/Users',
-	'models/user',
 	'views/projectlist',
-	'views/projectdetails',
+	'views/ProjectDetails',
 	'views/stagelist',
-	'views/stagedetails',
-	'views/userlist',
-	'views/userdetails'
+	'views/StageDetails',
 	
 ], function( $, _, Backbone, ErrorHandler, 
 		ProjectCollection, 
 		ProjectModel, 
 		StageCollection,
 		StageModel,
-		UserCollection,
-		UserModel,
 		ProjectListView, 
 		ProjectDetailsView, 
 		StageListView,
-		StageDetailsView,
-		UserListView,
-		UserDetailsView) {
+		StageDetailsView) {
 	
 	var AdminView = Backbone.View.extend({
 		
@@ -72,42 +64,6 @@ define([
 	    
 	    projectCreated: function(id) {
 	    	self.router.navigate('project/' + id, false);
-	    },
-	    
-	    listUsers: function() {
-
-	    	if (!self.userList) {
-
-	    		self.userList = new UserCollection();	    		
-	    		self.userListView = new UserListView({model: self.userList});
-		        $('#admin .users .listContainer').html(self.userListView.render().el);	    		
-	    	}	    	
-	    },
-	    
-	    userDetails: function(id) {
-	    	this.listUsers();	    	
-	    	this.userList.deferred.done(function() {
-	    		
-		        self.user = self.userList.get(id);
-		        if (self.userView) self.userView.close();
-		        self.userView = new UserDetailsView({ model: self.user, userList: self.userList});
-		        $('#admin .users .details').html(self.userView.render().el);	
-	    	}, id);	    	
-	    },
-	    
-	    addUser: function() {
-
-	    	this.listUsers();
-	    	
-	    	if (self.userView) self.userView.close();
-
-	    	self.userView = new UserDetailsView({ model: new UserModel(), userList: self.userList});
-	        self.userView.bind("userCreated", self.userCreated);
-	        $('#admin .users .details').html(self.userView.render().el);	    	
-	    },
-	    
-	    userCreated: function(id) {
-	    	self.router.navigate('user/' + id, false);
 	    },	    
 
 	    listStages: function() {

@@ -1,12 +1,20 @@
-<label>Title:</label>
-<input type="text" class="title" value="<%= title %>" required/>
-<label>Start date:</label>
-<input type="text" class="startDate" value="<%= startDate != null ? moment(startDate).format('L') : "" %>" required/>
-<label>End Date:</label>
-<input type="text" class="endDate" value="<%= endDate != null ? moment(endDate).format('L') : "" %>" required/>
-<label>Description:</label>
-<textarea class="description"><%= description %></textarea><br>
-
-<button class="btn save">Save</button>
-<button class="btn cancel">Cancel</button>
-<button class="btn delete">Delete</button>
+<div class="iterationAdd">
+	<div class="control-group">
+		<label>Title:</label>
+		
+		<div class="controls">
+			<input type="text" class="title" value="<%= title %>" required />
+			<p class="help-block"></p>
+		</div>
+	</div>	
+	<label>Start date:</label>
+	<input type="text" class="startDate" value="<%= startDate != null ? moment(startDate).format('L') : "" %>" required/>
+	<label>End Date:</label>
+	<input type="text" class="endDate" value="<%= endDate != null ? moment(endDate).format('L') : "" %>" required/>
+	<label>Description:</label>
+	<textarea class="description"><%= description %></textarea><br>
+	
+	<button class="btn save">Save</button>
+	<button class="btn cancel">Cancel</button>
+	<button class="btn delete">Delete</button>
+</div>

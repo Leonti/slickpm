@@ -29,5 +29,9 @@ public class AuthenticatedUser extends User {
 
 	public com.leonti.slickpm.domain.User getUser() {
 		return user;
-	}		
+	}
+	
+	public void setUser(com.leonti.slickpm.domain.User user) {
+		this.user = user;
+	}
 }

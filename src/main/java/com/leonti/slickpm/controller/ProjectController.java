@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -35,6 +36,7 @@ import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskStageService;
 import com.leonti.slickpm.service.UploadedFileService;
+import com.leonti.slickpm.service.UserService;
 import com.leonti.slickpm.service.VcsService;
 
 @Controller
@@ -50,6 +52,9 @@ public class ProjectController {
 	
 	@Resource(name="TaskService")
 	TaskService taskService;	
+
+	@Resource(name="UserService")
+	UserService userService;		
 	
 	@Resource(name="PositionService")
 	PositionService positionService;	
@@ -181,8 +186,7 @@ public class ProjectController {
 	public @ResponseBody List<Project> RESTUserProjectList(
 			@PathVariable("userId") Integer userId) {
 		
-		// TODO: implement logic to return only projects for given user
-		return projectService.getList();
+		return projectService.getListForUser(userService.getById(userId));
 	}	
 	
     @RequestMapping(value = "{projectId}/updateBacklog", method = RequestMethod.POST)
