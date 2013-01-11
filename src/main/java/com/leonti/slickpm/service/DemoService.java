@@ -5,13 +5,13 @@ import java.util.Random;
 
 import javax.annotation.Resource;
 
-import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.leonti.slickpm.domain.Comment;
 import com.leonti.slickpm.domain.GitVcs;
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.Project;
@@ -23,9 +23,6 @@ import com.leonti.slickpm.domain.User;
 @Service("DemoService")
 @Transactional
 public class DemoService {
-
-    @Autowired
-    private SessionFactory sessionFactory;	
 	
 	@Resource(name="TaskTypeService")
 	TaskTypeService taskTypeService;	
@@ -182,7 +179,10 @@ public class DemoService {
 				task.setTaskStage(stages.get(stages.size() - 1));
 			}
 			
-			taskService.save(task);			
+			taskService.save(task);	
+			
+			taskService.addComment(task, new Comment("Just random comment " + random.nextInt(100), task));
+			taskService.addComment(task, new Comment("Another random comment " + random.nextInt(100), task));
 		}		
 	}
 }

@@ -1,3 +1,5 @@
+src/main/webapp/resources/js/admin-built.js
+src/main/webapp/resources/js/main-built.js
 target
 .classpath
 .settings
