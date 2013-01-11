@@ -8,13 +8,13 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.leonti.slickpm.form.ForgotForm;
-import com.leonti.slickpm.service.TenantService;
+import com.leonti.slickpm.service.UserService;
 
 @Component
 public class ForgotFormValidator implements Validator {
 
-	@Resource(name="tenantService")
-	TenantService tenantService;	
+	@Resource(name="UserService")
+	UserService userService;	
 	
 	@Override
 	public boolean supports(@SuppressWarnings("rawtypes") Class clazz) {
@@ -27,7 +27,7 @@ public class ForgotFormValidator implements Validator {
 		
 		ForgotForm forgotForm = (ForgotForm) obj;
 		
-		if (tenantService.getByEmail(forgotForm.getEmail()) == null) {
+		if (userService.getByEmail(forgotForm.getEmail()) == null) {
 			errors.rejectValue("email", "emailnotfound");
 		}		
 	}

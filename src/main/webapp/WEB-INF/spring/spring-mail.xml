@@ -15,15 +15,15 @@
             http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
     <!-- Read configuration properties -->
-    <context:property-placeholder location="classpath:configuration.properties"/>
+    <context:property-placeholder location="classpath:configuration.properties" system-properties-mode="OVERRIDE" />
 	
     <!-- Email support -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="${mail.server.host}" />
+        <property name="host" value="${mailserver_host}" />
         <property name="port" value="${mail.server.port}" />
         <property name="protocol" value="${mail.server.protocol}" />
-        <property name="username" value="${mail.server.username}" />
-        <property name="password" value="${mail.server.password}" />
+        <property name="username" value="${mailserver_username}" />
+        <property name="password" value="${mailserver_password}" />
         <property name="javaMailProperties">
         	<util:properties location="classpath:javamail.properties" />
         </property>

@@ -16,12 +16,14 @@
 <tx:annotation-driven />	
 <context:annotation-config />
 <context:component-scan base-package="com.leonti.slickpm" />
- 
+
+<context:property-placeholder location="classpath:configuration.properties" system-properties-mode="OVERRIDE" />
+
     <bean id="dataSource"
         class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"
-        p:driverClass="${jdbc.driverClassName}"
-        p:jdbcUrl="${jdbc.databaseurl}" p:user="${jdbc.username}"
-        p:password="${jdbc.password}" />
+        p:driverClass="${jdbc_driverClassName}"
+        p:jdbcUrl="${jdbc_databaseurl}" p:user="${jdbc_username}"
+        p:password="${jdbc_password}" />
  
  
     <bean id="sessionFactory"
@@ -32,9 +34,10 @@
 				
         <property name="hibernateProperties">
             <props>         
-                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
+                <prop key="hibernate.dialect">${jdbc_dialect}</prop>
                 <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+          <!--        <prop key="hibernate.hbm2ddl.auto">update</prop> -->
             </props>
         </property>
     </bean>
@@ -49,4 +52,6 @@
     
    	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />	
+		
+   	<bean id="applicationContextListener" class="com.leonti.slickpm.ApplicationContextListener" />
 </beans>
