@@ -72,7 +72,7 @@ define([
 		    		});
 	    		});
 	    		
-		        $('#iterations').html(self.iterationListView.render().el);
+		        $('#iterations').html(self.iterationListView.el);
 		        $('.addIterationLink').show();
 		        $('.addIterationLink').attr('href', '/#project/' + projectId + '/iteration/add'); 
 		        
@@ -135,7 +135,7 @@ define([
 	    		});	
 	    		
 	    		var taskListView = new TaskListView({model: this.backlogTaskList});
-		        $('#backlog').html(taskListView.render().el);
+		        $('#backlog').html(taskListView.el);
 		        $('.addTaskLink').show();
 		        $('.addTaskLink').attr('href', '/#project/' + projectId + '/task/add');
 		        this.currentBacklogProjectId = projectId;

@@ -24,6 +24,7 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,19 +44,12 @@ public class VcsService {
     @Autowired
     private SessionFactory sessionFactory;	
  
+    @Value("${uploadDir}")
+    String uploadFolder;    
+    
     private String getRepoFolder(String id) {
-    	try {
-			Properties props = PropertiesLoaderUtils.loadAllProperties("configuration.properties");
-			String folder = props.getProperty("uploadDir");
 			
-			return folder + File.separator + "gitrepos" + File.separator + id;
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	return null;
+		return uploadFolder + File.separator + "gitrepos" + File.separator + id;
     }
     
 	public List<VcsCommit> getDiffForTask(GitVcs gitVcs, Task task) {

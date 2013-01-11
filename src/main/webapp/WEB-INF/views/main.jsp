@@ -27,6 +27,10 @@
 				<a class="addIterationLink" href="#" style="display: none;">Add iteration</a>			
 			</div>			
 		</div>
+		
+		<div class="row">
+	    	<h3 class="span6">Backlog</h3><h3 class="span6">Iteartions</h3>	 		
+		</div>
 		<div class="row">	
 			<div class="span6">
 				<div id="addTask"></div>
@@ -36,8 +40,8 @@
 			</div>			
 		</div>
 
-	    <div class="row">	    
-		    <div id="backlog" class="span6" ></div>    
+	    <div class="row">   
+		    <div id="backlog" class="span6"></div>    
 		    <div id="iterations" class="span6"></div>    	    
 	    </div>
 	</div>

@@ -12,6 +12,9 @@ define([
 	    className: 'taskList',
 	 
 	    initialize:function () {
+	    	
+	    	$(this.el).append('<div class="loading">Loading ...</div>');
+	    	
 	        this.model.bind("reset", this.render, this);
 	        var self = this;
 	        this.model.bind("add", function (task) {
@@ -33,9 +36,13 @@ define([
 	    },
 	    	 
 	    render: function (eventName) {
+	    	
+	    	$(this.el).find('.loading').remove();
+	    		    	
 	        _.each(this.model.models, function (task) {
 	            $(this.el).append(new TaskListItemView({ model: task }).render().el);
 	        }, this);
+	  	        
 	        return this;
 	    }
 	 

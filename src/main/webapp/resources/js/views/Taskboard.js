@@ -38,7 +38,7 @@ define([
 		    			stageTitle: stage.title
 		    		});
 		    		
-		    		stageHtml = $(stageHtml).append(taskListView.render().$el);		    		
+		    		stageHtml = $(stageHtml).append(taskListView.el);		    		
 			        $(self.el).find('.stages').append(stageHtml);
 	        	});
 	        });

@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,7 @@ import com.leonti.slickpm.domain.AuthenticatedUser;
 
 @Controller
 public class GeneralController {
-
+    
 	@Secured("ROLE_USER")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) throws JsonGenerationException, JsonMappingException, IOException {

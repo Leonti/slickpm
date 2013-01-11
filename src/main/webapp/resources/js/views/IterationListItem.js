@@ -49,7 +49,7 @@ define([
 	    	if (!this.taskListView) {
 	    		this.taskListView = new TaskListView({model: this.taskList});
 	    		
-	    		$(this.el).find('.taskListHolder').html(this.taskListView.render().el);
+	    		$(this.el).find('.taskListHolder').html(this.taskListView.el);
 	    		
 	    		var self = this;
 	    		this.taskList.deferred.done(function() {

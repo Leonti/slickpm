@@ -6,11 +6,13 @@ import java.util.Random;
 import javax.annotation.Resource;
 
 import org.hibernate.SessionFactory;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.leonti.slickpm.domain.GitVcs;
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.Project;
 import com.leonti.slickpm.domain.Task;
@@ -42,6 +44,9 @@ public class DemoService {
 	
 	@Resource(name="TaskService")
 	TaskService taskService;		
+
+	@Resource(name="VcsService")
+	VcsService vcsService;	
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;	
@@ -92,9 +97,19 @@ public class DemoService {
 	private void createProjects() {
 		
 		Project project = new Project("Demo project 1", "Demo project 1 description");
+		
+		GitVcs gitVcs = new GitVcs();
+		gitVcs.setUri("https://leonti@bitbucket.org/leonti/test.git");
+		vcsService.save(gitVcs);
+		vcsService.checkAndCreateVcsCache(gitVcs);
+		
+		project.setVcs(gitVcs);		
+		
 		projectService.save(project);
 		
 		project = new Project("Demo project 2", "Demo project 2 description");
+		
+		project.setVcs(gitVcs);		
 		projectService.save(project);		
 	}
 	
@@ -102,12 +117,34 @@ public class DemoService {
 		
 		List<Project> projects = projectService.getList();
 		
+		DateTime start = new DateTime();
+		
+		DateTime end = start.plusWeeks(2);
+		
 		Iteration iteration = new Iteration("First iteration", "Iteration description", projects.get(0));
+		iteration.setStartDate(start.toDate());
+		iteration.setEndDate(end.toDate());
 		iterationService.save(iteration);
+		
 		iteration = new Iteration("Second iteration", "Iteration description", projects.get(0));
+		start = start.plusWeeks(2);
+		end = end.plusWeeks(2);		
+		iteration.setStartDate(start.toDate());
+		iteration.setEndDate(end.toDate());
 		iterationService.save(iteration);
-	
+
+		iteration = new Iteration("Third iteration", "Iteration description", projects.get(0));
+		start = start.plusWeeks(2);
+		end = end.plusWeeks(2);
+		iteration.setStartDate(start.toDate());
+		iteration.setEndDate(end.toDate());
+		iterationService.save(iteration);		
+		
 		iteration = new Iteration("Iteration 1", "Iteration description", projects.get(1));
+		start = start.plusWeeks(2);
+		end = end.plusWeeks(2);
+		iteration.setStartDate(start.toDate());
+		iteration.setEndDate(end.toDate());		
 		iterationService.save(iteration);		
 	}
 	
@@ -121,21 +158,29 @@ public class DemoService {
 		
 		List<TaskStage> stages = taskStageService.getList();
 		
+		Double[] points = {0.5, 1d, 2d, 3d, 5d, 8d};
+		
 		Random random = new Random();
 		
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 40; i++) {
 			Task task = new Task(
-					"Task + " + random.nextInt(10), 
-					"Task description + " + random.nextInt(10), 
+					"Task " + random.nextInt(10), 
+					"Task description " + random.nextInt(10), 
 					types.get(random.nextInt(3)),
 					projects.get(random.nextInt(2)));
 			
-			int iterationPosition = random.nextInt(4);
+			int iterationPosition = random.nextInt(6);
 			if (iterationPosition < 3) {
 				task.setIteration(iterations.get(iterationPosition));
 			}
 			
 			task.setTaskStage(stages.get(0));
+			
+			task.setPoints(points[random.nextInt(5)]);
+			
+			if (random.nextInt(2) == 1) {
+				task.setTaskStage(stages.get(stages.size() - 1));
+			}
 			
 			taskService.save(task);			
 		}		

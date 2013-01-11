@@ -10,10 +10,13 @@ define([
 	    tagName: 'div',
 	 
 	    initialize:function () {
+	    	$(this.el).append('<div class="loading">Loading ...</div>');
 	        this.model.bind("reset", this.render, this);
 	    },
 	 
 	    render:function (eventName) {
+	    	
+	    	$(this.el).find('.loading').remove();
 	    	
 	    	var list = $('<div>');
 	        _.each(this.model.models, function (iteration) {
