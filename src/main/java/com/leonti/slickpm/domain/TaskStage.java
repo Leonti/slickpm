@@ -9,24 +9,25 @@ import com.leonti.slickpm.domain.dto.TaskStageDTO;
 
 @Entity
 public class TaskStage {
-	
-    @Id
-    @GeneratedValue	
-	private Integer id;
-    
-    @Column
-    private String title;
-    
-    @Column
-    private String description;  
 
-    public TaskStage() {}
-    
-    public TaskStage(String title, String description) {
-    	this.title = title;
-    	this.description = description;
-    }
-    
+	@Id
+	@GeneratedValue
+	private Integer id;
+
+	@Column
+	private String title;
+
+	@Column
+	private String description;
+
+	public TaskStage() {
+	}
+
+	public TaskStage(String title, String description) {
+		this.title = title;
+		this.description = description;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -46,7 +47,6 @@ public class TaskStage {
 	public Integer getId() {
 		return id;
 	}
-	
 
 	public TaskStageDTO getDTO() {
 		return new TaskStageDTO(this.id, this.title, this.description);

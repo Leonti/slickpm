@@ -8,12 +8,12 @@ import javax.persistence.Id;
 @Entity
 public abstract class Position implements Comparable<Position> {
 
-    @Id
-    @GeneratedValue	
+	@Id
+	@GeneratedValue
 	private Integer id;
-    
-    @Column
-    private Integer position;
+
+	@Column
+	private Integer position;
 
 	public Integer getPosition() {
 		return position;
@@ -26,21 +26,21 @@ public abstract class Position implements Comparable<Position> {
 	public Integer getId() {
 		return id;
 	}
-	
-    public int compareTo(Position other) {
-        final int BEFORE = -1;
-        final int EQUAL = 0;
-        final int AFTER = 1;
-        
-        if (this.getPosition() < other.getPosition())
-        	return BEFORE;
-        
-        if (this.getPosition().equals(other.getPosition()))
-        	return EQUAL;
-        
-        if (this.getPosition() > other.getPosition())
-        	return AFTER; 
-        
-        return EQUAL;
-    }
+
+	public int compareTo(Position other) {
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
+
+		if (this.getPosition() < other.getPosition())
+			return BEFORE;
+
+		if (this.getPosition().equals(other.getPosition()))
+			return EQUAL;
+
+		if (this.getPosition() > other.getPosition())
+			return AFTER;
+
+		return EQUAL;
+	}
 }

@@ -21,18 +21,19 @@ import com.leonti.slickpm.service.TaskTypeService;
 @RequestMapping("/taskType")
 public class TaskTypeController {
 
-	@Resource(name="TaskTypeService")
+	@Resource(name = "TaskTypeService")
 	TaskTypeService taskTypeService;
-	
+
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public @ResponseBody List<TaskTypeDTO> RESTList(Model model) {
-		
+	public @ResponseBody
+	List<TaskTypeDTO> RESTList(Model model) {
+
 		List<TaskTypeDTO> taskTypeDTOList = new ArrayList<TaskTypeDTO>();
-		
+
 		for (TaskType taskType : taskTypeService.getList()) {
 			taskTypeDTOList.add(taskType.getDTO());
 		}
-		
+
 		return taskTypeDTOList;
-	}	    
+	}
 }

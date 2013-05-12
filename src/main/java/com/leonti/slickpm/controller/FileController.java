@@ -26,33 +26,34 @@ import com.leonti.slickpm.service.UploadedFileService;
 @RequestMapping("/file")
 public class FileController {
 
-	@Resource(name="UploadedFileService")
+	@Resource(name = "UploadedFileService")
 	UploadedFileService uploadedFileService;
-	
+
 	@Secured("ROLE_USER")
-	@RequestMapping(value="/upload", method=RequestMethod.POST)
-	public @ResponseBody UploadedFileDTO upload(
-		@RequestParam("file") MultipartFile file) {
-		
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public @ResponseBody
+	UploadedFileDTO upload(@RequestParam("file") MultipartFile file) {
+
 		UploadedFile uploadedFile = uploadedFileService.save(file);
-    	
-    	return uploadedFile.getDTO();		
+
+		return uploadedFile.getDTO();
 	}
-	
-    @RequestMapping(value = "/download/{id}/*", method=RequestMethod.GET)
-    public void getFile(HttpServletResponse response, @PathVariable("id") Integer id) throws IOException {
-		
+
+	@RequestMapping(value = "/download/{id}/*", method = RequestMethod.GET)
+	public void getFile(HttpServletResponse response,
+			@PathVariable("id") Integer id) throws IOException {
+
 		UploadedFile uploadedFile = uploadedFileService.getById(id);
 
 		if (uploadedFile == null) {
-    		response.setStatus(404);  			
+			response.setStatus(404);
 		} else {
-    		response.setContentType(uploadedFile.getContentType());
-	   		
-    		InputStream in;
-	        in = new FileInputStream(uploadedFileService.getFile(uploadedFile));
-	        ServletOutputStream out = response.getOutputStream();
-	        IOUtils.copy(in, out);    			
+			response.setContentType(uploadedFile.getContentType());
+
+			InputStream in;
+			in = new FileInputStream(uploadedFileService.getFile(uploadedFile));
+			ServletOutputStream out = response.getOutputStream();
+			IOUtils.copy(in, out);
 		}
-    }	
+	}
 }

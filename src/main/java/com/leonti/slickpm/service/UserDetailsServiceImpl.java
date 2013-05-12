@@ -17,37 +17,31 @@ import com.leonti.slickpm.domain.AuthenticatedUser;
 import com.leonti.slickpm.domain.User;
 
 @Component
-public class UserDetailsServiceImpl implements UserDetailsService {	 
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Resource(name = "UserService")
-	UserService userService; 	
-	
+	UserService userService;
+
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		
+
 		User user = userService.getByEmail(username);
-		
+
 		if (user == null)
 			throw new UsernameNotFoundException("User not found");
-		
+
 		if (user.getConfirmationKey() != null)
 			throw new UsernameNotFoundException("User not confirmed");
-		
+
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
-		
-		return new AuthenticatedUser (
-				user.getEmail(),
-				user.getPassword(),
-				enabled,
-				accountNonExpired,
-				credentialsNonExpired,
-				accountNonLocked,
-				getAuthorities(user.getRole()),
-				user);
+
+		return new AuthenticatedUser(user.getEmail(), user.getPassword(),
+				enabled, accountNonExpired, credentialsNonExpired,
+				accountNonLocked, getAuthorities(user.getRole()), user);
 	}
 
 	public Collection<? extends GrantedAuthority> getAuthorities(Integer role) {

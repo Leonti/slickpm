@@ -5,11 +5,11 @@ import com.leonti.slickpm.domain.User;
 public class UserForm {
 
 	private String name;
-	
+
 	private String email;
-	
+
 	private String password;
-	
+
 	private String repeatPassword;
 
 	public String getEmail() {
@@ -35,7 +35,7 @@ public class UserForm {
 	public void setRepeatPassword(String repeatPassword) {
 		this.repeatPassword = repeatPassword;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -45,7 +45,6 @@ public class UserForm {
 	}
 
 	public User getUser() {
-		return new User(name, email,
-				password);
+		return new User(name, email, password);
 	}
 }

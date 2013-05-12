@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,171 +36,179 @@ import com.leonti.slickpm.service.UploadedFileService;
 @RequestMapping("/iteration")
 public class IterationController {
 
-	@Resource(name="IterationService")
+	@Resource(name = "IterationService")
 	IterationService iterationService;
-	
-	@Resource(name="ProjectService")
-	ProjectService projectService;	
 
-	@Resource(name="TaskService")
-	TaskService taskService;	
+	@Resource(name = "ProjectService")
+	ProjectService projectService;
 
-	@Resource(name="TaskStageService")
-	TaskStageService taskStageService;	
+	@Resource(name = "TaskService")
+	TaskService taskService;
 
-	@Resource(name="PositionService")
+	@Resource(name = "TaskStageService")
+	TaskStageService taskStageService;
+
+	@Resource(name = "PositionService")
 	PositionService positionService;
-	
-	@Resource(name="UploadedFileService")
-	UploadedFileService uploadedFileService;		
+
+	@Resource(name = "UploadedFileService")
+	UploadedFileService uploadedFileService;
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public IterationDTO RESTDetails(@PathVariable("id") Integer id) {
-		
+
 		Iteration iteration = iterationService.getById(id);
 		IterationDTO iterationDTO = iteration.getDTO();
-		
-		iterationDTO.setPlannedPoints(iterationService.getPlannedPoints(iteration));
+
+		iterationDTO.setPlannedPoints(iterationService
+				.getPlannedPoints(iteration));
 		iterationDTO.setDonePoints(iterationService.getDonePoints(iteration));
-		
+
 		return iterationDTO;
-	}	
-	
+	}
+
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	public IterationDTO RESTAdd(@RequestBody IterationDTO iterationDTO) {
-		
+
 		Iteration iteration = new Iteration();
 		iteration.setTitle(iterationDTO.getTitle());
 		iteration.setDescription(iterationDTO.getDescription());
-		iteration.setProject(projectService.getById(iterationDTO.getProjectId()));
+		iteration
+				.setProject(projectService.getById(iterationDTO.getProjectId()));
 		iteration.setStartDate(iterationDTO.getStartDate());
 		iteration.setEndDate(iterationDTO.getEndDate());
-		
+
 		iterationService.save(iteration);
-		
+
 		return iteration.getDTO();
 	}
-	
+
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public IterationDTO RESTUpdate(
-			@RequestBody IterationDTO iterationDTO,
+	public IterationDTO RESTUpdate(@RequestBody IterationDTO iterationDTO,
 			@PathVariable("id") Integer id) {
-		
+
 		Iteration iteration = iterationService.getById(id);
 		iteration.setTitle(iterationDTO.getTitle());
 		iteration.setDescription(iterationDTO.getDescription());
 		iteration.setStartDate(iterationDTO.getStartDate());
-		iteration.setEndDate(iterationDTO.getEndDate());		
-		
-		iterationService.save(iteration);
-		
-		return iteration.getDTO();
-	}	
+		iteration.setEndDate(iterationDTO.getEndDate());
 
-	
+		iterationService.save(iteration);
+
+		return iteration.getDTO();
+	}
+
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public void RESTDelete(@PathVariable("id") Integer id) {
-		
+
 		iterationService.delete(iterationService.getById(id));
 	}
-	
+
 	@RequestMapping(value = "{iterationId}/task", method = RequestMethod.GET)
-	public @ResponseBody List<TaskDTO> RESTTaskList(
-			@PathVariable("iterationId") Integer iterationId) {		
-			
-		List<IterationPosition> iterationPositions = 
-				positionService.getIterationPositions(iterationService.getById(iterationId).getTasks());
-		
-		List<TaskDTO> taskDTOList = new ArrayList<TaskDTO>();    	
-    	for (IterationPosition position : iterationPositions) {
-    		Task task = position.getTask();
-    		taskDTOList.add(task.getDTO());      		
-    	}  		
-		
+	public @ResponseBody
+	List<TaskDTO> RESTTaskList(@PathVariable("iterationId") Integer iterationId) {
+
+		List<IterationPosition> iterationPositions = positionService
+				.getIterationPositions(iterationService.getById(iterationId)
+						.getTasks());
+
+		List<TaskDTO> taskDTOList = new ArrayList<TaskDTO>();
+		for (IterationPosition position : iterationPositions) {
+			Task task = position.getTask();
+			taskDTOList.add(task.getDTO());
+		}
+
 		return taskDTOList;
 	}
-	
+
 	@RequestMapping(value = "{iterationId}/stagetasks/{stageId}", method = RequestMethod.GET)
-	public @ResponseBody List<TaskDTO> RESTStageTaskList(
+	public @ResponseBody
+	List<TaskDTO> RESTStageTaskList(
 			@PathVariable("iterationId") Integer iterationId,
 			@PathVariable("stageId") Integer stageId) {
-		
-		List<TaskStagePosition> positions = positionService.getTaskStagePositions(taskStageService.getTasksForStage(
-				iterationService.getById(iterationId), 
-				taskStageService.getById(stageId)));
-		
-		List<TaskDTO> taskDTOList = new ArrayList<TaskDTO>();      	
-    	for (TaskStagePosition position : positions) {
-    		Task task = position.getTask();
-    		taskDTOList.add(task.getDTO());
-    	}      			
-		
+
+		List<TaskStagePosition> positions = positionService
+				.getTaskStagePositions(taskStageService.getTasksForStage(
+						iterationService.getById(iterationId),
+						taskStageService.getById(stageId)));
+
+		List<TaskDTO> taskDTOList = new ArrayList<TaskDTO>();
+		for (TaskStagePosition position : positions) {
+			Task task = position.getTask();
+			taskDTOList.add(task.getDTO());
+		}
+
 		return taskDTOList;
 	}
-	
+
 	@RequestMapping(value = "{iterationId}/updateStage/{stageId}", method = RequestMethod.POST)
-	public @ResponseBody Map<String, String> updateStage(
+	public @ResponseBody
+	Map<String, String> updateStage(
 			@PathVariable("iterationId") Integer iterationId,
 			@PathVariable("stageId") Integer stageId,
-			@RequestParam(value="idList", required=true) String idList) {
-    	
-    	if (idList.length() > 0) {
-    		
-    		
-    		TaskStage taskStage = taskStageService.getById(stageId);
-    		List<Task> tasks = taskStageService.getTasksForStage(				
-    				iterationService.getById(iterationId), 
-    				taskStage);
-    		   		
-    		for (String id : idList.split(",")) {
-    			Task task = taskService.getById(Integer.parseInt(id));
-    			
-    			// if task is not in this stage - change it's stage to current stage
-    			if (!tasks.contains(task)) {
+			@RequestParam(value = "idList", required = true) String idList) {
 
-    	        	TaskStage previousStage = task.getTaskStage();
-    	        	
-    	        	task.setTaskStage(taskStage);
-    	        	taskService.save(task);
-    	        	
-    	        	EmailNotificationHook emailNotificationHook = new EmailNotificationHook();
-    	        	emailNotificationHook.execute(task, previousStage);   
-    			}
-    		}
-    		
-        	int positionCount = 0;
-    	    	for (String id : idList.split(",")) {
-    	    		
-    	    		TaskStagePosition position = positionService.getOrCreateTaskStagePosition(taskService.getById(Integer.parseInt(id)));
-    	    		position.setPosition(positionCount);
-    	    		positionService.save(position);
-    	    		positionCount++;
-    	    	}      		   		   		
-    	}  	
-		
-    	Map<String, String> result = new HashMap<String, String>();
-    	result.put("result", "OK");
-    	
-    	return result;
-	}	
-    
-    @RequestMapping(value = "/getStats", method = RequestMethod.GET)
-    public @ResponseBody Map<String, String> getStats(
-    		@RequestParam(value="id", required=true) Integer id) {    
-    	
-    	Iteration iteration = iterationService.getById(id);
-    	
-    	Map<String, String> result = new HashMap<String, String>();
- 
-    	result.put("plannedPoints", iterationService.getPlannedPoints(iteration).toString());
-    	result.put("donePoints", iterationService.getDonePoints(iteration).toString());      	    	
-    	result.put("result", "OK");
-    	
-    	return result;
-    }
-  
+		if (idList.length() > 0) {
+
+			TaskStage taskStage = taskStageService.getById(stageId);
+			List<Task> tasks = taskStageService.getTasksForStage(
+					iterationService.getById(iterationId), taskStage);
+
+			for (String id : idList.split(",")) {
+				Task task = taskService.getById(Integer.parseInt(id));
+
+				// if task is not in this stage - change it's stage to current
+				// stage
+				if (!tasks.contains(task)) {
+
+					TaskStage previousStage = task.getTaskStage();
+
+					task.setTaskStage(taskStage);
+					taskService.save(task);
+
+					EmailNotificationHook emailNotificationHook = new EmailNotificationHook();
+					emailNotificationHook.execute(task, previousStage);
+				}
+			}
+
+			int positionCount = 0;
+			for (String id : idList.split(",")) {
+
+				TaskStagePosition position = positionService
+						.getOrCreateTaskStagePosition(taskService
+								.getById(Integer.parseInt(id)));
+				position.setPosition(positionCount);
+				positionService.save(position);
+				positionCount++;
+			}
+		}
+
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("result", "OK");
+
+		return result;
+	}
+
+	@RequestMapping(value = "/getStats", method = RequestMethod.GET)
+	public @ResponseBody
+	Map<String, String> getStats(
+			@RequestParam(value = "id", required = true) Integer id) {
+
+		Iteration iteration = iterationService.getById(id);
+
+		Map<String, String> result = new HashMap<String, String>();
+
+		result.put("plannedPoints", iterationService
+				.getPlannedPoints(iteration).toString());
+		result.put("donePoints", iterationService.getDonePoints(iteration)
+				.toString());
+		result.put("result", "OK");
+
+		return result;
+	}
+
 }

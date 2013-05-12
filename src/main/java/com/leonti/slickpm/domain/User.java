@@ -14,38 +14,39 @@ import com.leonti.slickpm.domain.dto.UserDTO;
 @Entity
 public class User {
 
-    @Id
-    @GeneratedValue	
+	@Id
+	@GeneratedValue
 	private Integer id;
-    
-    @Column
-    private String name;
-    
-    @ManyToOne
-    private UploadedFile avatar;       
 
-	@Column(name="email")
+	@Column
+	private String name;
+
+	@ManyToOne
+	private UploadedFile avatar;
+
+	@Column(name = "email")
 	private String email;
-	
+
 	private String password;
 
-	@Column(name="forgotKey")
+	@Column(name = "forgotKey")
 	private String forgotKey = null;
-	
-	@Column(name="confirmationKey")
+
+	@Column(name = "confirmationKey")
 	private String confirmationKey = null;
 
 	private Boolean deleted = false;
-	
-	private Integer role = 2;    
-    
-    public User() {}
-    
-    public User(String name, String email, String password) {
-    	this.name = name;
-    	this.password = password;
-    	this.email = email;
-    }
+
+	private Integer role = 2;
+
+	public User() {
+	}
+
+	public User(String name, String email, String password) {
+		this.name = name;
+		this.password = password;
+		this.email = email;
+	}
 
 	public String getName() {
 		return name;
@@ -66,8 +67,8 @@ public class User {
 	public Integer getId() {
 		return id;
 	}
-		
-    public String getEmail() {
+
+	public String getEmail() {
 		return email;
 	}
 
@@ -116,26 +117,22 @@ public class User {
 	}
 
 	public int hashCode() {
-        return new HashCodeBuilder(17, 31).
-            append(this.id).
-            toHashCode();
-    }
-    
-    public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (obj == this)
-            return true;
-        if (obj.getClass() != getClass())
-            return false;
+		return new HashCodeBuilder(17, 31).append(this.id).toHashCode();
+	}
 
-        User user = (User) obj;
-        return new EqualsBuilder().
-            append(this.id, user.getId()).
-            isEquals();
-    }
-    
-    public UserDTO getDTO() {
-    	return new UserDTO(id, name, avatar == null ? null : avatar.getId());
-    }
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		if (obj.getClass() != getClass())
+			return false;
+
+		User user = (User) obj;
+		return new EqualsBuilder().append(this.id, user.getId()).isEquals();
+	}
+
+	public UserDTO getDTO() {
+		return new UserDTO(id, name, avatar == null ? null : avatar.getId());
+	}
 }

@@ -27,4 +27,4 @@
 	},
     name: "admin",
     out: "admin-built.js"
-})
+});

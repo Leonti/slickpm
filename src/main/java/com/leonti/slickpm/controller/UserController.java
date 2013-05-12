@@ -27,75 +27,78 @@ import com.leonti.slickpm.service.UserService;
 @RequestMapping("/user")
 public class UserController {
 
-	@Resource(name="UserService")
+	@Resource(name = "UserService")
 	UserService userService;
 
-	@Resource(name="UploadedFileService")
-	UploadedFileService uploadedFileService;	
+	@Resource(name = "UploadedFileService")
+	UploadedFileService uploadedFileService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public @ResponseBody List<UserDTO> RESTList(Model model) {
-		
-		List<UserDTO> users = new ArrayList<UserDTO> ();
-		
-		for (User user: userService.getList()) {
+	public @ResponseBody
+	List<UserDTO> RESTList(Model model) {
+
+		List<UserDTO> users = new ArrayList<UserDTO>();
+
+		for (User user : userService.getList()) {
 			users.add(user.getDTO());
 		}
-		
+
 		return users;
-	}	
+	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public @ResponseBody UserDTO RESTDetails(@PathVariable("id") Integer id) {
-		
-		return userService.getById(id).getDTO();
-	}	
+	public @ResponseBody
+	UserDTO RESTDetails(@PathVariable("id") Integer id) {
 
-	
+		return userService.getById(id).getDTO();
+	}
+
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	public UserDTO RESTAdd(@RequestBody UserDTO userDTO) {
-		
+
 		User user = new User();
-		
-		user.setName(userDTO.getName());		
+
+		user.setName(userDTO.getName());
 		if (userDTO.getAvatarId() != null) {
-			UploadedFile avatar = uploadedFileService.getById(userDTO.getAvatarId());
+			UploadedFile avatar = uploadedFileService.getById(userDTO
+					.getAvatarId());
 			user.setAvatar(avatar);
-		}		
+		}
 		userService.save(user);
-		
+
 		return user.getDTO();
-	}	
+	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public UserDTO RESTUpdate(
-			@RequestBody UserDTO userDTO,
+	public UserDTO RESTUpdate(@RequestBody UserDTO userDTO,
 			@PathVariable("id") Integer id) {
-		
+
 		User user = userService.getById(id);
-		user.setName(userDTO.getName());		
+		user.setName(userDTO.getName());
 		if (userDTO.getAvatarId() != null) {
-			UploadedFile avatar = uploadedFileService.getById(userDTO.getAvatarId());
+			UploadedFile avatar = uploadedFileService.getById(userDTO
+					.getAvatarId());
 			user.setAvatar(avatar);
-		}		
-		userService.save(user);			
-		
+		}
+		userService.save(user);
+
 		// update current logged in user if user is updating himself
-		AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User loggedIn = authUser.getUser();		
+		AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+		User loggedIn = authUser.getUser();
 		if (loggedIn.equals(user)) {
 			authUser.setUser(user);
 		}
-		
+
 		return user.getDTO();
-	}	
-	
+	}
+
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public void RESTDelete(@PathVariable("id") Integer id) {
-		
+
 		userService.delete(userService.getById(id));
-	}	
+	}
 }

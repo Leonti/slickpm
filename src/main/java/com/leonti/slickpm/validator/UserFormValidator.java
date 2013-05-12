@@ -11,11 +11,11 @@ import com.leonti.slickpm.form.UserForm;
 import com.leonti.slickpm.service.UserService;
 
 @Component
-public class UserFormValidator implements Validator {	
+public class UserFormValidator implements Validator {
 
-	@Resource(name="UserService")
+	@Resource(name = "UserService")
 	UserService userService;
-	
+
 	@Override
 	public boolean supports(@SuppressWarnings("rawtypes") Class clazz) {
 		return UserForm.class.equals(clazz);
@@ -23,17 +23,21 @@ public class UserFormValidator implements Validator {
 
 	@Override
 	public void validate(Object obj, Errors errors) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "field.required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "field.required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "field.required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "repeatPassword", "field.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name",
+				"field.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
+				"field.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
+				"field.required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "repeatPassword",
+				"field.required");
 
 		UserForm userForm = (UserForm) obj;
-		
+
 		if (userService.getByEmail(userForm.getEmail()) != null) {
 			errors.rejectValue("email", "userregistered");
 		}
-		
+
 		if (!userForm.getPassword().equals(userForm.getRepeatPassword())) {
 			errors.rejectValue("repeatPassword", "passwordsnotequal");
 		}

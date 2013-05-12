@@ -14,31 +14,29 @@ import com.leonti.slickpm.domain.TaskType;
 @Transactional
 public class TaskTypeService {
 
-    @Autowired
-    private SessionFactory sessionFactory;	
-    
+	@Autowired
+	private SessionFactory sessionFactory;
+
 	public TaskType save(TaskType taskType) {
 		sessionFactory.getCurrentSession().saveOrUpdate(taskType);
 		return taskType;
-	}	
-    
-    public void delete(TaskType taskType) {
-    	sessionFactory.getCurrentSession().delete(taskType);
-    }
-    
-    @SuppressWarnings("unchecked")
-	public List<TaskType> getList() {
-    	
-    	return (ArrayList<TaskType>) sessionFactory.getCurrentSession()
-    			.createQuery("FROM TaskType").list();
 	}
-    
+
+	public void delete(TaskType taskType) {
+		sessionFactory.getCurrentSession().delete(taskType);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<TaskType> getList() {
+
+		return (ArrayList<TaskType>) sessionFactory.getCurrentSession()
+				.createQuery("FROM TaskType").list();
+	}
+
 	public TaskType getById(Integer id) {
 
-    	return (TaskType) sessionFactory.getCurrentSession()
-    			.createQuery("FROM TaskType t WHERE t.id = ?")
-    			.setLong(0, id)
-    			.setMaxResults(1)
-    			.uniqueResult();
-	}   
+		return (TaskType) sessionFactory.getCurrentSession()
+				.createQuery("FROM TaskType t WHERE t.id = ?").setLong(0, id)
+				.setMaxResults(1).uniqueResult();
+	}
 }

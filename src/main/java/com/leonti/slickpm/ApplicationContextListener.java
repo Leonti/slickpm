@@ -8,8 +8,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import com.leonti.slickpm.service.DemoService;
 
-
-public class ApplicationContextListener implements ApplicationListener {
+public class ApplicationContextListener implements ApplicationListener<ApplicationEvent> {
 
 	@Resource(name="DemoService")
 	DemoService demoService;		
@@ -20,8 +19,5 @@ public class ApplicationContextListener implements ApplicationListener {
         if (event instanceof ContextRefreshedEvent) {
         	demoService.populateDb();
         }		
-	}
-
-
-	
+	}	
 }

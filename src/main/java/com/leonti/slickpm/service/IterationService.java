@@ -17,55 +17,53 @@ import com.leonti.slickpm.domain.Task;
 @Transactional
 public class IterationService {
 
-    @Autowired
-    private SessionFactory sessionFactory;	
+	@Autowired
+	private SessionFactory sessionFactory;
 
-	@Resource(name="ProjectService")
-	ProjectService projectService;    
+	@Resource(name = "ProjectService")
+	ProjectService projectService;
 
-	@Resource(name="TaskStageService")
-	TaskStageService taskStageService; 	
-	
+	@Resource(name = "TaskStageService")
+	TaskStageService taskStageService;
+
 	public Iteration save(Iteration iteration) {
 		sessionFactory.getCurrentSession().saveOrUpdate(iteration);
 		return iteration;
-	}	
-    
-    public void delete(Iteration iteration) {
-    	sessionFactory.getCurrentSession().delete(iteration);
-    }
-    
-    @SuppressWarnings("unchecked")
+	}
+
+	public void delete(Iteration iteration) {
+		sessionFactory.getCurrentSession().delete(iteration);
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<Iteration> getList(Integer projectId) {
-    	
-    	return (ArrayList<Iteration>) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Iteration WHERE project = ?")
-    			.setEntity(0, projectService.getById(projectId)).list();
-	}      
-    
+
+		return (ArrayList<Iteration>) sessionFactory.getCurrentSession()
+				.createQuery("FROM Iteration WHERE project = ?")
+				.setEntity(0, projectService.getById(projectId)).list();
+	}
+
 	public Iteration getById(Integer id) {
 
-    	return (Iteration) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Iteration i WHERE i.id = ?")
-    			.setLong(0, id)
-    			.setMaxResults(1)
-    			.uniqueResult();
+		return (Iteration) sessionFactory.getCurrentSession()
+				.createQuery("FROM Iteration i WHERE i.id = ?").setLong(0, id)
+				.setMaxResults(1).uniqueResult();
 	}
-	
+
 	public void addTask(Iteration iteration, Task task) {
 
 		task.setIteration(iteration);
-		sessionFactory.getCurrentSession().saveOrUpdate(task);	
+		sessionFactory.getCurrentSession().saveOrUpdate(task);
 	}
-	
+
 	public void removeTask(Iteration iteration, Task task) {
-		
+
 		task.setIteration(null);
-		sessionFactory.getCurrentSession().saveOrUpdate(task);			
+		sessionFactory.getCurrentSession().saveOrUpdate(task);
 	}
-	
+
 	public Double getPlannedPoints(Iteration iteration) {
-		
+
 		Double total = 0d;
 		List<Task> tasks = iteration.getTasks();
 		for (Task task : tasks) {
@@ -73,21 +71,22 @@ public class IterationService {
 				total += task.getPoints();
 			}
 		}
-		
+
 		return total;
 	}
-	
+
 	public Double getDonePoints(Iteration iteration) {
-	
+
 		Double total = 0d;
-		
-		List<Task> tasks = taskStageService.getTasksForStage(iteration, taskStageService.getLastStage());
+
+		List<Task> tasks = taskStageService.getTasksForStage(iteration,
+				taskStageService.getLastStage());
 		for (Task task : tasks) {
 			if (task.getPoints() != null) {
 				total += task.getPoints();
 			}
 		}
-		
+
 		return total;
-	}	
+	}
 }

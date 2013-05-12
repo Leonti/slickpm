@@ -20,45 +20,43 @@ import com.leonti.slickpm.domain.User;
 @Transactional
 public class ProjectService {
 
-    @Autowired
-    private SessionFactory sessionFactory;	
+	@Autowired
+	private SessionFactory sessionFactory;
 
-	@Resource(name="TaskService")
-	TaskService taskService;    
-    
+	@Resource(name = "TaskService")
+	TaskService taskService;
+
 	public Project save(Project project) {
 		sessionFactory.getCurrentSession().saveOrUpdate(project);
 		return project;
-	}	
-    
-    public void delete(Project project) {
-    	sessionFactory.getCurrentSession().delete(project);
-    }
-    
-    @SuppressWarnings("unchecked")
-	public List<Project> getList() {
-    	
-    	return (ArrayList<Project>) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Project").list();
 	}
-    
-    public List<Project> getListForUser(User user) {
-    	
-    	Set<Project> userProjects = new HashSet<Project>(); 
-    	
-    	for (Task task : taskService.getListForUser(user)) {
-    		userProjects.add(task.getProject());
-    	}
-    	
-    	return new ArrayList<Project>(userProjects);
-    }
-    
+
+	public void delete(Project project) {
+		sessionFactory.getCurrentSession().delete(project);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Project> getList() {
+
+		return (ArrayList<Project>) sessionFactory.getCurrentSession()
+				.createQuery("FROM Project").list();
+	}
+
+	public List<Project> getListForUser(User user) {
+
+		Set<Project> userProjects = new HashSet<Project>();
+
+		for (Task task : taskService.getListForUser(user)) {
+			userProjects.add(task.getProject());
+		}
+
+		return new ArrayList<Project>(userProjects);
+	}
+
 	public Project getById(Integer id) {
 
-    	return (Project) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Project p WHERE p.id = ?")
-    			.setLong(0, id)
-    			.setMaxResults(1)
-    			.uniqueResult();
-	}     
+		return (Project) sessionFactory.getCurrentSession()
+				.createQuery("FROM Project p WHERE p.id = ?").setLong(0, id)
+				.setMaxResults(1).uniqueResult();
+	}
 }

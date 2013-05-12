@@ -8,14 +8,15 @@ public class TaskStagePosition extends Position {
 
 	@OneToOne
 	private Task task;
-	
-	public TaskStagePosition() {}
-	
+
+	public TaskStagePosition() {
+	}
+
 	public TaskStagePosition(Task task, Integer position) {
 		this.task = task;
 		setPosition(position);
 	}
-	
+
 	public Task getTask() {
 		return task;
 	}

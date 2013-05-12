@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String getLoginPage(@RequestParam(value="error", required=false) boolean error,
-								ModelMap model) {
-	
+	public String getLoginPage(
+			@RequestParam(value = "error", required = false) boolean error,
+			ModelMap model) {
+
 		return "auth/login";
-	}	
+	}
 }

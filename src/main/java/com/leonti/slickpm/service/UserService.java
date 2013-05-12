@@ -14,58 +14,55 @@ import com.leonti.slickpm.domain.User;
 @Transactional
 public class UserService {
 
-    @Autowired
-    private SessionFactory sessionFactory;	
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	public User save(User user) {
 		sessionFactory.getCurrentSession().saveOrUpdate(user);
 		return user;
-	}	
-    
-    public void delete(User user) {
-    	sessionFactory.getCurrentSession().delete(user);
-    }    
-    
-    @SuppressWarnings("unchecked")
-	public List<User> getList() {
-    	
-    	return (ArrayList<User>) sessionFactory.getCurrentSession()
-    			.createQuery("FROM User").list();
 	}
-    
+
+	public void delete(User user) {
+		sessionFactory.getCurrentSession().delete(user);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<User> getList() {
+
+		return (ArrayList<User>) sessionFactory.getCurrentSession()
+				.createQuery("FROM User").list();
+	}
+
 	public User getById(Integer id) {
 
-    	return (User) sessionFactory.getCurrentSession()
-    			.createQuery("FROM User WHERE id = ?")
-    			.setLong(0, id)
-    			.setMaxResults(1)
-    			.uniqueResult();
+		return (User) sessionFactory.getCurrentSession()
+				.createQuery("FROM User WHERE id = ?").setLong(0, id)
+				.setMaxResults(1).uniqueResult();
 	}
-	
+
 	public User getByEmail(String email) {
 
-    	return (User) sessionFactory.getCurrentSession()
-    			.createQuery("FROM User u WHERE u.email = ? AND u.deleted != 1")
-    			.setString(0, email)
-    			.setMaxResults(1)
-    			.uniqueResult();
+		return (User) sessionFactory
+				.getCurrentSession()
+				.createQuery("FROM User u WHERE u.email = ? AND u.deleted != 1")
+				.setString(0, email).setMaxResults(1).uniqueResult();
 	}
 
 	public User getByForgotKey(String forgotKey) {
-		
-    	return (User) sessionFactory.getCurrentSession()
-    			.createQuery("FROM User u WHERE u.forgotKey = ? AND u.deleted != 1")
-    			.setString(0, forgotKey)
-    			.setMaxResults(1)
-    			.uniqueResult();
+
+		return (User) sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"FROM User u WHERE u.forgotKey = ? AND u.deleted != 1")
+				.setString(0, forgotKey).setMaxResults(1).uniqueResult();
 	}
 
 	public User getByConfirmationKey(String confirmationKey) {
-		
-    	return (User) sessionFactory.getCurrentSession()
-    			.createQuery("FROM User u WHERE u.confirmationKey = ? AND u.deleted != 1")
-    			.setString(0, confirmationKey)
-    			.setMaxResults(1)
-    			.uniqueResult();
-	}	
+
+		return (User) sessionFactory
+				.getCurrentSession()
+				.createQuery(
+						"FROM User u WHERE u.confirmationKey = ? AND u.deleted != 1")
+				.setString(0, confirmationKey).setMaxResults(1).uniqueResult();
+	}
 }

@@ -7,11 +7,12 @@ public class VcsCommit {
 
 	private String id;
 	private String message;
-	
+
 	List<VcsDiff> diffs;
 
-	public VcsCommit() {}
-	
+	public VcsCommit() {
+	}
+
 	public VcsCommit(String id, String message) {
 		super();
 		this.id = id;
@@ -42,9 +43,9 @@ public class VcsCommit {
 	public void setDiffs(List<VcsDiff> diffs) {
 		this.diffs = diffs;
 	}
-	
+
 	public void addDiff(VcsDiff diff) {
 		this.diffs.add(diff);
 	}
-	
+
 }

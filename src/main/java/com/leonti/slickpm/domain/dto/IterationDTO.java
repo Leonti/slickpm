@@ -2,26 +2,26 @@ package com.leonti.slickpm.domain.dto;
 
 import java.util.Date;
 
-
 public class IterationDTO {
 	private Integer id;
-    
-    private String title;
-    
-    private String description;
-    
-    private Integer projectId;
-    
-    private Date startDate;
-    
-    private Date endDate;
-    
-    private Double plannedPoints = 0d;
-    
-    private Double donePoints = 0d;
-   
-    public IterationDTO() {}
-    
+
+	private String title;
+
+	private String description;
+
+	private Integer projectId;
+
+	private Date startDate;
+
+	private Date endDate;
+
+	private Double plannedPoints = 0d;
+
+	private Double donePoints = 0d;
+
+	public IterationDTO() {
+	}
+
 	public IterationDTO(Integer id, String title, String description,
 			Integer projectId, Date startDate, Date endDate) {
 		super();
@@ -29,7 +29,7 @@ public class IterationDTO {
 		this.title = title;
 		this.description = description;
 		this.projectId = projectId;
-		this.startDate= startDate;
+		this.startDate = startDate;
 		this.endDate = endDate;
 	}
 
@@ -80,20 +80,20 @@ public class IterationDTO {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	
+
 	public Double getPlannedPoints() {
 		return plannedPoints;
 	}
-	
+
 	public void setPlannedPoints(Double plannedPoints) {
 		this.plannedPoints = plannedPoints;
 	}
-	
+
 	public Double getDonePoints() {
 		return donePoints;
 	}
-	
+
 	public void setDonePoints(Double donePoints) {
 		this.donePoints = donePoints;
-	}	
+	}
 }

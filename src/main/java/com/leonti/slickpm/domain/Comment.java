@@ -13,21 +13,22 @@ import com.leonti.slickpm.domain.dto.CommentDTO;
 @Entity
 public class Comment {
 
-    @Id
-    @GeneratedValue	
+	@Id
+	@GeneratedValue
 	private Integer id;
-    
-    @Column
-    private String content;
-    
-    @Column
-    private Date date;
-    
-    @ManyToOne
-    private Task task;
 
-    public Comment() {}
-        
+	@Column
+	private String content;
+
+	@Column
+	private Date date;
+
+	@ManyToOne
+	private Task task;
+
+	public Comment() {
+	}
+
 	public Comment(String content, Task task) {
 		this.content = content;
 		this.task = task;
@@ -61,8 +62,9 @@ public class Comment {
 	public void setTask(Task task) {
 		this.task = task;
 	}
-	
+
 	public CommentDTO getDTO() {
-		return new CommentDTO(this.id, this.task.getId(), this.content, this.date);
+		return new CommentDTO(this.id, this.task.getId(), this.content,
+				this.date);
 	}
 }

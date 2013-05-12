@@ -3,20 +3,21 @@ package com.leonti.slickpm.domain.dto;
 import java.util.Date;
 
 public class CommentDTO {
-	
-	private Integer id;
-	
-	private Integer taskId;
-	
-    private String content;
-    
-    private Date date;   
 
-    public CommentDTO() {}
+	private Integer id;
+
+	private Integer taskId;
+
+	private String content;
+
+	private Date date;
+
+	public CommentDTO() {
+	}
 
 	public CommentDTO(Integer id, Integer taskId, String content, Date date) {
 		super();
-		this.id= id;
+		this.id = id;
 		this.taskId = taskId;
 		this.content = content;
 		this.date = date;
@@ -52,5 +53,5 @@ public class CommentDTO {
 
 	public void setTaskId(Integer taskId) {
 		this.taskId = taskId;
-	}	
+	}
 }

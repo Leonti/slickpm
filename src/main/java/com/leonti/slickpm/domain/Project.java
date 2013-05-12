@@ -11,26 +11,27 @@ import com.leonti.slickpm.domain.dto.ProjectDTO;
 @Entity
 public class Project {
 
-    @Id
-    @GeneratedValue	
+	@Id
+	@GeneratedValue
 	private Integer id;
-    
-    @Column
-    private String title;
-    
-    @Column
-    private String description;
-    
-    @ManyToOne
-    private Vcs vcs;
 
-    public Project() {}
-    
-    public Project(String title, String description) {
-    	this.title = title;
-    	this.description = description;
-    }
-    
+	@Column
+	private String title;
+
+	@Column
+	private String description;
+
+	@ManyToOne
+	private Vcs vcs;
+
+	public Project() {
+	}
+
+	public Project(String title, String description) {
+		this.title = title;
+		this.description = description;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -54,7 +55,7 @@ public class Project {
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public Vcs getVcs() {
 		return vcs;
 	}
@@ -64,6 +65,7 @@ public class Project {
 	}
 
 	public ProjectDTO getDTO() {
-		return new ProjectDTO(id, title, description, vcs != null ? vcs.getDTO() : null );
+		return new ProjectDTO(id, title, description,
+				vcs != null ? vcs.getDTO() : null);
 	}
 }

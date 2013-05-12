@@ -39,215 +39,224 @@ import com.leonti.slickpm.validator.UserFormValidator;
 @RequestMapping("/account")
 public class AccountController {
 
-	@Resource(name="UserService")
+	@Resource(name = "UserService")
 	UserService userService;
 
-	@Resource(name="emailService")
+	@Resource(name = "emailService")
 	EmailService emailService;
-	
-	@Resource(name="configService")
+
+	@Resource(name = "configService")
 	ConfigurationService configService;
-	
+
 	@Autowired
-	UserFormValidator userFormValidator;	
-	
+	UserFormValidator userFormValidator;
+
 	@Autowired
 	ForgotFormValidator forgotFormValidator;
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private ApplicationContext context; 
-	
+	private ApplicationContext context;
+
 	@Autowired
-	private HttpServletRequest request;	
-	
+	private HttpServletRequest request;
+
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(Model model) {
-				
-		model.addAttribute("userForm", new UserForm());						
+
+		model.addAttribute("userForm", new UserForm());
 		return "account/register";
 	}
-	
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String registerPost(@ModelAttribute("userForm") UserForm userForm, 
-    					Model model,
-    					BindingResult result) {
-    	
-    	
-    	userFormValidator.validate(userForm, result); 
-        if (result.hasErrors()) { 
-        	return "account/register"; 
-        } 
-        
-        User user = userForm.getUser();
-        
-        SecureRandom random = new SecureRandom();
-        String confirmationKey = new BigInteger(130, random).toString(32);
-        user.setConfirmationKey(confirmationKey);       
 
-        user.setPassword(passwordEncoder.encodePassword(user.getPassword(), null));
-        
-        userService.save(user);   	
-    	
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public String registerPost(@ModelAttribute("userForm") UserForm userForm,
+			Model model, BindingResult result) {
+
+		userFormValidator.validate(userForm, result);
+		if (result.hasErrors()) {
+			return "account/register";
+		}
+
+		User user = userForm.getUser();
+
+		SecureRandom random = new SecureRandom();
+		String confirmationKey = new BigInteger(130, random).toString(32);
+		user.setConfirmationKey(confirmationKey);
+
+		user.setPassword(passwordEncoder.encodePassword(user.getPassword(),
+				null));
+
+		userService.save(user);
+
 		try {
-			
-	        Map<String, Object> replacements = new HashMap<String, Object>();
+
+			Map<String, Object> replacements = new HashMap<String, Object>();
 			replacements.put("confirmationkey", confirmationKey);
-			
-			emailService.sendSimpleMail(userForm.getEmail(), "confirmation", replacements);
+
+			emailService.sendSimpleMail(userForm.getEmail(), "confirmation",
+					replacements);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-    	return "redirect:registered";
+
+		return "redirect:registered";
 	}
-    
-    @RequestMapping(value = "/registered", method = RequestMethod.GET)
-    public String confirmationsent() {
-    	return "account/confirmationsent";
-    }	
 
-    @RequestMapping(value = "/confirm", method = RequestMethod.GET)
-    public String confirmation(@RequestParam(value="key", required=true) String confirmationKey,
-    							Model model) {
-    	
-    	User user = userService.getByConfirmationKey(confirmationKey);
+	@RequestMapping(value = "/registered", method = RequestMethod.GET)
+	public String confirmationsent() {
+		return "account/confirmationsent";
+	}
 
-    	if (user == null) {    		
-    		model.addAttribute("error", context.getMessage("confirmation.invalidKey", null, Locale.getDefault()));
-    		return "errormessage";
-    	}
-    	
+	@RequestMapping(value = "/confirm", method = RequestMethod.GET)
+	public String confirmation(
+			@RequestParam(value = "key", required = true) String confirmationKey,
+			Model model) {
+
+		User user = userService.getByConfirmationKey(confirmationKey);
+
+		if (user == null) {
+			model.addAttribute(
+					"error",
+					context.getMessage("confirmation.invalidKey", null,
+							Locale.getDefault()));
+			return "errormessage";
+		}
+
 		user.setConfirmationKey(null);
 		userService.save(user);
-    	return "redirect:confirmed";
-    }
-    
-    @RequestMapping(value = "/confirmed", method = RequestMethod.GET)
-    public String confirmed() {
-    	return "account/confirmed";
-    }    
-  
-    
-    @Secured("ROLE_USER")
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String getEdit(Model model) {
-    	
-    	User user = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+		return "redirect:confirmed";
+	}
+
+	@RequestMapping(value = "/confirmed", method = RequestMethod.GET)
+	public String confirmed() {
+		return "account/confirmed";
+	}
+
+	@Secured("ROLE_USER")
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public String getEdit(Model model) {
 
 		model.addAttribute("changePasswordForm", new PasswordForm());
 		return "account/edit";
-    } 
-    
-    @Secured("ROLE_USER")
-    @RequestMapping(value = "/savepassword", method = RequestMethod.POST)
-    public String savePassword( @ModelAttribute("changePasswordForm") PasswordForm changePasswordForm,
-									Model model,
-									BindingResult result) {
-    	   	
-    	User user = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-    	
-    	PasswordFormValidator validator = new PasswordFormValidator();
-    	validator.validate(changePasswordForm, result); 
-    	   	
-    	if (result.hasErrors()) { 		
-    		
-    		return "account/edit";
-    	}
+	}
 
-    	user.setPassword(passwordEncoder.encodePassword(changePasswordForm.getPassword(), null));
-    	userService.save(user);
-    	
-    	return "redirect:..";    	
-    }
-    
-    @RequestMapping(value = "/forgot", method = RequestMethod.GET)
-    public String getForgot(Model model) {
-    	
-    	model.addAttribute("forgotForm", new ForgotForm());
-    	return "account/forgot";
-    }
-    
-    @RequestMapping(value = "/forgot", method = RequestMethod.POST)
-    public String forgotPost(@ModelAttribute("forgotForm") ForgotForm forgotForm,
-    							Model model,
-    							BindingResult result) {
+	@Secured("ROLE_USER")
+	@RequestMapping(value = "/savepassword", method = RequestMethod.POST)
+	public String savePassword(
+			@ModelAttribute("changePasswordForm") PasswordForm changePasswordForm,
+			Model model, BindingResult result) {
 
-    	forgotFormValidator.validate(forgotForm, result);
-    	if (result.hasErrors()) {
-    		return "account/forgot";
-    	}
-    	
-    	User user = userService.getByEmail(forgotForm.getEmail());
-        SecureRandom random = new SecureRandom();
-        String forgotKey = new BigInteger(130, random).toString(32);
-    	
-        user.setForgotKey(forgotKey);
-        
-        userService.save(user);
-    	
+		User user = ((AuthenticatedUser) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal()).getUser();
+
+		PasswordFormValidator validator = new PasswordFormValidator();
+		validator.validate(changePasswordForm, result);
+
+		if (result.hasErrors()) {
+
+			return "account/edit";
+		}
+
+		user.setPassword(passwordEncoder.encodePassword(
+				changePasswordForm.getPassword(), null));
+		userService.save(user);
+
+		return "redirect:..";
+	}
+
+	@RequestMapping(value = "/forgot", method = RequestMethod.GET)
+	public String getForgot(Model model) {
+
+		model.addAttribute("forgotForm", new ForgotForm());
+		return "account/forgot";
+	}
+
+	@RequestMapping(value = "/forgot", method = RequestMethod.POST)
+	public String forgotPost(
+			@ModelAttribute("forgotForm") ForgotForm forgotForm, Model model,
+			BindingResult result) {
+
+		forgotFormValidator.validate(forgotForm, result);
+		if (result.hasErrors()) {
+			return "account/forgot";
+		}
+
+		User user = userService.getByEmail(forgotForm.getEmail());
+		SecureRandom random = new SecureRandom();
+		String forgotKey = new BigInteger(130, random).toString(32);
+
+		user.setForgotKey(forgotKey);
+
+		userService.save(user);
+
 		try {
-			
-	        Map<String, Object> replacements = new HashMap<String, Object>();
+
+			Map<String, Object> replacements = new HashMap<String, Object>();
 			replacements.put("forgotkey", forgotKey);
-			
-			emailService.sendSimpleMail(forgotForm.getEmail(), "forgot", replacements);
+
+			emailService.sendSimpleMail(forgotForm.getEmail(), "forgot",
+					replacements);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return "redirect:resetsent";
-    	
-    }
-    
-    @RequestMapping(value = "/resetsent", method = RequestMethod.GET)
-    public String resetSent() {
-    	return "account/forgotsent";
-    }
-    
-    @RequestMapping(value = "/reset", method = RequestMethod.GET)
-    public String getReset(@RequestParam(value="key", required=true) String forgotKey,  
-									Model model) {
-    	    	
-    	PasswordForm passwordForm = new PasswordForm();
-    	
-    	model.addAttribute("resetForm", passwordForm);
-    	
-    	return "account/reset";
-    }
-    
-    @RequestMapping(value = "/reset", method = RequestMethod.POST)
-    public String resetPost(@RequestParam(value="key", required=true) String forgotKey,
-    						@ModelAttribute("resetForm") PasswordForm resetForm,
-							Model model,
-							BindingResult result) {
-    	
-    	PasswordFormValidator validator = new PasswordFormValidator();
-    	validator.validate(resetForm, result);
-    	if (result.hasErrors()) {
-    		return "account/reset";
-    	}
-   	
-    	User user = userService.getByForgotKey(forgotKey);
-    	if (user == null) {
-    		model.addAttribute("error", context.getMessage("reset.invalidKey", null, Locale.getDefault()));
-    		return "errormessage";
-    	}    	
 
-    	user.setPassword(passwordEncoder.encodePassword(resetForm.getPassword(), null));
-    	user.setForgotKey(null);
-    	
-    	userService.save(user);
-    	
-    	return "redirect:reseted";
-    }
-    
-    @RequestMapping(value = "/reseted", method = RequestMethod.GET)
-    public String reseted() {
-    	return "account/reseted";
-    }  
+		return "redirect:resetsent";
+
+	}
+
+	@RequestMapping(value = "/resetsent", method = RequestMethod.GET)
+	public String resetSent() {
+		return "account/forgotsent";
+	}
+
+	@RequestMapping(value = "/reset", method = RequestMethod.GET)
+	public String getReset(
+			@RequestParam(value = "key", required = true) String forgotKey,
+			Model model) {
+
+		PasswordForm passwordForm = new PasswordForm();
+
+		model.addAttribute("resetForm", passwordForm);
+
+		return "account/reset";
+	}
+
+	@RequestMapping(value = "/reset", method = RequestMethod.POST)
+	public String resetPost(
+			@RequestParam(value = "key", required = true) String forgotKey,
+			@ModelAttribute("resetForm") PasswordForm resetForm, Model model,
+			BindingResult result) {
+
+		PasswordFormValidator validator = new PasswordFormValidator();
+		validator.validate(resetForm, result);
+		if (result.hasErrors()) {
+			return "account/reset";
+		}
+
+		User user = userService.getByForgotKey(forgotKey);
+		if (user == null) {
+			model.addAttribute(
+					"error",
+					context.getMessage("reset.invalidKey", null,
+							Locale.getDefault()));
+			return "errormessage";
+		}
+
+		user.setPassword(passwordEncoder.encodePassword(
+				resetForm.getPassword(), null));
+		user.setForgotKey(null);
+
+		userService.save(user);
+
+		return "redirect:reseted";
+	}
+
+	@RequestMapping(value = "/reseted", method = RequestMethod.GET)
+	public String reseted() {
+		return "account/reseted";
+	}
 }

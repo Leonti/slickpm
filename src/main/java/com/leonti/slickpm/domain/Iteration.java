@@ -19,36 +19,37 @@ import com.leonti.slickpm.domain.dto.IterationDTO;
 
 @Entity
 public class Iteration implements Comparable<Iteration> {
-    @Id
-    @GeneratedValue	
+	@Id
+	@GeneratedValue
 	private Integer id;
-    
-    @Column
-    private String title;
-    
-    @Column
-    private String description;
-    
-    @Column
-    private Date startDate;
 
-    @Column
-    private Date endDate;    
+	@Column
+	private String title;
+
+	@Column
+	private String description;
+
+	@Column
+	private Date startDate;
+
+	@Column
+	private Date endDate;
 
 	@OneToMany(mappedBy = "iteration", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Task> tasks;
-    
-    @ManyToOne
-    private Project project;
 
-    public Iteration() {}
-    
-    public Iteration(String title, String description, Project project) {
-    	this.title = title;
-    	this.description = description;
-    	this.project = project;
-    }
-    
+	@ManyToOne
+	private Project project;
+
+	public Iteration() {
+	}
+
+	public Iteration(String title, String description, Project project) {
+		this.title = title;
+		this.description = description;
+		this.project = project;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -84,7 +85,7 @@ public class Iteration implements Comparable<Iteration> {
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
 	}
-	
+
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -106,40 +107,37 @@ public class Iteration implements Comparable<Iteration> {
 				this.project.getId(), this.startDate, this.endDate);
 	}
 
-    public int hashCode() {
-        return new HashCodeBuilder(17, 31).
-            append(this.id).
-            toHashCode();
-    }
-    
-    public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (obj == this)
-            return true;
-        if (obj.getClass() != getClass())
-            return false;
+	public int hashCode() {
+		return new HashCodeBuilder(17, 31).append(this.id).toHashCode();
+	}
 
-        Iteration iteration = (Iteration) obj;
-        return new EqualsBuilder().
-            append(this.id, iteration.getId()).
-            isEquals();
-    } 
-    
-    public int compareTo(Iteration other) {
-        final int BEFORE = -1;
-        final int EQUAL = 0;
-        final int AFTER = 1;
-        
-        if (this.getId() < other.getId())
-        	return BEFORE;
-        
-        if (this.getId().equals(other.getId()))
-        	return EQUAL;
-        
-        if (this.getId() > other.getId())
-        	return AFTER; 
-        
-        return EQUAL;
-    }   
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		if (obj.getClass() != getClass())
+			return false;
+
+		Iteration iteration = (Iteration) obj;
+		return new EqualsBuilder().append(this.id, iteration.getId())
+				.isEquals();
+	}
+
+	public int compareTo(Iteration other) {
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
+
+		if (this.getId() < other.getId())
+			return BEFORE;
+
+		if (this.getId().equals(other.getId()))
+			return EQUAL;
+
+		if (this.getId() > other.getId())
+			return AFTER;
+
+		return EQUAL;
+	}
 }

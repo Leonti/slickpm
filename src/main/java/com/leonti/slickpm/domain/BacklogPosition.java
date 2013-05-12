@@ -8,14 +8,15 @@ public class BacklogPosition extends Position {
 
 	@OneToOne
 	private Task task;
-	
-	public BacklogPosition() {}
-	
+
+	public BacklogPosition() {
+	}
+
 	public BacklogPosition(Task task, Integer position) {
 		this.task = task;
 		setPosition(position);
 	}
-	
+
 	public Task getTask() {
 		return task;
 	}

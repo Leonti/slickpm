@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
-
+@SuppressWarnings("deprecation")
 public class CustomAuthenticationEntryPoint extends
 		LoginUrlAuthenticationEntryPoint {
 
@@ -18,7 +18,7 @@ public class CustomAuthenticationEntryPoint extends
 			HttpServletResponse response,
 			org.springframework.security.core.AuthenticationException authException)
 			throws IOException, ServletException {
-				
+
 		String xrequestedWith = ((HttpServletRequest) request)
 				.getHeader("x-requested-with");
 		if (xrequestedWith != null && xrequestedWith.equals("XMLHttpRequest")

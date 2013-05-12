@@ -10,23 +10,24 @@ import com.leonti.slickpm.domain.dto.TaskTypeDTO;
 @Entity
 public class TaskType {
 
-    @Id
-    @GeneratedValue	
+	@Id
+	@GeneratedValue
 	private Integer id;
-    
-    @Column
-    private String title;
-    
-    @Column
-    private String description;
 
-    public TaskType() {}
-    
-    public TaskType(String title, String description) {
-    	this.title = title;
-    	this.description = description;
-    }    
-    
+	@Column
+	private String title;
+
+	@Column
+	private String description;
+
+	public TaskType() {
+	}
+
+	public TaskType(String title, String description) {
+		this.title = title;
+		this.description = description;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -46,7 +47,7 @@ public class TaskType {
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public TaskTypeDTO getDTO() {
 		return new TaskTypeDTO(id, title, description);
 	}

@@ -1,20 +1,20 @@
 package com.leonti.slickpm.domain.dto;
 
-
 public class TaskDTO {
-	
+
 	private Integer id;
-    private String title;
+	private String title;
 
 	private String description;
-    private Double points;    
-    private TaskTypeDTO taskType;
-    private Integer iterationId;
-    private Integer taskStageId;
-    private ProjectDTO project;
-    private UserDTO user;
-    
-    public TaskDTO() {}
+	private Double points;
+	private TaskTypeDTO taskType;
+	private Integer iterationId;
+	private Integer taskStageId;
+	private ProjectDTO project;
+	private UserDTO user;
+
+	public TaskDTO() {
+	}
 
 	public TaskDTO(Integer id, String title, String description, Double points,
 			TaskTypeDTO taskType, Integer iterationId, Integer taskStageId,
@@ -102,10 +102,11 @@ public class TaskDTO {
 	public void setUser(UserDTO userDTO) {
 		this.user = userDTO;
 	}
-	
+
 	// Dummy setter for automatic JSON object creation
-	public void setFullTitle(String fullTitle) {}
-	
+	public void setFullTitle(String fullTitle) {
+	}
+
 	public String getFullTitle() {
 		return "#" + this.id + " - " + this.title;
 	}

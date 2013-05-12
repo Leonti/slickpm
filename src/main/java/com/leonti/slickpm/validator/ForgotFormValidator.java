@@ -13,9 +13,9 @@ import com.leonti.slickpm.service.UserService;
 @Component
 public class ForgotFormValidator implements Validator {
 
-	@Resource(name="UserService")
-	UserService userService;	
-	
+	@Resource(name = "UserService")
+	UserService userService;
+
 	@Override
 	public boolean supports(@SuppressWarnings("rawtypes") Class clazz) {
 		return ForgotForm.class.equals(clazz);
@@ -23,13 +23,14 @@ public class ForgotFormValidator implements Validator {
 
 	@Override
 	public void validate(Object obj, Errors errors) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "field.required");
-		
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
+				"field.required");
+
 		ForgotForm forgotForm = (ForgotForm) obj;
-		
+
 		if (userService.getByEmail(forgotForm.getEmail()) == null) {
 			errors.rejectValue("email", "emailnotfound");
-		}		
+		}
 	}
 
 }

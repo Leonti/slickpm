@@ -13,8 +13,8 @@
 		<org.aspectj-version>1.7.0</org.aspectj-version>
 		<org.slf4j-version>1.5.10</org.slf4j-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>	
-	
+	</properties>
+
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -29,7 +29,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-				
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -47,29 +47,29 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.7.1</version>
-		</dependency>		
+		</dependency>
 
-        <!-- Apache Commons Upload --> 
+		<!-- Apache Commons Upload -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
 		</dependency>
-	 
-		<!-- Apache Commons Upload --> 
+
+		<!-- Apache Commons Upload -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>1.3.2</version>
-		</dependency>		
+		</dependency>
 
-		<!-- Apache Commons Lang --> 	
+		<!-- Apache Commons Lang -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.0</version>
-		</dependency>		
-						
+		</dependency>
+
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -116,7 +116,7 @@
 			<artifactId>hibernate-c3p0</artifactId>
 			<version>4.1.5.Final</version>
 		</dependency>
-		
+
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -251,17 +251,13 @@
 			<groupId>org.eclipse.jgit</groupId>
 			<artifactId>org.eclipse.jgit</artifactId>
 			<version>2.0.0.201206130900-r</version>
-		</dependency>		
-
+		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.1</version>
-		</dependency>		
-				
+		</dependency>
 	</dependencies>
-	
-	
 	
 	<build>
 		<plugins>

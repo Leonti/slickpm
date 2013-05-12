@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,29 +16,34 @@ import com.leonti.slickpm.domain.AuthenticatedUser;
 
 @Controller
 public class GeneralController {
-    
+
 	@Secured("ROLE_USER")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) throws JsonGenerationException, JsonMappingException, IOException {
-		
-    	AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public String home(Model model) throws JsonGenerationException,
+			JsonMappingException, IOException {
 
-    	ObjectMapper mapper = new ObjectMapper();   	
-    	model.addAttribute("user", mapper.writeValueAsString(authUser.getUser().getDTO()));		
-		
+		AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
+
+		ObjectMapper mapper = new ObjectMapper();
+		model.addAttribute("user",
+				mapper.writeValueAsString(authUser.getUser().getDTO()));
+
 		return "main";
 	}
-	
+
 	@Secured("ROLE_USER")
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
-	public String backbone(Model model) throws JsonGenerationException, JsonMappingException, IOException {
+	public String backbone(Model model) throws JsonGenerationException,
+			JsonMappingException, IOException {
 
-		
-    	AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal();
 
-    	ObjectMapper mapper = new ObjectMapper();   	
-    	model.addAttribute("user", mapper.writeValueAsString(authUser.getUser().getDTO()));	
-    	
+		ObjectMapper mapper = new ObjectMapper();
+		model.addAttribute("user",
+				mapper.writeValueAsString(authUser.getUser().getDTO()));
+
 		return "admin";
-	}	
+	}
 }

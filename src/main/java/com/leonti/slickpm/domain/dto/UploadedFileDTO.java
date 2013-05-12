@@ -3,14 +3,15 @@ package com.leonti.slickpm.domain.dto;
 import java.util.Date;
 
 public class UploadedFileDTO {
-	
+
 	private Integer id;
-    private String filename;
-    private String contentType;
-    private Long size;
-    private Date uploadDate;
-    
-    public UploadedFileDTO() {}
+	private String filename;
+	private String contentType;
+	private Long size;
+	private Date uploadDate;
+
+	public UploadedFileDTO() {
+	}
 
 	public UploadedFileDTO(Integer id, String filename, String contentType,
 			Long size, Date uploadDate) {
