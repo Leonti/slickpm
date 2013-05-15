@@ -1,92 +1,26 @@
 package com.leonti.slickpm.service;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.Task;
 
-@Service("IterationService")
-@Transactional
-public class IterationService {
+public interface IterationService {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+	Iteration save(Iteration iteration);
 
-	@Resource(name = "ProjectService")
-	ProjectService projectService;
+	void delete(Iteration iteration);
 
-	@Resource(name = "TaskStageService")
-	TaskStageService taskStageService;
+	List<Iteration> getList(Integer projectId);
 
-	public Iteration save(Iteration iteration) {
-		sessionFactory.getCurrentSession().saveOrUpdate(iteration);
-		return iteration;
-	}
+	Iteration getById(Integer id);
 
-	public void delete(Iteration iteration) {
-		sessionFactory.getCurrentSession().delete(iteration);
-	}
+	void addTask(Iteration iteration, Task task);
 
-	@SuppressWarnings("unchecked")
-	public List<Iteration> getList(Integer projectId) {
+	void removeTask(Iteration iteration, Task task);
 
-		return (ArrayList<Iteration>) sessionFactory.getCurrentSession()
-				.createQuery("FROM Iteration WHERE project = ?")
-				.setEntity(0, projectService.getById(projectId)).list();
-	}
+	Double getPlannedPoints(Iteration iteration);
 
-	public Iteration getById(Integer id) {
+	Double getDonePoints(Iteration iteration);
 
-		return (Iteration) sessionFactory.getCurrentSession()
-				.createQuery("FROM Iteration i WHERE i.id = ?").setLong(0, id)
-				.setMaxResults(1).uniqueResult();
-	}
-
-	public void addTask(Iteration iteration, Task task) {
-
-		task.setIteration(iteration);
-		sessionFactory.getCurrentSession().saveOrUpdate(task);
-	}
-
-	public void removeTask(Iteration iteration, Task task) {
-
-		task.setIteration(null);
-		sessionFactory.getCurrentSession().saveOrUpdate(task);
-	}
-
-	public Double getPlannedPoints(Iteration iteration) {
-
-		Double total = 0d;
-		List<Task> tasks = iteration.getTasks();
-		for (Task task : tasks) {
-			if (task.getPoints() != null) {
-				total += task.getPoints();
-			}
-		}
-
-		return total;
-	}
-
-	public Double getDonePoints(Iteration iteration) {
-
-		Double total = 0d;
-
-		List<Task> tasks = taskStageService.getTasksForStage(iteration,
-				taskStageService.getLastStage());
-		for (Task task : tasks) {
-			if (task.getPoints() != null) {
-				total += task.getPoints();
-			}
-		}
-
-		return total;
-	}
 }

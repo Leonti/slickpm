@@ -31,7 +31,7 @@ public class DemoService {
 	UserService userService;
 
 	@Resource(name = "ProjectService")
-	ProjectService projectService;
+	ProjectServiceImpl projectService;
 
 	@Resource(name = "IterationService")
 	IterationService iterationService;

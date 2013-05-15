@@ -10,6 +10,8 @@ import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.annotation.Secured;
@@ -39,6 +41,8 @@ import com.leonti.slickpm.validator.UserFormValidator;
 @RequestMapping("/account")
 public class AccountController {
 
+	Logger log = LoggerFactory.getLogger(AccountController.class);
+	
 	@Resource(name = "UserService")
 	UserService userService;
 
@@ -98,8 +102,7 @@ public class AccountController {
 			emailService.sendSimpleMail(userForm.getEmail(), "confirmation",
 					replacements);
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
 		return "redirect:registered";
@@ -200,8 +203,7 @@ public class AccountController {
 			emailService.sendSimpleMail(forgotForm.getEmail(), "forgot",
 					replacements);
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
 		return "redirect:resetsent";

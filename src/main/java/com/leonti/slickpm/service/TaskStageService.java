@@ -1,84 +1,27 @@
 package com.leonti.slickpm.service;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.leonti.slickpm.domain.Iteration;
 import com.leonti.slickpm.domain.Task;
 import com.leonti.slickpm.domain.TaskStage;
 
-@Service("TaskStageService")
-@Transactional
-public class TaskStageService {
+public interface TaskStageService {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+	TaskStage save(TaskStage taskStage);
 
-	@Resource(name = "ProjectService")
-	ProjectService projectService;
+	void delete(TaskStage taskStage);
 
-	public TaskStage save(TaskStage taskStage) {
-		sessionFactory.getCurrentSession().saveOrUpdate(taskStage);
-		return taskStage;
-	}
+	List<TaskStage> getList();
 
-	public void delete(TaskStage taskStage) {
-		sessionFactory.getCurrentSession().delete(taskStage);
-	}
+	List<TaskStage> getDefaultList();
 
-	@SuppressWarnings("unchecked")
-	public List<TaskStage> getList() {
+	TaskStage getById(Integer id);
 
-		return (ArrayList<TaskStage>) sessionFactory.getCurrentSession()
-				.createQuery("FROM TaskStage").list();
-	}
+	List<Task> getTasksForStage(Iteration iteration, TaskStage taskStage);
 
-	@SuppressWarnings("unchecked")
-	public List<TaskStage> getDefaultList() {
+	TaskStage getFirstStage();
 
-		return (ArrayList<TaskStage>) sessionFactory.getCurrentSession()
-				.createQuery("FROM TaskStage").list();
-	}
+	TaskStage getLastStage();
 
-	public TaskStage getById(Integer id) {
-
-		return (TaskStage) sessionFactory.getCurrentSession()
-				.createQuery("FROM TaskStage WHERE id = ?").setLong(0, id)
-				.setMaxResults(1).uniqueResult();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Task> getTasksForStage(Iteration iteration, TaskStage taskStage) {
-
-		return (ArrayList<Task>) sessionFactory.getCurrentSession()
-				.createQuery("FROM Task WHERE iteration = ? AND taskStage = ?")
-				.setEntity(0, iteration).setEntity(1, taskStage).list();
-	}
-
-	public TaskStage getFirstStage() {
-
-		List<TaskStage> stages = getList();
-		if (stages.size() > 0) {
-			return stages.get(0);
-		}
-
-		return null;
-	}
-
-	public TaskStage getLastStage() {
-
-		List<TaskStage> stages = getList();
-		if (stages.size() > 0) {
-			return stages.get(stages.size() - 1);
-		}
-
-		return null;
-	}
 }

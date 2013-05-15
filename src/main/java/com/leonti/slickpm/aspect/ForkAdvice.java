@@ -1,20 +1,22 @@
 package com.leonti.slickpm.aspect;
 
-import java.util.logging.Logger;
-import org.aspectj.lang.ProceedingJoinPoint;  
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ForkAdvice {   
-    protected static Logger logger = Logger.getLogger("Fork advice"); 
+	Logger log = LoggerFactory.getLogger(ForkAdvice.class); 
     
     public void fork(final ProceedingJoinPoint pjp) {  
         new Thread(new Runnable() {  
             public void run() {  
-                logger.info("Forking method execution: " + pjp);  
+                log.info("Forking method execution: " + pjp);  
                 try {  
                     pjp.proceed();  
                 } catch (Throwable t) {  
                     // All we can do is log the error.  
-                    logger.severe(t.getMessage());
+                    log.error(t.getMessage());
                 }  
             }  
         }).start();  

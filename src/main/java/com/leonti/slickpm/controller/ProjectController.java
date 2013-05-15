@@ -81,8 +81,8 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public @ResponseBody
-	ProjectDTO RESTDetails(@PathVariable("id") Integer id) {
+	@ResponseBody
+	public ProjectDTO RESTDetails(@PathVariable("id") Integer id) {
 
 		return projectService.getById(id).getDTO();
 	}

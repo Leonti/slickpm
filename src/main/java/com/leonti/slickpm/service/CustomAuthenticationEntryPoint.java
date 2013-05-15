@@ -24,11 +24,7 @@ public class CustomAuthenticationEntryPoint extends
 		if (xrequestedWith != null && xrequestedWith.equals("XMLHttpRequest")
 				&& authException != null) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-
-		}
-
-		else {
-
+		} else {
 			super.commence(request, response, authException);
 		}
 	}

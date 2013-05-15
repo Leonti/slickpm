@@ -26,7 +26,7 @@ import com.leonti.slickpm.domain.dto.TaskDTO;
 import com.leonti.slickpm.hook.EmailNotificationHook;
 import com.leonti.slickpm.service.IterationService;
 import com.leonti.slickpm.service.PositionService;
-import com.leonti.slickpm.service.ProjectService;
+import com.leonti.slickpm.service.ProjectServiceImpl;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskStageService;
 import com.leonti.slickpm.service.UploadedFileService;
@@ -40,7 +40,7 @@ public class IterationController {
 	IterationService iterationService;
 
 	@Resource(name = "ProjectService")
-	ProjectService projectService;
+	ProjectServiceImpl projectService;
 
 	@Resource(name = "TaskService")
 	TaskService taskService;
