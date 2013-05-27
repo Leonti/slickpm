@@ -28,7 +28,7 @@ import com.leonti.slickpm.domain.dto.UploadedFileDTO;
 import com.leonti.slickpm.domain.dto.VcsCommit;
 import com.leonti.slickpm.domain.dto.VcsDiff;
 import com.leonti.slickpm.service.CommentService;
-import com.leonti.slickpm.service.ProjectServiceImpl;
+import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskService;
 import com.leonti.slickpm.service.TaskTypeService;
 import com.leonti.slickpm.service.UploadedFileService;
@@ -47,7 +47,7 @@ public class TaskController {
 	TaskTypeService taskTypeService;
 
 	@Resource(name = "ProjectService")
-	ProjectServiceImpl projectService;
+	ProjectService projectService;
 
 	@Resource(name = "UserService")
 	UserService userService;

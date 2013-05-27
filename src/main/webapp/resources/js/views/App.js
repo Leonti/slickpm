@@ -127,7 +127,6 @@ define([
 	    	if (!this.backlogTaskList || this.currentBacklogProjectId != projectId) {
 	    		this.backlogTaskList = new BacklogTaskCollection(null, {projectId: projectId});
 	    		
-	    		var self = this;
 	    		this.backlogTaskList.deferred.done(function(tasks) {
 		    		_.each(tasks, function (task) {
 		    			self.loadedTasks['task_' + task.id] = self.backlogTaskList.get(task.id);

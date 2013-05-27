@@ -21,7 +21,7 @@ public class IterationServiceImpl implements IterationService {
 	private SessionFactory sessionFactory;
 
 	@Resource(name = "ProjectService")
-	ProjectServiceImpl projectService;
+	ProjectService projectService;
 
 	@Resource(name = "TaskStageService")
 	TaskStageService taskStageService;

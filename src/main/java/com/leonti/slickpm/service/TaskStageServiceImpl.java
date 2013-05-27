@@ -22,7 +22,7 @@ public class TaskStageServiceImpl implements TaskStageService {
 	private SessionFactory sessionFactory;
 
 	@Resource(name = "ProjectService")
-	ProjectServiceImpl projectService;
+	ProjectService projectService;
 
 	@Override
 	public TaskStage save(TaskStage taskStage) {

@@ -23,7 +23,7 @@ public class TaskServiceImpl implements TaskService {
 	private SessionFactory sessionFactory;
 
 	@Resource(name = "ProjectService")
-	ProjectServiceImpl projectService;
+	ProjectService projectService;
 
 	@Resource(name = "PositionService")
 	PositionService positionService;

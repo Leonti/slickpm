@@ -20,7 +20,7 @@ import com.leonti.slickpm.domain.StagePosition;
 import com.leonti.slickpm.domain.TaskStage;
 import com.leonti.slickpm.domain.dto.TaskStageDTO;
 import com.leonti.slickpm.service.PositionService;
-import com.leonti.slickpm.service.ProjectServiceImpl;
+import com.leonti.slickpm.service.ProjectService;
 import com.leonti.slickpm.service.TaskStageService;
 
 @Controller
@@ -32,7 +32,7 @@ public class TaskStageController {
 	TaskStageService taskStageService;
 
 	@Resource(name = "ProjectService")
-	ProjectServiceImpl projectService;
+	ProjectService projectService;
 
 	@Resource(name = "PositionService")
 	PositionService positionService;
