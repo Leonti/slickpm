@@ -44,11 +44,11 @@ define([
 	    addComment: function () {
 
 	    	$(this.el).find('textarea').triggerHandler("submit.validation");
-	    	for (var entry in $(this.el).find('textarea').jqBootstrapValidation("collectErrors")) {
-	    		
-	    		// don't proceed on validation error
+
+	    	// don't proceed on validation error
+	    	if ($(this.el).find('textarea').jqBootstrapValidation("collectErrors").size() > 0) {
 	    		return false;
-	    	}	    	
+	    	}
 	    	
 	    	var model = new CommentModel({taskId: this.task.attributes.id});
 	    	

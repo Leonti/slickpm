@@ -32,11 +32,11 @@ define([
 	    saveTask:function () {
 	    	
 	    	$(this.el).find('input').triggerHandler("submit.validation");
-	    	for (var entry in $(this.el).find('input').jqBootstrapValidation("collectErrors")) {
-	    		
-	    		// don't proceed on validation error
+	    	
+	    	// don't proceed on validation error
+	    	if ($(this.el).find('input').jqBootstrapValidation("collectErrors").size() > 0) {
 	    		return false;
-	    	}	    	
+	    	}    	
 	    	
 	        this.model.set({
 	            title: $('.title', $(this.el)).val(),
