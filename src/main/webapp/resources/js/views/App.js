@@ -102,8 +102,17 @@ define([
 
 	    	this.listIterations(projectId);
 	    	
-	        if (self.iterationView) self.iterationView.close();
-
+	        if (self.iterationView) {
+	        	self.iterationView.close();
+	        }
+	        
+	        $('.addIterationLink').on('click', function() {
+		    	window.history.back();
+		    	self.iterationView.close();
+		    	$(this).unbind('click');
+		    	return false;
+	        });	        
+	        
 	        self.iterationView = new IterationDetailsView({model: new IterationModel({projectId: projectId}), collection: self.iterationList});
 	        self.iterationView.bind("iterationCreated", self.iterationCreated, self);
 	        self.iterationView.bind("cancel", function() {
@@ -145,8 +154,17 @@ define([
 	    	
 	    	this.backlog(projectId);
 	    	
-	    	if (self.taskAddView) self.taskAddView.close();
-
+	    	if (self.taskAddView) {
+	    		self.taskAddView.close();
+	    	}
+	    	    	
+	        $('.addTaskLink').on('click', function() {
+		    	window.history.back();
+		    	self.taskAddView.close();
+		    	$(this).unbind('click');
+		    	return false;
+	        });
+	    	
 	    	var renderAddTask = function() {
 		    	self.taskAddView = new TaskAddView({ 
 		    		model: new TaskModel(), 
@@ -198,7 +216,6 @@ define([
 	    	$('#projectView').hide();
 	    	$('#dashboard').hide();
 	    	
-	    	var self = this;
 	    	var renderIteration = function(iteration) {
         		self.taskboardView = new TaskboardView({iteration: iteration});
     	        $('#taskboard').html(self.taskboardView.render().el);	    		

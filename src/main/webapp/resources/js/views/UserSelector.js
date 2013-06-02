@@ -3,8 +3,9 @@ define([
 	'jqueryui/dialog',
 	'underscore',
 	'backbone',
+	'filter',
 	'text!templates/userSelector.html'
-], function( $, dialog, _, Backbone, userSelectorTemplate ) {
+], function( $, dialog, _, Backbone, filter, userSelectorTemplate ) {
 	
 	var UserSelectorView = Backbone.View.extend({
 		
@@ -35,6 +36,11 @@ define([
 				self.el.dialog('close');
 				self.triggerSelection(self.collection.get($(this).data('id')));
 			});
+
+			$('.listFilter .input', this.el).searchFilter({
+				items: $('.item', this.el),
+				matchItemClass: 'userName'
+			});			
 			
 			this.delegateEvents(this.events);
 			return this;

@@ -15,11 +15,11 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-
-	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" media="all" />
-    <link href="../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">   
+    
     <link href="../resources/css/main.css" rel="stylesheet">
     <link href="../resources/css/jquery.jqplot.css" rel="stylesheet">
+    <link href="../resources/css/custom-theme/jquery-ui.min.css" rel="stylesheet">
 
 	<script data-main="../resources/js/<c:out value="${param.script}"/>" src="../resources/js/lib/require/require.js"></script>
 </head>

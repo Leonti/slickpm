@@ -62,11 +62,10 @@ public class DemoService {
 
 	private void createTaskTypes() {
 		String[] taskTypes = { "User story", "Bug", "Technical Task" };
-
-		for (String type : taskTypes) {
-			TaskType taskType = new TaskType();
-			taskType.setTitle(type);
-
+		String[] labelColors = { "#d7e102", "#fc2929", "#5c3fba" };
+		
+		for (int i = 0; i < taskTypes.length; i++) {
+			TaskType taskType = new TaskType(taskTypes[i], "", labelColors[i]);
 			taskTypeService.save(taskType);
 		}
 	}

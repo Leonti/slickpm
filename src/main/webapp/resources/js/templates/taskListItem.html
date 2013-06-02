@@ -1,5 +1,6 @@
 <div class="task media small" data-id="<%= id %>">
-	<div class="avatar"> 		
+	<div class="marker"><div class="color" style="background-color: <%= taskType.labelColor %>"></div><div class="dots"></div></div>
+	<div class="avatar" title="Asign to task"> 		
 		<% if (user && user.avatarId) { %>
 			<img class="avatar" src="/file/download/<%= user.avatarId %>/avatar" />
 		<% } else { %>

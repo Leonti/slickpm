@@ -3,8 +3,9 @@ define([
 	'jqueryui/dialog',
 	'underscore',
 	'backbone',
+	'filter',
 	'text!templates/taskSelector.html'
-], function( $, dialog, _, Backbone, taskSelectorTemplate ) {
+], function( $, dialog, _, Backbone, filter, taskSelectorTemplate ) {
 	
 	var TaskSelectorView = Backbone.View.extend({
 		
@@ -36,6 +37,11 @@ define([
 			$('.taskTitle', this.el).on('click', function() {
 				self.el.dialog('close');
 				self.triggerSelection(self.collection.get($(this).data('id')));
+			});
+			
+			$('.listFilter .input', this.el).searchFilter({
+				items: $('.item', this.el),
+				matchItemClass: 'taskTitle'
 			});
 			
 			this.delegateEvents(this.events);

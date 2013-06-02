@@ -1,5 +1,4 @@
-html,
-body {
+html,body {
 	height: 100%;
 }
 
@@ -10,8 +9,7 @@ body {
 	margin: 0 auto -40px;
 }
 
-.wrapper > .container,
-.wrapper > .container-fluid {
+.wrapper>.container,.wrapper>.container-fluid {
 	padding-top: 60px;
 }
 
@@ -26,7 +24,6 @@ body {
 }
 
 /* Media element */
-
 .media {
 	position: relative;
 }
@@ -37,11 +34,12 @@ body {
 }
 
 .media.small .avatar {
-	margin-right: 5px;	
+	margin-right: 5px;
+	cursor: pointer;
 }
 
 .media.medium .avatar {
-	margin-right: 10px;	
+	margin-right: 10px;
 }
 
 .media.small .avatar img {
@@ -56,7 +54,6 @@ body {
 
 .media {
 	overflow: hidden;
-	cursor: pointer;
 }
 
 .media:hover {
@@ -64,6 +61,31 @@ body {
 }
 
 /* Task List item */
+.media.task .marker {
+	float: left;
+	cursor: pointer;
+	height: 50px;
+}
+
+.media.task .marker .color,.media.task .marker .dots {
+	display: inline-block;
+}
+
+.media.task .marker .color {
+	width: 4px;
+	height: 100%;
+}
+
+.media.task .marker .dots {
+	width: 8px;
+	height: 100%;
+}
+
+.media.task:hover .marker .dots {
+	background-image: url(/resources/images/handle-dots.png);
+	background-repeat: repeat-y;
+}
+
 .media.task {
 	border-bottom: 1px #ccc solid;
 }
@@ -78,7 +100,6 @@ body {
 }
 
 /* Global styles */
-
 .action {
 	cursor: pointer;
 	text-decoration: underline;
@@ -109,7 +130,6 @@ body {
 }
 
 /* Scrum */
-
 .iteration {
 	padding: 0.5em;
 	border-bottom: 1px solid grey;
@@ -125,27 +145,27 @@ body {
 
 /* User edit */
 .fileinput-button input {
-    cursor: pointer;
-    direction: ltr;
-    margin: 0;
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transform: translate(-700px, 0px) scale(8);
+	cursor: pointer;
+	direction: ltr;
+	margin: 0;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	transform: translate(-700px, 0px) scale(8);
 }
 
 .fileinput-button {
-    overflow: hidden;
-    position: relative;
+	overflow: hidden;
+	position: relative;
 }
 
 .userform .avatar {
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: 1px solid #CCCCCC;
-    border-radius: 3px 3px 3px 3px;	
-    padding: 5px;
-    display: table;	
+	border: 1px solid #CCCCCC;
+	border-radius: 3px 3px 3px 3px;
+	padding: 5px;
+	display: table;
 }
 
 .userform .avatar .image {
@@ -155,7 +175,7 @@ body {
 
 .userform .avatar .image .background {
 	width: 128px;
-	height: 128px;	
+	height: 128px;
 }
 
 .userform .avatar .change {
@@ -175,7 +195,6 @@ body {
 }
 
 /* Task */
-
 #dependencies .remove {
 	position: absolute;
 	right: 10px;
@@ -186,21 +205,39 @@ body {
 	display: block;
 }
 
+.listFilter .icon-search {
+	position: relative;
+	left: 27px;
+	top: -4px;
+	z-index: 10;
+	margin-left: -20px;
+}
+
+.listFilter .input {
+	padding-left: 25px !important;
+}
+
 /* Project View */
 .taskListHolder .taskList {
 	min-height: 50px;
 }
 
 .velocityChart {
-	width: 100%; 
+	width: 100%;
 	height: 150px;
 }
 
-.taskAdd, .iterationAdd {
-	margin-bottom: 15px;
+.project-controls {
+	padding-bottom: 30px;
+}
+
+#addTask .taskAdd, 
+#addIteration .iterationAdd {
+	margin-bottom: 20px;
+}
+
+.project-controls .caption {
+	font-size: 25px;
 }
 
 /* Admin interface */
-
-
-

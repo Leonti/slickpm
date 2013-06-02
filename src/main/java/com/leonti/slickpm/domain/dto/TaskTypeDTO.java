@@ -5,15 +5,17 @@ public class TaskTypeDTO {
 	private Integer id;
 	private String title;
 	private String description;
+	private String labelColor;
 
 	public TaskTypeDTO() {
 	}
 
-	public TaskTypeDTO(Integer id, String title, String description) {
+	public TaskTypeDTO(Integer id, String title, String description, String labelColor) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
+		this.labelColor = labelColor;
 	}
 
 	public Integer getId() {
@@ -38,5 +40,13 @@ public class TaskTypeDTO {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getLabelColor() {
+		return labelColor;
+	}
+
+	public void setLabelColor(String labelColor) {
+		this.labelColor = labelColor;
 	}
 }

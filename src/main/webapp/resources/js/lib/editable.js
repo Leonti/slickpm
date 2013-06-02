@@ -12,6 +12,12 @@ define(["jquery"], function(jQuery) {
 				el.on('click', function() {
 					
 					var editor = $('<input type="text">');
+					
+					editor.css({
+						'height': el.outerHeight() + 'px',
+						'line-height': el.outerHeight() + 'px'
+					});
+					
 					if (opts.type == 'textarea') {
 						editor = $('<textarea></textarea>');
 					}					

@@ -1,5 +1,10 @@
 <div class="userSelector selector">
-	<% _.each(users, function(user) { %> 
-	    <span class="userName item btn btn-link" data-id="<%= user.id %>"><%= user.name %></span><br>
+	<div class="listFilter">
+		<i class="icon-search"></i> <input type="text" class="input" placeholder="Search&hellip;">
+	</div>
+	<% _.each(users, function(user) { %>
+	<div class="item"> 
+	    <span class="userName btn btn-link" data-id="<%= user.id %>"><%= user.name %></span><br>
+	</div>
 	<% }); %>
 </div>

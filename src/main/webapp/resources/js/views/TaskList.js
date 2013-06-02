@@ -16,7 +16,6 @@ define([
 	    	$(this.el).append('<div class="loading">Loading ...</div>');
 	    	
 	        this.model.bind("reset", this.render, this);
-	        var self = this;
 	        this.model.bind("add", function (task) {
 	            $(self.el).append(new TaskListItemView({model: task}).render().el);
 	        });
@@ -24,6 +23,7 @@ define([
 	        $(this.el).sortable({
 	            connectWith: ".taskList",
 	            dropOnEmpty: true,
+	            handle: ".marker",
 	            
 	        	update: function(event, ui) {
 	        		var newOrder = [];

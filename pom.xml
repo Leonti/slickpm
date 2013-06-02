@@ -262,12 +262,14 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>maven-jetty-plugin</artifactId>
-				<version>6.1.9</version>
-				<configuration>
-					<contextPath>/</contextPath>
-				</configuration>
+			  <groupId>org.mortbay.jetty</groupId>
+			  <artifactId>jetty-maven-plugin</artifactId>
+			  <configuration>
+			    <scanIntervalSeconds>1</scanIntervalSeconds>
+			    <webApp>
+			      <contextPath>/</contextPath>
+			    </webApp>
+			  </configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>

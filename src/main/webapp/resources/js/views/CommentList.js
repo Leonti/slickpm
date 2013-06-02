@@ -44,9 +44,9 @@ define([
 	    addComment: function () {
 
 	    	$(this.el).find('textarea').triggerHandler("submit.validation");
-
+	    	
 	    	// don't proceed on validation error
-	    	if ($(this.el).find('textarea').jqBootstrapValidation("collectErrors").size() > 0) {
+	    	if ($(this.el).find('textarea').jqBootstrapValidation("collectErrors").length > 0) {
 	    		return false;
 	    	}
 	    	

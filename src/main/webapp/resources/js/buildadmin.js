@@ -21,6 +21,7 @@
 		fileupload: 'lib/fileupload',
 		bootstrap: 'lib/bootstrap',
 		editable: 'lib/editable',
+		filter: 'lib/filter',
 		moment: 'lib/moment',
 		jqplot: 'lib/jqplot/jquery.jqplot',
 		jqBootstrapValidation: 'lib/jqBootstrapValidation'

@@ -19,13 +19,17 @@ public class TaskType {
 
 	@Column
 	private String description;
+	
+	@Column
+	private String labelColor;	
 
 	public TaskType() {
 	}
 
-	public TaskType(String title, String description) {
+	public TaskType(String title, String description, String labelColor) {
 		this.title = title;
 		this.description = description;
+		this.labelColor = labelColor;
 	}
 
 	public String getTitle() {
@@ -42,6 +46,14 @@ public class TaskType {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}	
+	
+	public String getLabelColor() {
+		return labelColor;
+	}
+
+	public void setLabelColor(String labelColor) {
+		this.labelColor = labelColor;
 	}
 
 	public Integer getId() {
@@ -49,6 +61,6 @@ public class TaskType {
 	}
 
 	public TaskTypeDTO getDTO() {
-		return new TaskTypeDTO(id, title, description);
+		return new TaskTypeDTO(id, title, description, labelColor);
 	}
 }

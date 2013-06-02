@@ -44,7 +44,7 @@ define([
 	    	$(this.el).find('input').triggerHandler("submit.validation");
 
 	    	// don't proceed on validation error
-	    	if ($(this.el).find('input').jqBootstrapValidation("collectErrors").size() > 0) {
+	    	if ($(this.el).find('input').jqBootstrapValidation("collectErrors").length > 0) {
 	    		return false;
 	    	}
 	    	
