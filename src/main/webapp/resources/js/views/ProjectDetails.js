@@ -23,11 +23,16 @@ define([
 	        
 	        $(this.el).find('input').jqBootstrapValidation();	        
 	        
+	        if (this.model.id === null) {
+	        	$(this.el).find('.delete').hide();
+	        }
+	        
 	        return this;
 	    },
 	 
 	    events:{
 	        "click .save": "saveProject",
+	        "click .cancel": "cancel",
 	        "click .delete": "deleteProject"
 	    },
 	 
@@ -97,16 +102,20 @@ define([
 	    	var self = this;
 	        this.model.destroy({
 	            success:function () {
-	                window.history.back();
 	                self.close();
 	            }
 	        });
 	        return false;
 	    },
+	    
+	    cancel: function () {
+	    	this.close();
+	    },
 	 
 	    close:function () {
 	        $(this.el).unbind();
 	        $(this.el).empty();
+	        window.history.back();
 	    }
 	 
 	});

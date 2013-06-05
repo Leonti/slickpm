@@ -1,6 +1,6 @@
 <h3><%= iteration.title %>  (<%= iteration.donePoints %>/<%= iteration.plannedPoints %>) 
 		<%= iteration.startDate != null ? moment(iteration.startDate).format('L') : "" %> - <%= iteration.endDate != null ? moment(iteration.endDate).format('L') : "" %>
 </h3>
-<small><%= iteration.description %></small>
+<p><%= iteration.description %></p>
 
 <div class="stages"></div>

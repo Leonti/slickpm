@@ -27,6 +27,7 @@ define([
 	 
 	    events:{
 	        "click .save": "saveStage",
+	        "click .cancel": "cancel",
 	        "click .delete": "deleteStage"
 	    },
 	 
@@ -61,16 +62,20 @@ define([
 	    	var self = this;
 	        this.model.destroy({
 	            success:function () {
-	                window.history.back();
 	                self.close();
 	            }
 	        });
 	        return false;
 	    },
-	 
+
+	    cancel: function () {
+	    	this.close();
+	    },
+	    
 	    close:function () {
 	        $(this.el).unbind();
 	        $(this.el).empty();
+	        window.history.back();
 	    }
 	 
 	});

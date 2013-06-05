@@ -28,7 +28,12 @@ define([
 	        	$(this.el).find('.userProjectList').append(new UserProjectListItemView({ model: project }).render().el);
 	        	
 	        }, this);	    	
-	   	        
+	   	    
+	        // click on "All projects" tab so we don't display empty tab to user
+	        if (this.collection.models.length === 0) {
+	        	$('a[href="#allProjectList"]').click();
+	        }
+	        
 	        $(this.holder).html(this.el);
 	    },
 	    
@@ -39,7 +44,7 @@ define([
 	        	$(this.el).find('.allProjectList').append(new UserProjectListItemView({ model: project }).render().el);
 	        	
 	        }, this);	    	
-	   	        
+    
 	        $(this.holder).html(this.el);
 	    },	    
 	});
