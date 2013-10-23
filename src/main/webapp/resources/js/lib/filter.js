@@ -4,15 +4,13 @@ define(["jquery"], function(jQuery) {
 		
 		$.fn.searchFilter = function(options) {
 		
-			var opts = $.extend( {}, $.fn.filter.options, options );
-			
+			var opts = $.extend( {}, $.fn.filter.options, options );			
 			
 			this.each(function() {
 				var input = $(this);
 				
 				input.on('keyup', function() {
 
-					console.log(input.val());
 					opts.items.each(function(i, item) {
 												
 						if (hasMatches(opts.matchItemClass, $(item), input.val())) {

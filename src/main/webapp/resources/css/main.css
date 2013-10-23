@@ -218,6 +218,10 @@ html,body {
 	padding-left: 25px !important;
 }
 
+.dependency .title {
+	vertical-align: middle;
+}
+
 /* Project View */
 .taskListHolder .taskList {
 	min-height: 50px;

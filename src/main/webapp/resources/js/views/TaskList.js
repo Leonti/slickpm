@@ -20,6 +20,7 @@ define([
 	            $(self.el).append(new TaskListItemView({model: task}).render().el);
 	        });
 	        
+	        var self = this;
 	        $(this.el).sortable({
 	            connectWith: ".taskList",
 	            dropOnEmpty: true,
