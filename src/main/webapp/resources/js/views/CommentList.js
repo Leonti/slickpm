@@ -46,9 +46,9 @@ define([
 	    	$(this.el).find('textarea').triggerHandler("submit.validation");
 	    	
 	    	// don't proceed on validation error
-	    	if ($(this.el).find('textarea').jqBootstrapValidation("collectErrors").length > 0) {
+	    	if ($(this.el).find('textarea[aria-invalid="true"]').size() > 0) {
 	    		return false;
-	    	}
+	    	} 
 	    	
 	    	var model = new CommentModel({taskId: this.task.attributes.id});
 	    	

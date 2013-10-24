@@ -106,12 +106,12 @@ define([
 	        	self.iterationView.close();
 	        }
 	        
-	        $('.addIterationLink').on('click', function() {
-		    	window.history.back();
-		    	self.iterationView.close();
-		    	$(this).unbind('click');
-		    	return false;
-	        });	        
+//	        $('.addIterationLink').on('click', function() {
+//		    	window.history.back();
+//		    	self.iterationView.close();
+//		    	$(this).unbind('click');
+//		    	return false;
+//	        });	        
 	        
 	        self.iterationView = new IterationDetailsView({model: new IterationModel({projectId: projectId}), collection: self.iterationList});
 	        self.iterationView.bind("iterationCreated", self.iterationCreated, self);
@@ -158,12 +158,12 @@ define([
 	    		self.taskAddView.close();
 	    	}
 	    	    	
-	        $('.addTaskLink').on('click', function() {
-		    	window.history.back();
-		    	self.taskAddView.close();
-		    	$(this).unbind('click');
-		    	return false;
-	        });
+//	        $('.addTaskLink').on('click', function() {
+//		    	window.history.back();
+//		    	self.taskAddView.close();
+//		    	$(this).unbind('click');
+//		    	return false;
+//	        });
 	    	
 	    	var renderAddTask = function() {
 		    	self.taskAddView = new TaskAddView({ 

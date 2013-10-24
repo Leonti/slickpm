@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.leonti.slickpm.domain.Comment;
 import com.leonti.slickpm.domain.GitVcs;
 import com.leonti.slickpm.domain.Task;
+import com.leonti.slickpm.domain.TaskType;
 import com.leonti.slickpm.domain.UploadedFile;
 import com.leonti.slickpm.domain.dto.CommentDTO;
 import com.leonti.slickpm.domain.dto.TaskDTO;
@@ -74,9 +75,16 @@ public class TaskController {
 
 		Task task = new Task();
 
+		
 		task.setTitle(taskDTO.getTitle());
 		task.setDescription(taskDTO.getDescription());
 		task.setProject(projectService.getById(taskDTO.getProject().getId()));
+
+		for (TaskType taskType : taskTypeService.getList()) {
+			if (taskType.getTitle().contains("User")) {
+				task.setTaskType(taskType);
+			}
+		}
 		taskService.save(task);
 
 		return task.getDTO();
